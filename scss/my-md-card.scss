@@ -1,0 +1,387 @@
+@import 'theme';
+
+// START SANDBOX
+/*
+ // secondary color
+ */
+
+.negative-color {
+  color: #DD2C00 !important;
+  font-weight: 900;
+
+}
+
+.card-section-label {
+  font-weight: 600;
+  color: $dark !important;
+  font-size: 1.1em;
+  position: relative;
+  left: -10px;
+  text-transform: uppercase;
+
+}
+
+tr {
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.data-row {
+
+  td {
+
+    padding-left: 15px;
+  }
+  .card-data-label {
+    color: #212121 !important;
+    width: 200px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-size: .9em;
+  }
+  .data {
+    color: $secondary-text;
+    font-size: 1.3em;
+
+  }
+}
+
+.data-row td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 900;
+  font-size: 1.1em;
+
+}
+
+
+.summary-item {
+  background: rgba(218, 218, 218, 0.4);
+  font-size: 1.1em;
+  padding-right: 4px;
+  height: 32px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+
+}
+
+
+.data-bit-label {
+  -webkit-border-radius: 6dppx;
+  -moz-border-radius: 6dppx;
+  background-color:  $dark !important;
+  padding: 5px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  padding: 5px;
+
+  float: left;
+  color: #fff;
+  text-shadow: 0px 1px 1px #000;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.data-bit {
+  float: right;
+  /* text-align: center; */
+  line-height: 30px;
+  padding-right: 6px;
+  padding-right: 6px;
+  padding-left: 6px;
+  font-size: 1.2em;
+  text-shadow: 1px 1px 1px rgba(101, 94, 94, 0.6);
+
+}
+
+/*  COMMON stuff for small screens  */
+@media screen and (max-width: 767px) {
+
+  .summary-item {
+    background: rgba(218, 218, 218, 0.4);
+    font-size: .9em;
+    height: 22px;
+    width: 100px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 1px 1px 1px 2px rgba(218, 218, 218, 0.4);
+  }
+
+  .data-bit {
+    font-size: 1.1em;
+    line-height: 22px;
+  }
+
+  .data-bit-label {
+   font-size: .8em;
+  }
+
+} // end small screen (max-width: 767px)
+
+
+
+
+
+.seven-count {
+ color: #090;
+
+}
+
+.thirty-count {
+  //  background: #050;
+}
+
+.total-count {
+  // background: #e7e9fd;
+
+}
+
+.redfin-color {
+  color: rgb(160, 32, 33) !important;
+}
+
+
+.showing-scroller {
+
+  max-height: 400px;
+  overflow-y: scroll;
+
+}
+
+/////////////////////////////
+// summary card for web sites like zillow, trulia, redfin, realtor.com etc.
+/////////////////////////////
+
+md-card-zillow,
+md-card-redfin,
+md-card-showing-summary {
+
+  .top-section {
+    padding: 10px;
+  }
+
+
+  .card-section-label {
+    font-weight: 600;
+    color: $dark;
+    font-size: 1.1em;
+    position: relative;
+    left: -10px;
+    text-transform: uppercase;
+
+  }
+
+  font-size: 16px;
+  border-radius: 2px 2px 0 0;
+
+  #md-card {
+
+    width: 600px;
+    height: auto;
+
+  }
+  .md-card-left-of-image {
+
+    width: 50%;
+    min-width: 225px;
+    position: relative;
+    top: 10px;
+
+  }
+
+  #md-card-image {
+    width: 50%;
+    background-size: 150px 150px;
+    height: 150px;
+    width: 150px;
+    position: relative;
+    top: 10px;
+
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    .logo-caption {
+
+      position: relative;
+      top: 160px;
+      width: 100%;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 600;
+      color: $secondary-text;
+
+    }
+
+  }
+
+  /*  stuff for small screens  */
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
+
+    .card-section-label {
+      font-weight: 600;
+      color: $dark !important;
+      font-size: 1.0em;
+      position: relative;
+      left: -5px;
+
+    }
+    //.summary-item {
+    //  background: rgba(218, 218, 218, 0.4);
+    //  font-size: .9em;
+    //  width: 100px;
+    //
+    //  border-top-right-radius: 4px;
+    //  border-bottom-right-radius: 4px;
+    //
+    //
+    //  -webkit-box-shadow: 1px 1px 1px 2px rgba(218, 218, 218, 0.4);
+    //  -moz-box-shadow: 1px 1px 1px 2px rgba(218, 218, 218, 0.4);
+    //  box-shadow: 1px 1px 1px 2px rgba(218, 218, 218, 0.4);;
+    //
+    //}
+    #md-card {
+
+      width: 380px !important;
+      height: auto;
+
+    }
+
+    .md-card-left-of-image {
+
+
+      top: 15px;
+
+    }
+
+    #md-card-image {
+      //background-size: 75px 75px !important;
+      //height: 100px;
+      //width: 100px;
+      background-size: 100px 100px !important;
+      height: 100px;
+      width: 100px;
+      position: relative;
+      top: 20px;
+
+      .logo-caption {
+
+        position: relative;
+        top: 100px;
+        width: 100%;
+        text-align: center;
+        font-size: 14px !important;
+        font-weight: 600;
+        color: $secondary-text;
+
+      }
+    }
+  }
+}
+
+
+
+/////////////////////////////
+//  IMAGE OVERLAY CARD STYLE  ** DON"T TOUCH iTS PERFECT
+/////////////////////////////
+md-card-image-overlay {
+  width: 100%;
+  height: auto;
+
+
+
+
+
+  #md-card-image {
+    width: 600px;
+    height: 450px;
+    background-size: cover;
+
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 2px 2px 0 0;
+  }
+
+  #md-card {
+    width: 600px !important;
+
+  }
+
+  .image-text-guard {
+    position: absolute;
+    bottom: 0;
+    display: inline-block;
+    width: inherit;
+    /* font-weight: 900; */
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.45));
+    color: #fff;
+    font-size: 20px;
+    padding: 8px 0 8px 0;
+    text-align: center;
+    text-wrap: normal;
+    text-shadow: 1px 1px 1px #312D2D;
+  }
+
+  .image-text-guard-bottom {
+    position: absolute;
+    bottom: 0;
+    display: inline-block;
+
+    width: inherit;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+
+    color: #fff;
+    font-size: 18px;
+    padding: 8px 0 8px 0;
+    text-align: center;
+    text-wrap: normal;
+  }
+
+}
+
+/*  stuff for small screens  */
+@media screen and (max-width: 767px) {
+
+
+  md-card-image-overlay {
+    width: 100%;
+    height: auto;
+
+
+
+    #md-card-image {
+      width: 380px !important;
+      height: 285px !important;
+      background-size: cover;
+
+      background-position: center center;
+      background-repeat: no-repeat;
+      border-radius: 2px 2px 0 0;
+    }
+
+    #md-card {
+      width: 380px !important;
+    }
+
+    .image-text-guard {
+      position: absolute;
+      bottom: 0;
+      display: inline-block;
+
+      width: inherit;
+      background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+
+      color: #fff;
+      font-size: 14px;
+      padding: 5px 0 5px 0;
+      text-align: center;
+    }
+
+  }
+}

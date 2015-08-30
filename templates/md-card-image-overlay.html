@@ -1,0 +1,17 @@
+
+<md-card id="md-card">
+    <div id="md-card-image" style="position: relative">
+        <div class="image-text-guard">{{listing.address}}<br>[ MLS: {{listing.summary.mls_id}} ]</div>
+    </div>
+    <md-card-content><h2>{{title}}</h2>
+
+        <div layout="row" padding layout-align="space-around center">
+
+            <div> <md-card-stat title="7 DAY" stat-model="listing.summary.listing_shows_sevenDayCnt"></md-card-stat></div>
+            <div> <md-card-stat title="30 DAY" stat-model="listing.summary.listing_shows_thirtyDayCnt"></md-card-stat></div>
+            <div> <md-card-stat title="TOTAL" stat-model="listing.summary.listing_shows_totalCnt"></md-card-stat></div>
+
+        </div>
+    </md-card-content>
+
+</md-card>
