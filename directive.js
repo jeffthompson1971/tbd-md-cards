@@ -56,5 +56,6 @@ angular.module('jeffthompson1971.md-cards', []).
             });
         }
     }
+}
 )
 
