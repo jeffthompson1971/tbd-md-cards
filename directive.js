@@ -1,9 +1,8 @@
 
-angular.module('jeffthompson1971.md-cards', []).
-  
-  directive('mdCardStat', function () {
+angular.module('jeffthompson1971.md-cards', [])
+.  directive('mdCardStat', function () {
 
-  	return {
+    return {
 
         scope: {
             statModel: '='
@@ -38,7 +37,7 @@ angular.module('jeffthompson1971.md-cards', []).
 
         },
 
-        templateUrl: "templates/md-card-image-overlay.html",
+        templateUrl: "views/templates/md-card-image-overlay.html",
 
         link: function (scope, element, attrs) {
 
@@ -56,6 +55,36 @@ angular.module('jeffthompson1971.md-cards', []).
             });
         }
     }
-}
-)
+})
 
+.directive('mdCardZillow', function () {
+
+    return {
+
+        transpose: true,
+      scope: {
+        listing: '='
+      },
+
+      templateUrl: '/views/templates/md-card-zillow.html',
+
+      link: function (scope, element, attrs) {
+
+        scope.title = attrs.title;
+
+        // scope.imgUrl =  imgUrl="/assets/logos/zillow-logo-150x150.png"
+
+        // watch for changes in the listing to update the new photo
+        scope.$watch('siteSummaries', function (listing) {
+
+          var el = angular.element(element.find('#md-card-image'));
+
+          el.css({
+            'background-image': 'url(assets/logos/zillow-logo-150x150.png)'
+
+          });
+        });
+      }
+    }
+    }
+)
