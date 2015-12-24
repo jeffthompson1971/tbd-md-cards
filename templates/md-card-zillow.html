@@ -1,20 +1,112 @@
 
 
+<md-card class="md-card">
+    <div class= "site-header">
+        <div class="zillow-logo"></div>
+     <!--   <img src="/assets/logos/zillow_logo_40x189.png"  class="logo"> -->
+        <a href="{{listing.subjectUrl}}" target="_blank">
+            <i class="mdi md-accent mdi-link"></i>
+        </a>
+    </div>
 
-<md-card id="md-card">
+    <div layout= "row">
+        <div flex class= "left">
+            <div>
+                <label>Days listed</label>
+                <span><b>{{listing.listing_daysOn}}</b></span>
+            </div>
 
-    <div layout="row" layout-align="space-around center" style="padding: 10px">
+            <div>
+                <label>Views today</label>
+                <span ng-show="listing.listing_views_todayCnt"><b>{{listing.listing_views_todayCnt}}</b></span>
 
+                <span ng-show="!listing.listing_views_todayCnt"><b>*</b></span>
+            </div>
+            <div>
+
+                <label>7-day views</label>
+
+                <span ng-show="listing.listing_views_sevenDayCnt"><b>{{listing.listing_views_sevenDayCnt}}</b></span>
+
+                <span ng-show="!listing.listing_views_sevenDayCnt"><b>*</b></span>
+
+            </div>
+
+
+            <div>
+                <label>30-day views</label>
+
+                <span ng-show="listing.listing_views_thirtyDayCnt"><b>{{listing.listing_views_thirtyDayCnt}}</b></span>
+
+                <span ng-show="!listing.listing_views_thirtyDayCnt"><b>*</b></span>
+
+            </div>
+            <div>
+                <label>Total views</label>
+                <span><b>{{listing.listing_views_totalCnt}}</b></span>
+            </div>
+
+            <div>
+                <label>Favorites</label>
+                <span><b>{{listing.listing_prefs_favoritesCnt}}</b></span>
+            </div>
+        </div>
+        <div flex class= "right">
+            <div>
+                <label>Current price</label>
+                <span ng-show="listing.listing_price">
+                    <b>{{listing.listing_price  | noFractionCurrency}} </b>
+                    </span>
+
+                <span ng-show="! listing.listing_price">
+                     <b>*</b>
+                 </span>
+            </div>
+            <div style= "border-bottom: 1px solid #eee;">
+                <label style= "color: #636075;"><b>Zestimate</b></label>
+            </div>
+            
+            <div>
+                <label>Current value</label>
+
+                <span><b>{{listing.est_currentValue | noFractionCurrency}}</b> </span>
+
+            </div>
+            <div>
+                <label>30-day change</label>
+
+                <span><b>{{listing.est_thirtyDayChange | noFractionCurrency}}</b> </span>
+
+            </div>
+            <div>
+                <label>High range</label>
+
+                <span><b>{{listing.est_highRange | noFractionCurrency}}</b> </span>
+
+            </div>
+            <div>
+                <label>Low range</label>
+                <span><b>{{listing.est_lowRange | noFractionCurrency}}</b> </span>
+
+            </div>
+            <!--<div>-->
+                <!--<label>1-yr forecast</label>-->
+                <!--<span><b>$203858</b></span>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <!-- <div layout="row" layout-align="space-around center" style="padding: 10px">
 
         <div class="md-card-left-of-image">
 
-            <table ng-show='listing.activitySummary[0].est_currentValue != undefined'>
+            <table ng-show='listing.est_currentValue != undefined'>
                 <thead>
 
                 </thead>
 
                 <div style="overflow: hidden; height: 100%"
-                     ng-show='listing.activitySummary[0].est_currentValue != undefined'>
+                     ng-show='listing.est_currentValue != undefined'>
                     <tbody>
 
 
@@ -24,97 +116,103 @@
 
                     <tr class="data-row">
                         <td class="card-data-label">current value</td>
-                        <td class="data">{{listing.activitySummary[0].est_currentValue | currency:"$":0 }}
+                        <td class="data">{{listing.est_currentValue |  noFractionCurrency }}
                             <md-icon class="negative-color"
-                                     ng-show="listing.activitySummary[0].est_thirtyDayChange < 0"
+                                     ng-show="listing.est_thirtyDayChange < 0"
                                      md-svg-src="/assets/icons/ic_trending_down_black_18px.svg"></md-icon>
 
                             <md-icon class=""
-                                     ng-show="listing.activitySummary[0].est_thirtyDayChange >= 0"
+                                     ng-show="listing.est_thirtyDayChange > 0"
                                      md-svg-src="/assets/icons/ic_trending_up_black_18px.svg"></md-icon>
                         </td>
                     </tr>
-                    <tr class="data-row" ng-show='listing.activitySummary[0].est_thirtyDayChange'>
+                    <tr class="data-row" ng-show='listing.est_thirtyDayChange'>
                         <td class="card-data-label">thirty-day change</td>
                         <td class="data"
-                            ng-class="listing.activitySummary[0].est_thirtyDayChange < 0  ? 'negative-color' : ''">
-                            {{listing.activitySummary[0].est_thirtyDayChange | currency:"$":0 }}
+                            ng-class="listing.est_thirtyDayChange < 0  ? 'negative-color' : ''">
+                            {{listing.est_thirtyDayChange |  noFractionCurrency }}
                         </td>
                     </tr>
 
-                    <tr class="data-row" ng-show='listing.activitySummary[0].est_highRange'>
+                    <tr class="data-row" ng-show='listing.est_highRange'>
                         <td class="card-data-label">high range</td>
-                        <td class="data">{{listing.activitySummary[0].est_highRange | currency:"$":0 }}</td>
+                        <td class="data">{{listing.est_highRange |  noFractionCurrency }}</td>
                     </tr>
-                    <tr class="data-row" ng-show='listing.activitySummary[0].est_lowRange'>
+                    <tr class="data-row" ng-show='listing.est_lowRange'>
                         <td class="card-data-label">low range</td>
-                        <td class="data">{{listing.activitySummary[0].est_lowRange | currency:"$":0 }}</td>
+                        <td class="data">{{listing.est_lowRange |  noFractionCurrency }}</td>
                     </tr>
 
                     </tbody>
                 </div>
 
             </table>
-
-
-
-
-            <!--this is cool this is coolthis is cool this is coolthis is cool this is coolthis is cool this is coolthis is cool this is cool-->
-            <!--{{listing.activitySummary[0].listing_views_totalCnt}}-->
-
-            <!--as of  {{listing.activitySummary[0].t.time | date:"EEEE, MMM d - h:m a" }}-->
-
-
         </div>
-
-        <!--<comment>show the proper value for days on even when we only have list_ts (listing date) by using-->
-        <!--a filter-->
-        <!--</comment>-->
-
-        <!-- show the proper value for days on even when we only have list_ts (listing date) by using -->
         <div id="md-card-image">
 
 
-
-            <div ng-show='listing.activitySummary[0].listing_daysOn != undefined' class="logo-caption">
-                {{listing.activitySummary[0].listing_daysOn}} Days On
+            <div ng-show='listing.listing_daysOn != undefined' class="logo-caption">
+                {{listing.listing_daysOn}} Days On
             </div>
-            <div ng-show='listing.activitySummary[0].listing_ts != undefined' class="logo-caption">
-                {{listing.activitySummary[0].listing_ts | makeDaysOn}} Days On
+            <div ng-show='listing.listing_ts != undefined' class="logo-caption">
+                {{listing.listing_ts | makeDaysOn}} Days On
             </div>
         </div>
 
 
-    </div>
+    </div> -->
 
 
 
-    <md-card-content>
+    <!-- <md-card-content>
 
         <h2>{{title}}</h2>
 
         <div layout="row" padding layout-align="space-around center">
-            <!--<div class="summary-item total-count">{{listing.activitySummary[0].listing_views_totalCnt}} total views-->
-            <!--</div>-->
-
-            <div> <md-card-stat title="TOTAL" stat-model="listing.activitySummary[0].listing_views_totalCnt"></md-card-stat></div>
-
-            <div> <md-card-stat title="7 DAY" stat-model="listing.activitySummary[0].listing_views_sevenDayCnt"></md-card-stat></div>
-
-            <div ng-show="listing.activitySummary[0].listing_views_thirtyDayCnt"> <md-card-stat title="30 DAY" stat-model="listing.activitySummary[0].listing_views_thirtyDayCnt"></md-card-stat></div>
-
-            <!--<div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title="TOTAL" value="{{listing.activitySummary[0].listing_views_totalCnt}}"></md-card-stat></div>-->
 
 
-            <div ng-show='listing.summary.listing_views_sevenDayCnt' class="summary-item seven-count">
-                {{listing.summary.listing_views_sevenDayCnt}} in last 7 days
+            <div ng-show="listing.listing_views_sevenDayCnt">
+                <md-card-stat title="7 DAY" stat-model="listing.listing_views_sevenDayCnt">
+
+                </md-card-stat>
             </div>
-            <div ng-show='listing.summary.listing_views_thirtyDayCnt' class="summary-item thirty-count">
-                {{listing.summary.listing_views_thirtyDayCnt}} in last 30 days
+
+            <div ng-show="listing.listing_views_thirtyDayCnt">
+                <md-card-stat title="30 DAY" stat-model="listing.listing_views_thirtyDayCnt">
+
+                </md-card-stat>
+            </div>
+
+            <div>
+                <md-card-stat ng-show='listing.listing_views_totalCnt' title="TOTAL" stat-model="listing.listing_views_totalCnt">
+
+                </md-card-stat>
             </div>
 
         </div>
-    </md-card-content>
+    </md-card-content> -->
+
+    <!-- <div class="md-actions md-card-actions" layout="row" layout-align="end center">
+
+        <md-button>
+            SHARE
+            <i class="mdi md-accent  mdi-share-variant md-card-icon"></i>
+
+        </md-button>
+
+
+        <md-button  ng-show="listing.subjectUrl"
+
+                    ng-click="go(listing.subjectUrl)">
+            ZILLOW
+            <i class="mdi md-accent  mdi-forward md-card-icon"></i>
+        </md-button>
+
+
+    </div> -->
+
+
+
 
 
 </md-card>

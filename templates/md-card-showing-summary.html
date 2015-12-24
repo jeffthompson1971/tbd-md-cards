@@ -1,9 +1,9 @@
 <style>
-   .showing-scroller {
+    .showing-scroller {
 
-       max-height: 300px;
-       overflow-y:  scroll;
-   }
+        max-height: 300px;
+        overflow-y: scroll;
+    }
 
 
 </style>
@@ -14,62 +14,39 @@
 
         <div class="md-card-left-of-image">
 
-            <table ng-show='listing.activitySummary[0].est_currentValue != undefined'>
+            <div>
 
-                <thead>
+                <md-card-stat
+                        title="total Feedback"
+                        stat-model="totalCnt"
+                        md-icon="mdi-comment-text-outline">
+                </md-card-stat>
+            </div>
 
-                </thead>
+            <br>
 
-                <div style="overflow: hidden; height: 100%"
-                     ng-show='listing.activitySummary[0].est_currentValue != undefined'>
-                    <tbody>
+            <div>
+                <md-card-stat title="positive"
+                              stat-model="posCnt"
+                              md-icon="mdi-comment-plus-outline"
+                              special-class="positive-color">
+                </md-card-stat>
+            </div>
+            <br>
 
-                    <tr>
-                        <td colspan="2" class="card-section-label">estimations</td>
-                    </tr>
+            <div>
+                <md-card-stat title="not so positive"
+                              stat-model="negCnt"
+                              md-icon="mdi-comment-alert-outline"
+                              special-class="negative-color">
 
-                    <tr class="data-row">
-                        <td class="card-data-label">current value</td>
-                        <td class="data">{{listing.activitySummary[0].est_currentValue | currency:"$":0 }}
-                            <md-icon class="negative-color"
-                                     ng-show="listing.activitySummary[0].est_thirtyDayChange < 0"
-                                     md-svg-src="/assets/icons/ic_trending_down_black_18px.svg"></md-icon>
+                </md-card-stat>
+            </div>
 
-                            <md-icon class=""
-                                     ng-show="listing.activitySummary[0].est_thirtyDayChange >= 0"
-                                     md-svg-src="/assets/icons/ic_trending_up_black_18px.svg"></md-icon>
-                        </td>
-                    </tr>
-                    <tr class="data-row" ng-show='listing.activitySummary[0].est_thirtyDayChange'>
-                        <td class="card-data-label">thirty-day change</td>
-                        <td class="data"
-                            ng-class="listing.activitySummary[0].est_thirtyDayChange < 0  ? 'negative-color' : ''">
-                            {{listing.activitySummary[0].est_thirtyDayChange | currency:"$":0 }}
-                        </td>
-                    </tr>
-
-                    <tr class="data-row" ng-show='listing.activitySummary[0].est_highRange'>
-                        <td class="card-data-label">high range</td>
-                        <td class="data">{{listing.activitySummary[0].est_highRange | currency:"$":0 }}</td>
-                    </tr>
-                    <tr class="data-row" ng-show='listing.activitySummary[0].est_lowRange'>
-                        <td class="card-data-label">low range</td>
-                        <td class="data">{{listing.activitySummary[0].est_lowRange | currency:"$":0 }}</td>
-                    </tr>
-
-                    </tbody>
-                </div>
-
-            </table>
-
-            <!--  -->
-            <!--{{listing.activitySummary[0].listing_views_totalCnt}}-->
 
             <!--as of  {{listing.activitySummary[0].t.time | date:"EEEE, MMM d - h:m a" }}-->
 
-
         </div>
-
 
 
         <!-- show the proper value for days on even when we only have list_ts (listing date) by using -->
@@ -89,40 +66,48 @@
 
         <h2>{{title}}</h2>
 
-        <!--<a href="#" ng-model="collapsed" ng-click="collapsed=!collapsed">Click here to <strong>Toggle (show/hide)</strong> description</a>-->
-
     </md-card-content>
+
 
     <div class="md-actions" layout="row" layout-align="end center">
 
+        <md-button class="md-accent" ng-model="collapsed" ng-click="collapsed= !collapsed">
+            READ FEEDBACK
+            <md-icon ng-show='collapsed' class="s36"
+                     md-svg-src="/assets/icons/ic_expand_more_black_48px.svg">
+            </md-icon>
 
-        <md-button class=" md-accent" ng-model="collapsed" ng-click="collapsed=!collapsed">
-            <!--  <md-icon icon="http://google.github.io/material-design-icons/notification/svg/ic_sync_48px.svg">
-             </md-icon> -->
-            <md-icon ng-show='collapsed' class="s36" md-svg-src="/assets/icons/ic_expand_more_black_48px.svg"></md-icon>
-            <md-icon ng-show='!collapsed' class="s36"  md-svg-src="/assets/icons/ic_expand_less_black_48px.svg"></md-icon>
+            <md-icon ng-show='!collapsed' class="s36"
+                     md-svg-src="/assets/icons/ic_expand_less_black_48px.svg">
+            </md-icon>
         </md-button>
-        <!--<md-button>Action 1</md-button>-->
-        <!--<md-button>Action 2</md-button>-->
+
     </div>
 
-    <md-list class="showing-scroller" ng-show="collapsed==false" >
 
-        <md-list-item class="md-3-line" ng-repeat="showing in showings">
+    <md-list class="showing-scroller" ng-show="collapsed==false">
 
-            <i class="mdi mdi-comment-text md-accent  md-avatar s36" ng-class="{ 'negative': showing.sentiment < -5, 'positive': showing.sentiment > 3}"></i>
+        <md-list-item class="md-3-line" ng-repeat="showing in showings" ng-click="show($event, showing)">
+
+            <i class="mdi mdi-comment-text md-accent  md-avatar s36">
+
+            </i>
 
             <div class="md-list-item-text">
 
-                <h3 class="order-address">{{showing.date}}  - {{showing.contact.name}}</h3>
+                <h3 class="order-address">{{showing.startTime | timeago}} - {{showing.contact.name}}</h3>
 
-                <h4>
-                    {{showing.feedback}}
+                <h4>{{showing.feedback}}   {{showing.startTime}}
                 </h4>
+
+                <!--<md-button class="md-accent"  ng-click="show($event)">-->
+                    <!--dialog-->
+
+                <!--</md-button>-->
 
             </div>
 
-            <md-divider> </md-divider>
+            <md-divider></md-divider>
 
         </md-list-item>
 

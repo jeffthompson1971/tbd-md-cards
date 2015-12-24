@@ -1,19 +1,17 @@
 <md-card class="md-card">
-    <div class= "site-header">
-        <!--<div id= "md-card-image"></div>-->
-        <div class="redfin-logo"></div>
-        <!--<i class="mdi md-accent mdi-share-variant"></i>-->
+    <div class="site-header">
+        <div class="trulia-logo"></div>
         <a href="{{listing.subjectUrl}}" target="_blank">
         <i class="mdi md-accent mdi-link"></i>
-            </a>
+        </a>
     </div>
-    <div layout= "row">
-        <div flex class= "left">
+
+    <div layout="row">
+        <div flex class="left">
             <div>
                 <label>Days listed</label>
-                <span><b>{{listing.listing_ts | makeDaysOn}}</b></span>
+                <span><b>{{listing.listing_daysOn}}</b></span>
             </div>
-
 
 
             <div>
@@ -45,13 +43,10 @@
                 <label>Total views</label>
                 <span><b>{{listing.listing_views_totalCnt}}</b></span>
             </div>
-            <!--<div>-->
-                <!--<label>All time views</label>-->
-                <!--<span><b>5880</b></span>-->
-            <!--</div>-->
-        </div>
-        <div flex class= "right">
 
+        </div>
+
+        <div flex class="right">
             <div>
                 <label>Current price</label>
                 <span ng-show="listing.listing_price">
@@ -63,44 +58,81 @@
                  </span>
             </div>
 
+            <div style="border-bottom: 1px solid #eee;">
 
-            <div style= "border-bottom: 1px solid #eee;">
-                <label style= "color: #636075;"><b>Activity on Redfin</b></label>
+                <label style="color: #636075; font-size: 11px;"><b>Real Estate Trends for {{listing.PostalCode}}</b></label>
             </div>
+
             <div>
-                <label>Favorites</label>
-                <span><b>{{listing.listing_prefs_favoritesCnt}}</b></span>
+                <label>Similar listing</label>
+                <span ng-show="listing.mkt_avgListComps">
+                    <b>{{listing.mkt_avgListComps  | noFractionCurrency}} </b>
+                      ({{listing.mkt_avgListComps | percentChange:listing.listing_price | percentage:1 }})
+
+                    </span>
+
+                <span ng-show="! listing.mkt_avgListComps">
+                     <b>*</b>
+                 </span>
             </div>
-            <!--<div>-->
-                <!--<label>All time Favorites</label>-->
-                <!--<span><b>18</b></span>-->
-            <!--</div>-->
+
             <div>
-                <label>X-outs</label>
-                <span><b>{{listing.listing_prefs_xOutCnt}}</b></span>
+                <label>Similar sale</label>
+                <span ng-show="listing.mkt_avgSaleComps">
+                    <b>{{listing.mkt_avgSaleComps | noFractionCurrency}} </b>
+                     ({{listing.mkt_avgSaleComps | percentChange:listing.listing_price | percentage:1 }})
+                    </span>
+
+                <span ng-show="! listing.mkt_avgSaleComps">
+                     <b>*</b>
+                 </span>
             </div>
-            <!--<div>-->
-                <!--<label>All time X-outs</label>-->
-                <!--<span><b>12</b></span>-->
-            <!--</div>-->
+
+            <div>
+                <label>Average listing</label>
+                <span ng-show="listing.mkt_avgListComps">
+                    <b>{{listing.mkt_avgListComps | noFractionCurrency}} </b>
+                      ({{listing.mkt_avgListComps | percentChange:listing.listing_price |  percentage:1 }})
+                    </span>
+
+                <span ng-show="! listing.mkt_avgListComps">
+                     <b>*</b>
+                 </span>
+            </div>
+
+            <div>
+                <label>Median sale</label>
+                <span ng-show="listing.mkt_medianSalePrice">
+
+                     <b>{{listing.mkt_medianSalePrice | noFractionCurrency}} </b>
+                    ({{listing.mkt_medianSalePrice | percentChange:listing.listing_price | percentage:1 }})
+                    </span>
+
+                <span ng-show="! listing.mkt_medianSalePrice">
+                     <b>*</b>
+                 </span>
+            </div>
+
+
         </div>
     </div>
 
     <!-- <div layout="row" layout-align="space-around center" style="padding: 10px">
 
-
         <div class="md-card-left-of-image">
-            <table ng-show='listing.est_currentValue == undefined'>
+
+            <table ng-show='listing.est_currentValue != undefined'>
                 <thead>
 
                 </thead>
 
                 <div style="overflow: hidden; height: 100%"
-                        >
+                     ng-show='listing.est_currentValue != undefined'>
                     <tbody>
 
+
                     <tr>
-                        <td colspan="2" class="card-section-label redfin-color">listing price</td>
+                        <td colspan="2" class="card-section-label">Zestimate&trade;</td>
                     </tr>
 
                     <tr class="data-row">
@@ -111,15 +143,32 @@
                                      md-svg-src="/assets/icons/ic_trending_down_black_18px.svg"></md-icon>
 
                             <md-icon class=""
-                                     ng-show="listing.est_thirtyDayChange >= 0"
+                                     ng-show="listing.est_thirtyDayChange > 0"
                                      md-svg-src="/assets/icons/ic_trending_up_black_18px.svg"></md-icon>
                         </td>
+                    </tr>
+                    <tr class="data-row" ng-show='listing.est_thirtyDayChange'>
+                        <td class="card-data-label">thirty-day change</td>
+                        <td class="data"
+                            ng-class="listing.est_thirtyDayChange < 0  ? 'negative-color' : ''">
+                            {{listing.est_thirtyDayChange | currency:"$":0 }}
+                        </td>
+                    </tr>
+
+                    <tr class="data-row" ng-show='listing.est_highRange'>
+                        <td class="card-data-label">high range</td>
+                        <td class="data">{{listing.est_highRange | currency:"$":0 }}</td>
+                    </tr>
+                    <tr class="data-row" ng-show='listing.est_lowRange'>
+                        <td class="card-data-label">low range</td>
+                        <td class="data">{{listing.est_lowRange | currency:"$":0 }}</td>
                     </tr>
 
                     </tbody>
                 </div>
 
             </table>
+
 
         </div>
         <div id="md-card-image">
@@ -138,43 +187,50 @@
     </div> -->
 
 
-
     <!-- <md-card-content>
 
         <h2>{{title}}</h2>
 
         <div layout="row" padding layout-align="space-around center">
 
-            <div> <md-card-stat title="VIEWS" stat-model="listing.listing_views_totalCnt"></md-card-stat></div>
+            <div ng-show="listing.listing_views_sevenDayCnt">
+                <md-card-stat title="7 DAY" stat-model="listing.listing_views_sevenDayCnt">
 
-            <div> <md-card-stat title="LIKES" stat-model="listing.listing_prefs_favoritesCnt"></md-card-stat></div>
+                </md-card-stat>
+            </div>
 
-            <div> <md-card-stat title="X-OUTS" stat-model="listing.listing_prefs_xOutCnt"></md-card-stat></div>
+            <div ng-show="listing.listing_views_thirtyDayCnt">
+                <md-card-stat title="30 DAY" stat-model="listing.listing_views_thirtyDayCnt">
 
-            <div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title="TOTAL" value="{{listing.listing_views_totalCnt}}"></md-card-stat></div>
+                </md-card-stat>
+            </div>
 
+            <div> <md-card-stat title="TOTAL" stat-model="listing.listing_views_totalCnt"></md-card-stat></div>
 
             <div ng-show='listing.summary.listing_views_sevenDayCnt' class="summary-item seven-count">
                 {{listing.summary.listing_views_sevenDayCnt}} in last 7 days
             </div>
+
             <div ng-show='listing.summary.listing_views_thirtyDayCnt' class="summary-item thirty-count">
                 {{listing.summary.listing_views_thirtyDayCnt}} in last 30 days
             </div>
 
         </div>
     </md-card-content> -->
+
     <!-- <div class="md-actions md-card-actions" layout="row" layout-align="end center">
 
+        <md-button>
+            SHARE
+            <i class="mdi md-accent mdi-share-variant md-card-icon"></i>
+        </md-button>
 
-        <md-button>SHARE
-            <i class="mdi md-accent mdi-share-variant"></i>
+        <md-button  ng-show="listing.subjectUrl"
 
-            <md-button  ng-show="listing.subjectUrl"
-
-                        ng-click="go(listing.subjectUrl)">
-                REDFIN
-                <i class="mdi md-accent  mdi-forward md-card-icon"></i>
-            </md-button>
+                   ng-click="go(listing.subjectUrl)">
+            TRULIA
+            <i class="mdi md-accent  mdi-forward md-card-icon"></i>
+        </md-button>
 
 
     </div> -->
