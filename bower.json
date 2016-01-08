@@ -1,12 +1,12 @@
 {
   "name": "tbd-md-cards",
   "version": "0.0.1",
-  "homepage": "https://github.com/jeffthompson1971/OKRP-APPS",
+  "homepage": "https://github.com/jeffthompson1971/tbd-md-cards",
   "authors": [
     "Jeff Thompson (jeffthompson1971@gmail.com)"
   ],
-  "description": "material design custom cards",
-  "main": "directive.js",
+  "description": "material design custom real estate cards",
+  "main": "directives/md-card-zillow.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
