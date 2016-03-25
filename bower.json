@@ -6,7 +6,7 @@
     "Jeff Thompson (jeffthompson1971@gmail.com)"
   ],
   "description": "material design custom real estate cards",
-  "main": "directives/md-card-zillow.js",
+  "main": "dist/tbd-md-cards.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -17,7 +17,7 @@
   ],
   "scripts": {
   
-    "postinstall": "grunt"
+    "postinstall": "npm install && grunt"
   
   },
   
