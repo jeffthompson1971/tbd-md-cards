@@ -1,0 +1,30 @@
+{
+  "name": "tbd-md-cards",
+  "description": "material design cards for site summaries",
+  "version": "0.0.1",
+  "homepage": "http://www.threebatdrone.io",
+  "author": "Jeff Thompson <jeffthompson1971@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffthompson1971/tbd-md-cards"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-angular-templates": "^1.0.3",
+    "grunt-autoprefixer": "^0.6.5",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-connect": "^0.6.0",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-cssmin": "^0.8.0",
+    "grunt-contrib-jshint": "^0.8.0",
+    "grunt-contrib-sass": "^0.7.2",
+    "grunt-contrib-uglify": "^0.3.2",
+    "grunt-contrib-watch": "^0.5.3",
+    "grunt-conventional-changelog": "~1.1.0",
+    "grunt-ng-annotate": "^2.0.1",
+    "load-grunt-tasks": "~0.3.0",
+    "requirejs": "~2.1.11"
+  }
+}

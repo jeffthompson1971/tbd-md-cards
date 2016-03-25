@@ -1,0 +1,27 @@
+<md-card ng-cloak id="md-card">
+
+    <div id="md-card-image" style="position: relative">
+
+        <div class="trending-list-guard">
+
+            <div ng-repeat="trend in listing.trends" ng-click="">
+
+                <span class="trend-box">
+                    <md-icon md-svg-src="assets/icons/ic_whatshot_black_48px.svg" tabindex="0" aria-hidden="true">
+                    </md-icon>
+                {{trend}}
+                </span>
+
+            </div>
+        </div>
+
+        <div class="image-text-guard">
+            <h5 style="color: #fff;">MLS: {{listing.mls_id}}</h5>
+            <label>{{listing.address}}</label>
+            <span>{{listing.listing_price | noFractionCurrency}}</span>
+        </div>
+    </div>
+    <md-stat-summary ng-if="listing.activityAggregate"  listing="listing" showings="showings" title="Showing Summary"> </md-stat-summary>
+
+
+</md-card>

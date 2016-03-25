@@ -1,0 +1,105 @@
+<style>
+ card-header {
+    width: 100%;
+    background-color: #FFF;
+    border-bottom: 1px;
+    font-weight: 600;
+    font-size: 90%;
+}
+    
+    
+    </style>
+
+
+<md-card class="md-card  site-summary-card">
+    
+<div class="site-header">
+    <div class="sentrilock-logo"></div>
+    
+
+</div>
+
+<div class="feedback-div">
+
+    <div class="card-header">
+      Serial Number  {{vm.sentrilock.LBSerialNumber}}
+     </div>
+
+
+    <div ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 ">
+       
+        <!--<label><b> {{entry.AccessedByName}}</b></label>-->
+
+        <div  ng-bind-html="entry.AccessedByName"></div>
+       <!--<span>{{entry.Date}}</span>-->
+       <span>{{entry.UTCAccessedDT}}</span>
+    <span>Access type: {{entry.AccessType}}</span>
+    </div>
+     
+    <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback() ">
+
+        <label><b>Show More</b></label>
+        <span> ... </span>
+        <!--<p> {{showing.feedback}}</p>-->
+
+
+    </div>
+
+</div>
+<p class=footer> {{vm.sentrilock.updated.time | timeago }} </p>
+
+</md-card>
+
+<!--
+  "BorrowingAgentName ":"Dawn Zurick ",
+"CompanyExternalID ":"5064 ",
+"CurrentListingID ":"LI000009NJSU ",
+"listing_id ":"LI000009NJSU ",
+"address ":"2203 Bay Oaks Drive LAKEMOOR, IL 60051 ",
+"ListingAgentName ":"Dawn Zurick ",
+"updated ":{
+"time ":1451762461841,
+"minutes ":21,
+"seconds ":1,
+"hours ":13,
+"month ":0,
+"year ":116,
+"timezoneOffset ":360,
+"day ":6,
+"date ":2
+},
+"mls_id ":"08680589 ",
+"LBSerialNumber ":"00445969 ",
+"entries ":[
+"AccessedByContact ":" ",
+"Association ":null,
+"OwnerAgentID ":"AG0000008DLQ ",
+"LBID ":"LB0000008ZFB ",
+"FromOneDayCode ":false,
+"UserID ":"US0000007HLH ",
+"Origin ":" ",
+"Time ":"12:31:44 ",
+"Created ":"2014-10-31 18:37:44 ",
+"emailAddy ":null,
+"Date ":"Monday, Oct 20 2014 ",
+"EmailAddress ":" ",
+"UserLastName ":"Rossman ",
+"ContactNumber ":null,
+"emailAddy2 ":null,
+"AccessedByName ":"Contractor Code 3 ",
+"ContactName ":"Contractor Code 3 ",
+"AgentFirstName ":null,
+"Location ":"2203 Bay Oaks Drive LAKEMOOR IL 60051 ",
+"PhoneNumber ":" ",
+"CompanyName ":" ",
+"AgentID ":null,
+"AccessLogID ":"AL00001R3CLW ",
+"AccessType ":"ContractorCode ",
+"rowcolor ":"#FF9 ",
+"AgentLastName ":null,
+"LBSerialNumber ":"00445969 ",
+"UserFirstName ":"Joy ",
+"AccessedBy ":"STATCNTCODE3 ",
+"UTCAccessedDT ":"Monday, Oct 20 2014 - 12:31 PM "
+}...]
+    --->

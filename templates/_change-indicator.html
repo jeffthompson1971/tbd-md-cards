@@ -1,0 +1,60 @@
+
+<style>
+    change-indicator {
+        float: right;
+        font-size: .9em;
+    }
+    
+    /*.data-change.pos {
+    color: #7cb342;
+}*/
+/*
+.data-change.pos {
+    color: #7cb342;
+}*/
+/*.data-change.neg {
+    color: #de4848;
+}*/
+.data-change.neg {
+    color: #FFFFFF;
+}
+
+.data-change.neutral {
+    color: #a5a5a5;
+}
+.data-change {
+   /* font-size: 14px !important;*/
+    font-weight: 400;
+    line-height: 22px;
+}
+.data-change.pos .change-triangle {
+    margin-bottom: 2px;
+    height: 0;
+    border-bottom: 6px solid #7cb342;
+}
+
+.data-change.neg .change-triangle {
+    margin-bottom: 1px;
+    height: 0;
+    border-top: 6px solid #de4848;
+}
+
+.change-triangle {
+    display: inline-block;
+    width: 0;
+    border-right: 6px solid transparent;
+    margin-right: 2px;
+    border-left: 6px solid transparent;
+}
+
+    </style>
+<div class="data-change" ng-class="vm.controlCss">
+    <div ng-if="vm.noChange">0 (0.00%)</div>
+    <div ng-if="!vm.canCalculateChange && !vm.noChange" i18n="common.na"></div>
+    <div ng-class="vm.textCss" ng-if="vm.canCalculateChange && !vm.noChange">
+    	<div class="change-triangle"></div>
+        <span ng-if="vm.valueType === 'number'">{{vm.amountChanged | number: vm.rateDecimals}}</span>
+        <span ng-if="vm.valueType === 'percentage'">{{vm.amountChanged | number: vm.rateDecimals}}%</span>
+        <span ng-if="vm.valueType === 'currency'">{{vm.amountChanged | currency}}</span> <span ng-if="vm.displayRateOfChange">({{vm.rateOfChange | number}}%)</span>
+    </div>
+</div>

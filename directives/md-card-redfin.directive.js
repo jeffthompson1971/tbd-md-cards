@@ -1,12 +1,23 @@
-(function () {
-    angular
-        .module('tbd.directives')
-        .directive('mdCardZillow', MdCardZillow);
+!(function () {
 
-    function MdCardZillow() {
+    var appName = "app";
+    try {
+        appName = THE_APP;
+    } catch (e) {
+
+    }
+
+    angular
+        .module(appName)
+        .directive('mdCardRedfin', MdCardRedfin);
+
+    function MdCardRedfin() {
         return {
+
             restrict: 'E',
-            templateUrl: '/templates/_md-card-zillow.html',
+            templateUrl: function (elem, attrs) {
+                return (attrs.templatepath) ? attrs.templatepath + "/_md-card-redfin.view.html" : 'templates/_md-card-redfin.view.html';
+            },
             scope: {
 
                 listing: '=',
@@ -16,51 +27,41 @@
                 valueType: '@?',
                 displayRateOfChange: '=?'
             },
-            controller: MdCardZillowController,
+            controller: MdCardRedfinController,
             controllerAs: 'vm',
             bindToController: true,
             link: function (scope, element, attrs) {
 
                 scope.title = attrs.title;
 
-                scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "/assets/logos/zillow_logo_40x189.png";
-
-                // handle the button press to GO to trulia
-                scope.go = function (val) {
-                    scope.$parent.navToSite(val);
-                }
-
-
-                //// watch for changes in the listing to update the new photo
-                scope.$watch('siteSummaries', function (listing) {
-
-                   // console.log("path: " + TEMPLATES);
-                    //  scope.listing = listing;
-                    var el = angular.element(element.find('#md-card-image'));
-
-                    el.css({
-                        'background-image': 'url(' + scope.logoUrl + ')'
-
-                    });
-                });
-
                 scope.browse = function (url) {
 
-                    //$window.open(url);
+                     $window.open(url, '_blank');
 
-                }
+                };
+
             }
         };
     }
 
-    MdCardZillowController.$inject = ['$scope'];
+    MdCardRedfinController.$inject = ['$scope', 'PalSvc'];
 
-    function MdCardZillowController($scope) {
+    function MdCardRedfinController($scope, PalSvc) {
         var vm = this;
-
+        $scope.listing = vm.listing;
         activate();
 
-        $scope.$watch('vm.data', activate);
+         
+        vm.openInBrowser = PalSvc.openWindow;
+        //$scope.$watch('vm.data', activate);
+        
+        $scope.$watch('vm.listing', function (theListing) {
+
+            if (_.isUndefined(theListing))
+                return;
+            $scope.listing = theListing;
+
+        });
 
         function activate() {
             vm.displayRateOfChange = _.isUndefined(vm.displayRateOfChange) ? true : vm.displayRateOfChange;

@@ -1,0 +1,202 @@
+<md-card class="md-card site-summary-card">
+
+    <div layout="row" layout-align="space-around center" style="padding: 10px">
+
+
+        <div class="md-card-left-of-image">
+
+            <table ng-show='listing.activitySummary[0].est_currentValue != undefined'>
+                <thead>
+
+                </thead>
+
+                <div style="overflow: hidden; height: 100%"
+                     ng-show='listing.activitySummary[0].est_currentValue != undefined'>
+                    <tbody>
+
+
+                    <tr>
+                        <td colspan="2" class="card-section-label"></td>
+                    </tr>
+
+                    <tr class="data-row">
+                        <td class="card-data-label">current value</td>
+                        <td class="data">{{listing.activitySummary[0].est_currentValue | currency:"$":0 }}
+                            <md-icon class="negative-color"
+                                     ng-show="listing.activitySummary[0].est_thirtyDayChange < 0"
+                                     md-svg-src="/assets/icons/ic_trending_down_black_18px.svg"></md-icon>
+
+                            <md-icon class=""
+                                     ng-show="listing.activitySummary[0].est_thirtyDayChange >= 0"
+                                     md-svg-src="/assets/icons/ic_trending_up_black_18px.svg"></md-icon>
+                        </td>
+                    </tr>
+                    <tr class="data-row" ng-show='listing.activitySummary[0].est_thirtyDayChange'>
+                        <td class="card-data-label">thirty-day change</td>
+                        <td class="data"
+                            ng-class="listing.activitySummary[0].est_thirtyDayChange < 0  ? 'negative-color' : ''">
+                            {{listing.activitySummary[0].est_thirtyDayChange | currency:"$":0 }}
+                        </td>
+                    </tr>
+
+                    <tr class="data-row" ng-show='listing.activitySummary[0].est_highRange'>
+                        <td class="card-data-label">high range</td>
+                        <td class="data">{{listing.activitySummary[0].est_highRange | currency:"$":0 }}</td>
+                    </tr>
+                    <tr class="data-row" ng-show='listing.activitySummary[0].est_lowRange'>
+                        <td class="card-data-label">low range</td>
+                        <td class="data">{{listing.activitySummary[0].est_lowRange | currency:"$":0 }}</td>
+                    </tr>
+
+                    </tbody>
+                </div>
+
+            </table>
+
+
+            <!-- something for Redfin -->
+            <table ng-show='listing.activitySummary[0].est_currentValue == undefined'>
+                <thead>
+
+                </thead>
+
+                <div style="overflow: hidden; height: 100%"
+                   >
+                    <tbody>
+
+
+                    <tr>
+                        <td colspan="2" class="card-section-label">listing price</td>
+                    </tr>
+
+                    <tr class="data-row">
+                        <td class="card-data-label">current value</td>
+                        <td class="data">{{listing.activitySummary[0].est_currentValue | currency:"$":0 }}
+                            <md-icon class="negative-color"
+                                     ng-show="listing.activitySummary[0].est_thirtyDayChange < 0"
+                                     md-svg-src="/assets/icons/ic_trending_down_black_18px.svg"></md-icon>
+
+                            <md-icon class=""
+                                     ng-show="listing.activitySummary[0].est_thirtyDayChange >= 0"
+                                     md-svg-src="/assets/icons/ic_trending_up_black_18px.svg"></md-icon>
+                        </td>
+                    </tr>
+                    <tr class="data-row" ng-show='listing.activitySummary[0].est_thirtyDayChange'>
+                        <td class="card-data-label">change thirty day</td>
+                        <td class="data"
+                            ng-class="listing.activitySummary[0].est_thirtyDayChange < 0  ? 'negative-color' : ''">
+                            {{listing.activitySummary[0].est_thirtyDayChange | currency:"$":0 }}
+                        </td>
+                    </tr>
+
+                    <tr class="data-row" ng-show='listing.activitySummary[0].est_highRange'>
+                        <td class="card-data-label">high range</td>
+                        <td class="data">{{listing.activitySummary[0].est_highRange * 1000 | currency:"$":0 }}</td>
+                    </tr>
+                    <tr class="data-row" ng-show='listing.activitySummary[0].est_lowRange'>
+                        <td class="card-data-label">low range</td>
+                        <td class="data">{{listing.activitySummary[0].est_lowRange * 1000 | currency:"$":0 }}</td>
+                    </tr>
+
+                    </tbody>
+                </div>
+
+            </table>
+
+
+            <!--this is cool this is coolthis is cool this is coolthis is cool this is coolthis is cool this is coolthis is cool this is cool-->
+            <!--{{listing.activitySummary[0].listing_views_totalCnt}}-->
+
+            <!--as of  {{listing.activitySummary[0].t.time | date:"EEEE, MMM d - h:m a" }}-->
+
+
+        </div>
+
+        <!--<comment>show the proper value for days on even when we only have list_ts (listing date) by using-->
+        <!--a filter-->
+        <!--</comment>-->
+
+        <!-- show the proper value for days on even when we only have list_ts (listing date) by using -->
+        <div id="md-card-image">
+
+
+
+            <div ng-show='listing.activitySummary[0].listing_daysOn != undefined' class="logo-caption">
+                {{listing.activitySummary[0].listing_daysOn}} Days On
+            </div>
+            <div ng-show='listing.activitySummary[0].listing_ts != undefined' class="logo-caption">
+                {{listing.activitySummary[0].listing_ts | makeDaysOn}} Days On
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <md-card-content>
+
+        <h2>{{title}}</h2>
+
+        <div layout="row" padding layout-align="space-around center">
+
+
+            <div> <md-card-stat title="TOTAL" stat-model="listing.activitySummary[0].listing_views_totalCnt"></md-card-stat></div>
+
+            <div> <md-card-stat title="FAVORITES" stat-model="listing.activitySummary[0].listing_prefs_favoritesCnt"></md-card-stat></div>
+
+            <div> <md-card-stat title="X-OUTs" stat-model="listing.activitySummary[0].listing_prefs_xOutCnt"></md-card-stat></div>
+
+            <div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title="TOTAL" value="{{listing.activitySummary[0].listing_views_totalCnt}}"></md-card-stat></div>
+
+
+            <div ng-show='listing.summary.listing_views_sevenDayCnt' class="summary-item seven-count">
+                {{listing.summary.listing_views_sevenDayCnt}} in last 7 days
+            </div>
+            <div ng-show='listing.summary.listing_views_thirtyDayCnt' class="summary-item thirty-count">
+                {{listing.summary.listing_views_thirtyDayCnt}} in last 30 days
+            </div>
+
+        </div>
+    </md-card-content>
+
+
+</md-card>
+<!--
+
+"activitySummary":[
+{
+"est_rentLowRange":"1",
+"prop_views_totalCnt":"766",
+"est_highRange":"277",
+"status":"For Sale",
+"listing_mlsId":"08990196",
+"est_thirtyDayChange":"-677",
+"listing_views_totalCnt":"591",
+"est_rent":"1994",
+"est_rentHighRange":"2",
+"t":{
+    "time":1440105194147,
+    "minutes":13,
+    "seconds":14,
+    "hours":16,
+    "month":7,
+    "timezoneOffset":300,
+    "year":115,
+    "day":4,
+    "date":20
+},
+"address":"11521 N BURLINGTON RD RICHMOND, IL 60071",
+"listing_id":"4F134C97-4E33-45AC-AB89-8A36CB072DDC",
+"listing_daysOn":"27",
+"est_rentThirtyDayChange":"5",
+"est_lowRange":"238",
+"mls_id":"08990196",
+"extSysId":3,
+"listing_trend":null,
+"est_currentValue":"256344",
+"prop_prefs_favoritesCnt":"14"
+}
+],
+"success":true
+-->

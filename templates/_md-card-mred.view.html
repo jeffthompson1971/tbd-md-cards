@@ -1,0 +1,92 @@
+<md-card class="md-card  site-summary-card">
+    <div class="site-header">
+        <!--<div id= "md-card-image"></div>-->
+        <div class="mred-logo"></div>
+        <!--<i class="mdi md-accent mdi-share-variant"></i>-->
+
+        <!--<div class="card-icons-wrapper">
+            <md-button class="md-icon-button" ng-click="vm.openInBrowser(listing.subjectUrl)">
+                <md-icon md-svg-src="assets/icons/ic_open_in_browser_black_48px.svg" aria-label="Launch in browser"></md-icon>
+            </md-button>
+        </div>-->
+    </div>
+    <div layout="row">
+        <div flex class="left">
+            <div>
+                <label>ID</label>
+                <span><b>{{vm.listing.ListingId}}</b></span>
+            </div>
+
+            <div>
+                <label>Status</label>
+                <span><b>{{vm.listing.MlsStatus}}</b></span>
+            </div>
+
+            <div>
+
+                <label>Built</label>
+
+                <span ng-if="vm.listing.YearBuilt != undefined"><b>{{vm.listing.YearBuilt | unknownYearBuilt}}</b></span>
+
+                <span ng-if="vm.listing.YearBuilt == undefined"><b>*</b></span>
+
+            </div>
+
+            <div>
+                <label>Approx SF</label>
+                <span ng-if="vm.listing.LivingArea != undefined"><b>{{vm.listing.LivingArea}}</b></span>
+            </div>
+
+            <div>
+                <label>Total Room</label>
+                <span><b>{{vm.listing.RoomsTotal}}</b></span>
+            </div>
+
+            <div>
+                <label>Bedrooms</label>
+                <span><b>{{vm.listing.BedsTotal}}</b></span>
+            </div>
+
+            <div>
+                <label>Bathrooms</label>
+                <span><b>{{vm.listing.BathsFull}}.{{vm.listing.BathsHalf}}</b></span>
+            </div>
+
+        </div>
+        <div flex class="right">
+
+            <div>
+                <label>Current price</label>
+
+                <span ng-show="listing.listing_price">
+                    <b>{{vm.listing.listing_price  | noFractionCurrency}} </b>
+                    </span>
+            </div>
+
+
+            <!--<div style="border-bottom: 1px solid #eee;">
+                <label style="color: #636075;"><b>Activity on Mred</b></label>
+            </div>-->
+            <div>
+                <label>Water/Sewer</label>
+                <span><b>{{vm.listing.WaterSource | waterSourceTranslation}} / {{vm.listing.Sewer | sewerSourceTranslation}}</b></span>
+            </div>
+            <div>
+                <label>High School</label>
+                <span><b>{{vm.listing.HighSchool | formatSchoolName | toProperCase}}</b></span>
+            </div>
+            <div>
+                <label>Middle School</label>
+                <span><b>{{vm.listing.MiddleOrJuniorSchool | formatSchoolName | toProperCase}}</b></span>
+            </div>
+            <div>
+                <label>Elem School</label>
+                <span><b>{{vm.listing.ElementarySchool  | formatSchoolName | toProperCase}}</b></span>
+            </div>
+            <div>
+                <label>Lot Size</label>
+                <span><b>{{vm.listing.LotSizeArea | lotSizeTranslation}}</b></span>
+            </div>
+        </div>
+    </div>
+</md-card>

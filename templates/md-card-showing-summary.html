@@ -1,0 +1,154 @@
+<style>
+    .showing-scroller {
+
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+
+
+</style>
+
+<md-card id="md-card site-summary-card" ng-show="showings.length > 0">
+
+    <div layout="row" layout-align="space-around center" style="padding: 10px">
+
+        <div class="md-card-left-of-image">
+
+            <div>
+
+                <md-card-stat
+                        title="total Feedback"
+                        stat-model="totalCnt"
+                        md-icon="mdi-comment-text-outline">
+                </md-card-stat>
+            </div>
+
+            <br>
+
+            <div>
+                <md-card-stat title="positive"
+                              stat-model="posCnt"
+                              md-icon="mdi-comment-plus-outline"
+                              special-class="positive-color">
+                </md-card-stat>
+            </div>
+            <br>
+
+            <div>
+                <md-card-stat title="not so positive"
+                              stat-model="negCnt"
+                              md-icon="mdi-comment-alert-outline"
+                              special-class="negative-color">
+
+                </md-card-stat>
+            </div>
+
+
+            <!--as of  {{listing.activitySummary[0].t.time | date:"EEEE, MMM d - h:m a" }}-->
+
+        </div>
+
+
+        <!-- show the proper value for days on even when we only have list_ts (listing date) by using -->
+        <div id="md-card-image">
+            <div ng-show='listing.activitySummary[0].listing_daysOn != undefined' class="logo-caption">
+                {{listing.activitySummary[0].listing_daysOn}} Days On
+            </div>
+            <div ng-show='listing.activitySummary[0].listing_ts != undefined' class="logo-caption">
+                {{listing.activitySummary[0].listing_ts | makeDaysOn}} Days On
+            </div>
+        </div>
+
+
+    </div>
+
+    <md-card-content id="showingScroller">
+
+        <h2>{{title}}</h2>
+
+    </md-card-content>
+
+
+    <div class="md-actions" layout="row" layout-align="end center">
+
+        <md-button class="md-accent" ng-model="collapsed" ng-click="collapsed= !collapsed">
+            READ FEEDBACK
+            <md-icon ng-show='collapsed' class="s36"
+                     md-svg-src="assets/icons/ic_expand_more_black_48px.svg">
+            </md-icon>
+
+            <md-icon ng-show='!collapsed' class="s36"
+                     md-svg-src="assets/icons/ic_expand_less_black_48px.svg">
+            </md-icon>
+        </md-button>
+
+    </div>
+
+
+    <md-list class="showing-scroller" ng-show="collapsed==false">
+
+        <md-list-item class="md-3-line" ng-repeat="showing in showings" ng-click="show($event, showing)">
+
+            <i class="mdi mdi-comment-text md-accent  md-avatar s36">
+
+            </i>
+
+            <div class="md-list-item-text">
+
+                <h3 class="order-address">{{showing.startTime | timeago}} - {{showing.contact.name}}</h3>
+
+                <h4>{{showing.feedback}}   {{showing.startTime}}
+                </h4>
+
+                <!--<md-button class="md-accent"  ng-click="show($event)">-->
+                    <!--dialog-->
+
+                <!--</md-button>-->
+
+            </div>
+
+            <md-divider></md-divider>
+
+        </md-list-item>
+
+    </md-list>
+
+</md-card>
+<!--
+
+"activitySummary":[
+{
+"est_rentLowRange":"1",
+"prop_views_totalCnt":"766",
+"est_highRange":"277",
+"status":"For Sale",
+"listing_mlsId":"08990196",
+"est_thirtyDayChange":"-677",
+"listing_views_totalCnt":"591",
+"est_rent":"1994",
+"est_rentHighRange":"2",
+"t":{
+    "time":1440105194147,
+    "minutes":13,
+    "seconds":14,
+    "hours":16,
+    "month":7,
+    "timezoneOffset":300,
+    "year":115,
+    "day":4,
+    "date":20
+},
+"address":"11521 N BURLINGTON RD RICHMOND, IL 60071",
+"listing_id":"4F134C97-4E33-45AC-AB89-8A36CB072DDC",
+"listing_daysOn":"27",
+"est_rentThirtyDayChange":"5",
+"est_lowRange":"238",
+"mls_id":"08990196",
+"extSysId":3,
+"listing_trend":null,
+"est_currentValue":"256344",
+"prop_prefs_favoritesCnt":"14"
+}
+],
+"success":true
+-->
