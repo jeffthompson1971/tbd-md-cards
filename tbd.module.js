@@ -1,2 +1,4 @@
+!(function() {
 APP_NAME='tbd';
-angular.module('tbd', [])
+angular.module('tbd', []);
+})();
