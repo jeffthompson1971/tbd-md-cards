@@ -75,11 +75,11 @@ module.exports = function(grunt) {
 
             shares: {
 
-                cwd: './templates/',
+                cwd: '.',
 
                 src: [
 
-                    '*.html'
+                    'templates/*.html'
                 ],
                 dest: 'dist/templates.js'
             }
@@ -115,7 +115,8 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                    'public/dist/application.min.css': '<%= applicationCSSFiles %>'
+                  //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
+                  'dist/directives.min.css': 'dist/*.css'
                 }
             }
         }
@@ -159,7 +160,7 @@ module.exports = function(grunt) {
     // Default task(s).
     //grunt.registerTask('default', ['clean', 'copy', 'ngtemplates', 'sass', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concurrent:default']);
 
-    grunt.registerTask('default', ['clean', 'ngtemplates', 'sass']);
+    grunt.registerTask('default', ['clean', 'ngtemplates', 'sass', 'concat', 'cssmin']);
 
     // // Debug task.
     // grunt.registerTask('debug', ['lint', 'concurrent:debug']);
