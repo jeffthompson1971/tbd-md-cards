@@ -1,4 +1,4 @@
 !(function() {
-APP_NAME='tbd';
+THE_APP='tbd';
 angular.module('tbd', []);
 })();
