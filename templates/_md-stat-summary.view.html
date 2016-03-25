@@ -1,0 +1,137 @@
+<div id="stats-table" class="site-summary-card">
+    <div class="row">
+
+        <span class="cell showings-div">
+           
+                <div>
+                    <md-icon class="stat-icon" md-svg-src="assets/icons/showings.svg"></md-icon>
+                    <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>
+                </div>
+                <div>
+                    <span class="title">showings</span>
+  
+</div>
+</span>
+
+
+<span class="cell clicks-div">
+           <div>
+                       
+                            <!--<img src="assets/icons/arrow.png">  -->
+                             <md-icon class="stat-icon" md-svg-src="assets/icons/clicks.svg"></md-icon>
+                             <label>{{vm.listing_views_todayCnt.current}}</label> 
+                            <change-indicator data="vm.listing_views_todayCnt" rate-decimals="0" pct-decimals="0" color="light"></change-indicator>
+                        </div>
+                        <div>
+                            <span class="title">clicks</span>
+</div>
+
+
+</span>
+
+<span ng-if="showings != undefined" class="cell positive-div">
+        
+        <div>
+           
+                <!--<img src="assets/icons/chat.png"/>-->
+                      <md-icon class="stat-icon" md-svg-src="assets/icons/feedback.svg"></md-icon>
+                <label>{{vm.sentimentCounter.notNegative | percentOf:vm.showings.length | percentage}}</label>
+                        </div>
+                        <div>
+                            <span class="title">non-negative</span>
+
+</div>
+
+</span>
+</div>
+
+
+<div class="row">
+
+    <span class="cell showings-detail-div">
+        
+        <div class="statrow">
+            <span class="label">7-day</span>
+    <span class="stat">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>
+</div>
+
+<div class="statrow">
+    <span class="label">30-day</span>
+    <span class="stat">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>
+</div>
+
+<div class="statrow">
+    <span class="label">Total</span>
+    <span class="stat">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>
+</div>
+
+
+</span>
+
+<span class="cell clicks-detail-div">
+        
+        
+        <div class="statrow">
+            <span class="label">7-day</span>
+
+<span class="stat">{{vm.listing_views_sevenDayCnt.current}}</span>
+<span class="stat asterisk" ng-if="!vm.listing.activityAggregate.sevenDayViewsComplete"> * </span>
+              <br>
+                <change-indicator style="color: #999; " data="vm.listing_views_sevenDayCnt " rate-decimals="0
+" pct-decimals="0 " color="dark "></change-indicator>
+       
+             
+            </div>
+           
+            <div class="statrow ">
+                <span class="label ">30-day</span>
+                   <span class="stat ">{{vm.listing_views_thirtyDayCnt.current}}</span>
+                    <span class="stat asterisk" ng-if="!vm.listing.activityAggregate.thirtyDayViewsComplete "> * </span>
+                   <br>
+           
+                  <change-indicator data="vm.listing_views_thirtyDayCnt " rate-decimals="0 " pct-decimals="0 "  color="dark "></change-indicator>
+                  
+             
+               
+            </div>
+        
+            <div class="statrow ">
+                <span class="label " class="statrow ">Total</span>
+                <span class="stat ">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>
+            </div>     
+        
+    </span>
+    
+    
+    <span ng-if="vm.showings != undefined"  class="cell positive-detail-div ">
+        
+       
+            <div class="statrow ">
+                <span class="label ">Positive</span>
+                <span class="stat ">{{vm.sentimentCounter.positive}}</span>
+            </div>
+         
+            <div class="statrow ">
+                <span class="label ">Negative</span>
+                <span class="stat " ngClass="vm.sentimentCounter.negative> 5">{{vm.sentimentCounter.negative}}</span>
+</div>
+
+<div class="statrow">
+    <span class="label">Neutral</span>
+    <span class="stat">{{vm.sentimentCounter.neutral}}</span>
+</div>
+
+<div class="statrow">
+    <span class="label">Total</span>
+    <span class="stat">{{vm.showings.length}}</span>
+</div>
+
+
+</span>
+
+</div>
+
+
+
+
+</div>

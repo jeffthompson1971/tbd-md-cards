@@ -1,0 +1,185 @@
+ 
+   #stats-table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+   
+    
+    .row {
+        display: table-row;
+        height: auto;
+    }
+    
+    .cell {
+        display: table-cell;
+        width: auto;
+        height: auto;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .cell img {
+        display: inline-block;
+        margin: 0 !important;
+    }
+    
+    .cell label {
+        display: inline-block;
+    }
+    
+    .appointment-div {
+        background-color: #ED5C56;
+        color: #fff;
+        margin: 0;
+        padding: 5px;
+        border-right: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+    }
+    
+    .appointment-div span {
+        font-size: 12px;
+    }
+    
+    .appointment-div img {
+        width: 13px;
+    }
+    
+    .appointment-div label {
+        font-size: 20px;
+    }
+    
+    .appointment-detail-div {
+        background-color: #FACECC;
+        border-right: 1px solid #fff;
+    }
+    
+    .appointment-detail-div label {
+        font-size: 11px;
+    }
+    
+    .appointment-detail-div span {
+        font-size: 11px;
+        /* float: right;*/
+        margin-top: 5px;
+    }
+    
+    .showings-div {
+        background-color: #0096A7;
+        color: #fff;
+        margin: 0;
+        padding: 5px;
+        border-right: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+    }
+    
+    .showings-div span {
+        font-size: 12px;
+    }
+    
+    .showings-div img {
+        width: 13px;
+        height: 13px !important;
+    }
+    
+    .showings-div label {
+        font-size: 20px;
+    }
+    
+    .showings-detail-div {
+        background-color: #B2DFE5;
+        border-right: 1px solid #fff;
+    }
+    
+    .showings-detail-div label {}
+    
+    .showings-detail-div span {
+        /* float: right; */
+    }
+    
+    .clicks-div {
+        background-color: #6C697D;
+        color: #fff;
+        margin: 0;
+        padding: 5px;
+        border-right: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+    }
+    
+    .clicks-div span {
+        font-size: 12px;
+    }
+    
+    .clicks-div img {
+        width: 13px;
+    }
+    
+    .clicks-div label {
+        font-size: 20px;
+    }
+    
+    .clicks-detail-div {
+        background-color: #D3D2D7;
+        border-right: 1px solid #fff;
+    }
+    
+    .positive-div {
+        background-color: #4BBD39;
+        color: #fff;
+        margin: 0;
+        padding: 5px;
+        border-bottom: 1px solid #fff;
+        white-space: nowrap;
+    }
+    
+    .positive-div span {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    
+    .positive-div img {
+        width: 13px;
+    }
+    
+    .positive-div label {
+        font-size: 20px;
+    }
+    
+    .positive-detail-div {
+        background-color: #CAEBC5;
+        border-right: 1px solid #fff;
+    }
+    
+    .statrow {
+        padding: 1px 5px 5px 5px;
+    }
+    
+    span.label {
+     /*   float: left; */
+        font-weight: 400;
+    }
+    
+    span.stat {
+        float: right;
+    }
+    
+  .stat-icon {
+      
+        height: 32px;
+        color: #fff;
+    }
+    
+    
+// /*  stuff for small screens  */
+@media screen and (max-width: 400px) {
+    label { 
+        font-size: 12px !important;
+    }
+   .clicks-div, .positive-div, .showings-div .stat-icon {
+      font-size: 10px;
+      /*width: 12px;*/
+
+   }
+    }
+    
+  
+}

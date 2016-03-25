@@ -1,0 +1,48 @@
+<div>
+    <!--   <div class="container absolute-center login-form"> -->
+    <br>
+
+    <md-card style="width: 50%; min-width: 500px; text-align: inherit;" class="center-me  site-summary-card">
+        <md-whiteframe class="md-whiteframe-z3" layout layout-align="center center">
+            <span>
+
+<md-toolbar class="">
+                    <h1 class="md-toolbar-tools" style="letter-spacing: .4em;">SentriLock Login</h1>
+                </md-toolbar>
+  <md-content class="md-padding">
+    <div class="sw-logo">
+      <img ng-src="/assets/logos/sentrilock-logo.png"   width="281" style="width: 281px !important;"></div>
+
+    <p> Log in to SentriLock just once, we'll take it from there! </p>
+
+
+    <form  ng-submit="vm.submitLogin(login.perm, login.username, login.password)" >
+
+    
+      <md-input-container ng-disabled="false" >
+        <label for="i2">user name</label>
+
+        <input id="i2" ng-model="vm.login.username" ></input>
+      </md-input-container>
+
+      <md-input-container ng-disabled="false">
+        <label for="i3">password</label>
+        <input id="i3" ng-model="vm.login.password"></input>
+      </md-input-container>
+
+      <footer>
+        <md-checkbox ng-model='vm.login.perm' checked label="permission">
+       Use broker permissions if available.
+        </md-checkbox>
+        <md-button type="submit" value="Login" class="md-raised md-primary centerme">LOG IN</md-button>
+        <!--  <md-button type="submit" value="Login" class="md-button-raised my-md-button centerme">Log In</md-button> -->
+      </footer>
+
+    </form>
+
+  </md-content>
+     </span>
+        </md-whiteframe>
+
+    </md-card>
+</div>
