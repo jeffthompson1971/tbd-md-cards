@@ -84,7 +84,7 @@ module.exports = function(grunt) {
 
         ngtemplates: {
 
-            shares: {
+            tbd: {
 
                cwd: '.',
                options: {
