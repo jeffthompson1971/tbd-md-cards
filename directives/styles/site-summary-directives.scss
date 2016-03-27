@@ -42,12 +42,12 @@ md-card-image-overlay {
     }
   }
   
-md-card-image-overlay #md-card {
+ #md-card {
     width: 100% !important;
     margin: 0;
 }
 
-md-card-image-overlay .md-card-image {
+.md-card-image {
     width: 100% !important;
     background-size: cover;
     background-position: center center;
@@ -55,22 +55,22 @@ md-card-image-overlay .md-card-image {
     border-radius: 2px 2px 0 0;
 }
 
-md-card-image-overlay .image-text-guard {
+ .image-text-guard {
     text-align: left;
     width: 100%;
 }
 
-md-card-image-overlay .image-text-guard h5 {
+ .image-text-guard h5 {
     margin: 0;
     padding-left: 5px;
 }
 
-md-card-image-overlay .image-text-guard label {
+ .image-text-guard label {
     font-size: 18px;
     padding-left: 5px;
 }
 
-md-card-image-overlay .image-text-guard span {
+ .image-text-guard span {
     float: right;
     margin-right: 16px;
     margin-top: 3px;
@@ -177,7 +177,7 @@ min-height: 34px;
     
 }
 
-md-card{
+//md-card{
     label {
        white-space: nowrap;
     }
@@ -190,17 +190,17 @@ md-card{
         height: $card-title-bar-height;
     }
     .footer {
-  
-    padding-right: 10px;
-    text-align: right;
-    width: 100%;
-    float: right;
-   
-    border-top: 1px;
-    border-color: aquamarine;
-    border-width: 2px;
-}
-}
+    
+        padding-right: 10px;
+        text-align: right;
+        width: 100%;
+        float: right;
+    
+        border-top: 1px;
+        border-color: aquamarine;
+        border-width: 2px;
+    }
+//}
 
 
 
