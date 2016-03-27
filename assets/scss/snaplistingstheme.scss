@@ -1,0 +1,117 @@
+
+
+$md-background: #fafafa;
+
+
+
+$teal-white : #e0f2f1;
+$teal-light : #b2dfdb;
+$teal-med  : #4db6ac;
+$teal-dark :#0697a7;
+
+$accent-green : #42bd41;
+
+$blue-white: #e7e9fd; // 50
+$blue-light: #d0d9ff; // 100
+$blue-med : #91a7ff; //300
+$blue-dark : #3b50ce; // 800
+
+$ltblue-white : #e1f5fe; //50
+$ltblue-light : #b3e5fc; // 100
+$ltblue-med :  #4fc3f7; // 300
+$ltblue-dark : #0277bd; // 800 
+
+
+$white : $ltblue-white;
+$light : $teal-dark;
+$medium : $ltblue-med;
+$dark :$teal-dark;
+
+
+// ltgreen-500
+$accent-yel-500: #ffeb3b;
+
+$accent : $accent-yel-500;
+
+
+
+$primary-color-dark:   #00796B;
+$primary-color:        #009688;
+$primary-color-light:  #B2DFDB;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #607D8B;
+$primary-text-color:   #212121;
+$secondary-text-color: #727272;
+$divider-color:        #B6B6B6;
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+
+// current stuff!!
+// $logo-teil: #0797A7;
+// $logo-burgundy: #512DA8;
+// $logo-blue: #1976D2;
+
+// $primary-text: #212121;
+// $secondary-text: #727272;
+// $divider-color: #B6B6B6;
+
+// $accent-primary: #009688;
+
+
+
+
+
+
+
+/*
+Blue
+500 #2196F3
+50#E3F2FD
+100#BBDEFB
+200#90CAF9
+300#64B5F6
+400#42A5F5
+500#2196F3
+600#1E88E5
+700#1976D2
+800#1565C0
+900#0D47A1
+A100#82B1FF
+A200#448AFF
+A400#2979FF
+A700#2962FF
+
+*/
+
+
+/*
+Teal
+500 #009688
+50#E0F2F1
+100#B2DFDB
+200#80CBC4
+300#4DB6AC
+400#26A69A
+500#009688
+600#00897B
+700#00796B
+800#00695C
+900#004D40
+A100#A7FFEB
+A200#64FFDA
+A400#1DE9B6
+A700#00BFA5
+*/

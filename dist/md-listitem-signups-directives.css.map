@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AACI,2BAAmB;EACf,KAAK,EAAE,kBAAkB",
-"sources": ["../scss/md-listitem-signups-directives.scss"],
-"names": [],
-"file": "md-listitem-signups-directives.css"
-}

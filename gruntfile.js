@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         concat: {
             basic: {
                 files: {
-                    'dist/directives.js': ['directives/*.js'],
+                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js'],
                    
                 },
             },
@@ -28,11 +28,22 @@ module.exports = function(grunt) {
 
         sass: {
             dist: {
-                files: [
+                // files: [
+                //     {
+                //         expand: true,
+                //         cwd: './directives/styles',
+                //         src: ['./*.scss'],
+                //         dest: './dist/',
+                //         ext: '.css'
+                //     }
+
+                // ]
+                
+                  files: [
                     {
                         expand: true,
-                        cwd: 'scss',
-                        src: ['./*.scss'],
+                       // cwd: './directives/styles',
+                        src: ['./**/styles/*.scss'],
                         dest: './dist/',
                         ext: '.css'
                     }
@@ -41,7 +52,7 @@ module.exports = function(grunt) {
             }
         },
 
-        clean: [".//dist"],
+        clean: ["./dist"],
 
         copy: {
             templates: {
@@ -73,13 +84,21 @@ module.exports = function(grunt) {
 
         ngtemplates: {
 
-            shares: {
+            tbd: {
 
-                cwd: '.',
-
+               cwd: '.',
+               options: {
+                      prefix: 'templates',
+                      
+                      url: function(url) { 
+                          return  url.split('/').pop();
+                       
+                      }
+               },
                 src: [
 
-                    'templates/*.html'
+                    'directives/**/**.html',
+                    'views/**/**.html'
                 ],
                 dest: 'dist/templates.js'
             }
@@ -116,7 +135,7 @@ module.exports = function(grunt) {
             combine: {
                 files: {
                   //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
-                  'dist/directives.min.css': 'dist/*.css'
+                  'dist/tbd-md-cards.min.css': 'dist/**/*.css'
                 }
             }
         }
