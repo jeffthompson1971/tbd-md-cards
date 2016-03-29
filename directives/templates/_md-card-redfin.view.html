@@ -59,7 +59,7 @@
             <div>
                 <label>Current price</label>
                 <span ng-show="listing.listing_price">
-                    <b>{{listing.listing_price  | noFractionCurrency}} </b>
+                    <b>{{listing.listing_price  }} </b>
                     </span>
 
                 <span ng-show="! listing.listing_price">
@@ -75,7 +75,7 @@
                 <label>Favorites</label>
                 
                 <span ng-if="listing.listing_favoritesCnt">
-                  <md-icon  class="favs" md-svg-src="assets/icons/ic_favorite_black_24px.svg"></md-icon>
+                  <md-icon  class="favs inline-small" md-svg-src="assets/icons/ic_favorite_black_24px.svg"></md-icon>
                   <b>{{listing.listing_favoritesCnt}}</b>
               
                 </span>
