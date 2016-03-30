@@ -59,7 +59,7 @@
             <div>
                 <label>Current price</label>
                 <span ng-show="listing.listing_price">
-                    <b>{{listing.listing_price  }} </b>
+                    <b>{{listing.listing_price | noFractionCurrency }} </b>
                     </span>
 
                 <span ng-show="! listing.listing_price">
