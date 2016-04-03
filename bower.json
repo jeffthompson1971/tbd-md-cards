@@ -6,7 +6,7 @@
     "Jeff Thompson (jeffthompson1971@gmail.com)"
   ],
   "description": "material design custom real estate cards",
-  "main": "dist/tbd-md-cards.js",
+  "main": ["dist/tbd-md-cards.js", "dist/tbd-md-cards.min.css"],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -20,4 +20,5 @@
     "postinstall": "npm install && grunt"
   
   }
+
 }
