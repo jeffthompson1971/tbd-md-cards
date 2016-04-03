@@ -158,15 +158,6 @@ module.exports = function(grunt) {
     // Making grunt default to force in order not to break the project.
     grunt.option('force', true);
 
-    // // A Task for loading the configuration object
-    // grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function() {
-    //     var init = require('./config/init')();
-    //     var config = require('./config/config');
-    //     console.log(config.assets.js)
-    //     grunt.config.set('applicationJavaScriptFiles', config.assets.js);
-    //     grunt.config.set('applicationCSSFiles', config.assets.css);
-    // });
-
     grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.loadNpmTasks('grunt-contrib-sass');
@@ -176,23 +167,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    // Default task(s).
-    //grunt.registerTask('default', ['clean', 'copy', 'ngtemplates', 'sass', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concurrent:default']);
-
     grunt.registerTask('default', ['clean', 'ngtemplates', 'sass', 'concat', 'cssmin']);
 
-    // // Debug task.
-    // grunt.registerTask('debug', ['lint', 'concurrent:debug']);
-
-    // // Secure task(s).
-    // grunt.registerTask('secure', ['env:secure', 'lint', 'concurrent:default']);
-
-    // // Lint task(s).
-    // //grunt.registerTask('lint', ['jshint', 'csslint']);
-
-    // // Build task(s).
-    // grunt.registerTask('build', ['copy', 'ngtemplates', 'sass', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
-
-    // // Test task.
-    // grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
-};
+  };

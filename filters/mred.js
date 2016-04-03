@@ -173,7 +173,7 @@
                             fieldText += "Well Community";
                             break;
                         case "E":
-                            fieldText += "Well Privite";
+                            fieldText += "Well Private";
                             break;
                         case "F":
                             fieldText += "Well Private Company";

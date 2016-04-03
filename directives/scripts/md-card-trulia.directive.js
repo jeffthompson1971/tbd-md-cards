@@ -49,6 +49,7 @@
 
     function MdCardTruliaController($scope, PalSvc) {
         var vm = this;
+        
         $scope.listing = vm.listing;
         activate();
         
@@ -58,11 +59,17 @@
         //$scope.$watch('vm.data', activate);
         
         $scope.$watch('vm.listing', function (theListing) {
-
-            if (_.isUndefined(theListing))
+             var myRe = /\d\d\d\d\d/g;    
+         if (_.isUndefined(theListing))
                 return;
             $scope.listing = theListing;
-
+            try{
+                  $scope.mZip = myRe.exec(theListing.address)[0]; 
+            
+            } catch (ex) {
+            
+                
+            }
         });
 
         function activate() {

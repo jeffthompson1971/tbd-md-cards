@@ -59,13 +59,24 @@
             <div>
                 <label>Current price</label>
                 <span ng-show="listing.listing_price">
-                    <b>{{listing.listing_price  | noFractionCurrency}} </b>
+                    <b>{{listing.listing_price | noFractionCurrency }} </b>
                     </span>
 
                 <span ng-show="! listing.listing_price">
                      <b>*</b>
                  </span>
             </div>
+            <div>
+                <label>Redfin Estimate</label>
+                <span ng-show="listing.redfinEstimate">
+                    <b>{{listing.redfinEstimate  | noFractionCurrency}} </b>
+                    </span>
+
+                <span ng-show="! listing.redfinEstimate">
+                     <b>*</b>
+                 </span>
+            </div>
+
 
 
             <div style="border-bottom: 1px solid #eee;">
@@ -73,9 +84,9 @@
             </div>
             <div>
                 <label>Favorites</label>
-                
+
                 <span ng-if="listing.listing_favoritesCnt">
-                  <md-icon  class="favs" md-svg-src="assets/icons/ic_favorite_black_24px.svg"></md-icon>
+                  <md-icon  class="favs inline-small" md-svg-src="assets/icons/ic_favorite_black_24px.svg"></md-icon>
                   <b>{{listing.listing_favoritesCnt}}</b>
               
                 </span>
@@ -187,7 +198,7 @@
 
 
     </div> -->
- <p class=footer> {{listing.t.time | timeago }} </p>
+    <p class=footer> {{listing.t.time | timeago }} </p>
 
 </md-card>
 <!--

@@ -144,6 +144,9 @@ md-card-image-overlay {
 
 
 .site-summary-card {
+    
+   
+    
 $card-title-bar-height: 30px;
 text-align: left;
 
@@ -151,8 +154,12 @@ md-icon.favs svg {
     height: 15px;
     font-size: 12px;
     fill: #636075 !important;
+           position: relative;
+    right: 1px;
+    top: 3px;
 }
-    
+
+
 input .share-url-dialog {
     
 min-height: 34px;
@@ -193,7 +200,7 @@ min-height: 34px;
     
         padding-right: 10px;
         text-align: right;
-        width: 100%;
+       // width: 100%;
         float: right;
     
         border-top: 1px;
@@ -789,7 +796,9 @@ md-card-zillow .md-card-image {
         border-right: 1px solid #fff;
     }
     
-    .showings-detail-div label {}
+    .showings-detail-div label {
+        
+    }
     
     .showings-detail-div span {
         /* float: right; */
