@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         concat: {
             basic: {
                 files: {
-                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js'],
+                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js', 'templates.js'],
                    
                 },
             },
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
                     'directives/**/**.html',
                     'views/**/**.html'
                 ],
-                dest: 'dist/templates.js'
+                dest: 'templates.js'
             }
 
         },
