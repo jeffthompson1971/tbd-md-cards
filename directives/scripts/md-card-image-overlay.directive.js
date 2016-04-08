@@ -59,10 +59,10 @@
             
               var el = angular.element($scope.meElement [0].querySelector('#md-card-image'));
 
-            el.css({
-                'background-image': 'url(' + theListing.photoUrl + ')'
+            // el.css({
+            //     'background-image': 'url(' + theListing.photoUrl + ')'
 
-            });
+            // });
             
             $scope.listing = theListing;
         });

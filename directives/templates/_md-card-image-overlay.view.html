@@ -1,6 +1,7 @@
 <md-card ng-cloak id="md-card">
 
-    <div id="md-card-image" style="position: relative">
+    <div id="md-card-image" style="position: relative" img-cache ic-bg="{{listing.photoUrl}}">
+
 
         <div class="trending-list-guard">
 
@@ -23,5 +24,6 @@
     </div>
     <md-stat-summary ng-if="listing.activityAggregate"  listing="listing" showings="showings" title="Showing Summary"> </md-stat-summary>
 
+  
 
 </md-card>
