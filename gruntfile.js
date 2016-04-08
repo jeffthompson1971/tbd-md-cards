@@ -19,7 +19,8 @@ module.exports = function(grunt) {
         concat: {
             basic: {
                 files: {
-                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js', 'templates.js'],
+                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js', 'templates.js', 
+                     'imagenie/imagenie.js', 'bower_components/**/dist/*.min.js', '!bower_components/**/dist/*nopromises.*'],
                    
                 },
             },
@@ -28,18 +29,7 @@ module.exports = function(grunt) {
 
         sass: {
             dist: {
-                // files: [
-                //     {
-                //         expand: true,
-                //         cwd: './directives/styles',
-                //         src: ['./*.scss'],
-                //         dest: './dist/',
-                //         ext: '.css'
-                //     }
-
-                // ]
-                
-                  files: [
+                    files: [
                     {
                         expand: true,
                        // cwd: './directives/styles',
@@ -105,22 +95,6 @@ module.exports = function(grunt) {
 
         },
 
-        // jshint: {
-        //     all: {
-        //         src: watchFiles.clientJS.concat(watchFiles.serverJS),
-        //         options: {
-        //             jshintrc: true
-        //         }
-        //     }
-        // },
-        // csslint: {
-        //     options: {
-        //         csslintrc: '.csslintrc',
-        //     },
-        //     all: {
-        //         src: watchFiles.clientCSS
-        //     }
-        // },
         uglify: {
             production: {
                 options: {
@@ -139,16 +113,7 @@ module.exports = function(grunt) {
                 }
             }
         }
-        // nodemon: {
-        //     dev: {
-        //         script: 'server.js',
-        //         options: {
-        //             nodeArgs: ['--debug'],
-        //             ext: 'js,html',
-        //             watch: watchFiles.serverViews.concat(watchFiles.serverJS)
-        //         }
-        //     }
-        // },
+
 
     });
 
