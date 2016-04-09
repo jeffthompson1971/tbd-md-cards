@@ -98,7 +98,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-image-overlay.view.html',
     "<md-card ng-cloak id=\"md-card\">\n" +
     "\n" +
-    "    <div id=\"md-card-image\" style=\"position: relative\">\n" +
+    "    <div id=\"md-card-image\" style=\"position: relative\" imagenie=\"{{listing.photoUrl}}\">\n" +
     "\n" +
     "        <div class=\"trending-list-guard\">\n" +
     "\n" +

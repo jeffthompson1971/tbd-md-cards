@@ -19,9 +19,14 @@ module.exports = function(grunt) {
         concat: {
             basic: {
                 files: {
-                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js', 'templates.js', 
-                     'imagenie/imagenie.js', 'bower_components/**/dist/*.min.js', '!bower_components/**/dist/*nopromises.*'],
-                   
+                    'dist/tbd-md-cards.js': [
+                        'tbd.module.js',
+                        'directives/scripts/*.js',
+                        'filters/*.js', 'templates.js',
+                        'bower_components/localforage/dist/localforage.min.js',
+                        'bower_components/angular-localforage/dist/angular-localForage.min.js',
+                        'imagenie/imagenie.js'],
+
                 },
             },
         },
@@ -29,10 +34,10 @@ module.exports = function(grunt) {
 
         sass: {
             dist: {
-                    files: [
+                files: [
                     {
                         expand: true,
-                       // cwd: './directives/styles',
+                        // cwd: './directives/styles',
                         src: ['./**/styles/*.scss'],
                         dest: './dist/',
                         ext: '.css'
@@ -76,15 +81,15 @@ module.exports = function(grunt) {
 
             tbd: {
 
-               cwd: '.',
-               options: {
-                      prefix: 'templates',
-                      
-                      url: function(url) { 
-                          return  url.split('/').pop();
-                       
-                      }
-               },
+                cwd: '.',
+                options: {
+                    prefix: 'templates',
+
+                    url: function(url) {
+                        return url.split('/').pop();
+
+                    }
+                },
                 src: [
 
                     'directives/**/**.html',
@@ -108,8 +113,8 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                  //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
-                  'dist/tbd-md-cards.min.css': 'dist/**/*.css'
+                    //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
+                    'dist/tbd-md-cards.min.css': 'dist/**/*.css'
                 }
             }
         }
@@ -134,4 +139,4 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['clean', 'ngtemplates', 'sass', 'concat', 'cssmin']);
 
-  };
+};
