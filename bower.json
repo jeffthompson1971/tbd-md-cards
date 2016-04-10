@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "localforage": "~1.4.0",
-    "angular-localforage": "~1.2.5"
-   
+    "angular-localforage": "~1.2.5",
+    "imagenie-anywhere": "*"
   },
   "resolutions": {
     "localforage": "~1.4.0"
