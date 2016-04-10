@@ -2,6 +2,8 @@
 
 module.exports = function(grunt) {
     // Unified Watch Object
+    
+    var shell = require('shelljs');
     var watchFiles = {
 
         clientViews: ['public/modules/**/views/**/*.html'],
@@ -10,6 +12,7 @@ module.exports = function(grunt) {
         clientSASS: ['public/modules/**/*.scss', 'public/styles/*.scss']
 
     };
+
 
     // Project Configuration
     grunt.initConfig({
@@ -122,6 +125,15 @@ module.exports = function(grunt) {
 
     });
 
+function run(cmd, msg){
+    shell.exec(cmd, {silent:true});
+    // if( msg ){
+    //   grunt.log.ok(msg);
+    // }
+  }
+  
+   
+
     // Load NPM tasks
     require('load-grunt-tasks')(grunt);
 
@@ -136,7 +148,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
 
     grunt.loadNpmTasks('grunt-contrib-clean');
+    
+    grunt.registerTask('submodules', 'pull any submodules', function(){
+    // Make sure we have the submodule in dist
+    run("git submodule update --init --recursive");
+    
+  });
 
-    grunt.registerTask('default', ['clean', 'ngtemplates', 'sass', 'concat', 'cssmin']);
+    grunt.registerTask('default', ['clean', 'submodules', 'ngtemplates', 'sass', 'concat', 'cssmin']);
 
 };
