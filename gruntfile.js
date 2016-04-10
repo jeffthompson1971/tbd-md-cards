@@ -25,10 +25,11 @@ module.exports = function(grunt) {
                     'dist/tbd-md-cards.js': [
                         'tbd.module.js',
                         'directives/scripts/*.js',
-                        'filters/*.js', 'templates.js',
-                        'bower_components/localforage/dist/localforage.min.js',
-                        'bower_components/angular-localforage/dist/angular-localForage.min.js',
-                        'imagenie/imagenie.js'],
+                        'filters/*.js', 'templates.js'
+                        //'bower_components/localforage/dist/localforage.min.js',
+                        //'bower_components/angular-localforage/dist/angular-localForage.min.js',
+                        //'imagenie/imagenie.js'
+                        ],
 
                 },
             },
@@ -145,6 +146,7 @@ function run(cmd, msg){
     grunt.loadNpmTasks('grunt-contrib-sass');
 
     grunt.loadNpmTasks('grunt-contrib-concat');
+    
     grunt.loadNpmTasks('grunt-angular-templates');
 
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -155,6 +157,6 @@ function run(cmd, msg){
     
   });
 
-    grunt.registerTask('default', ['clean', 'submodules', 'ngtemplates', 'sass', 'concat', 'cssmin']);
+    grunt.registerTask('default', ['clean',  'ngtemplates', 'sass', 'concat', 'cssmin']);
 
 };
