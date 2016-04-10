@@ -23,12 +23,13 @@ module.exports = function(grunt) {
             basic: {
                 files: {
                     'dist/tbd-md-cards.js': [
-                        'tbd.module.js',
-                        'directives/scripts/*.js',
-                        'filters/*.js', 'templates.js',
+                        
                         'bower_components/localforage/dist/localforage.min.js',
                         'bower_components/angular-localforage/dist/angular-localForage.min.js',
-                        'bower_components/imagenie-anywhere/imagenie.js'
+                        'bower_components/imagenie-anywhere/imagenie.js',
+                        'tbd.module.js',
+                        'directives/scripts/*.js',
+                        'filters/*.js', 'templates.js'
                         ],
 
                 },
