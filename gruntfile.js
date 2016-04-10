@@ -19,8 +19,14 @@ module.exports = function(grunt) {
         concat: {
             basic: {
                 files: {
-                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js', 'templates.js'],
-                   
+                    'dist/tbd-md-cards.js': [
+                        'tbd.module.js',
+                        'directives/scripts/*.js',
+                        'filters/*.js', 'templates.js',
+                        'bower_components/localforage/dist/localforage.min.js',
+                        'bower_components/angular-localforage/dist/angular-localForage.min.js',
+                        'imagenie/imagenie.js'],
+
                 },
             },
         },
@@ -28,21 +34,10 @@ module.exports = function(grunt) {
 
         sass: {
             dist: {
-                // files: [
-                //     {
-                //         expand: true,
-                //         cwd: './directives/styles',
-                //         src: ['./*.scss'],
-                //         dest: './dist/',
-                //         ext: '.css'
-                //     }
-
-                // ]
-                
-                  files: [
+                files: [
                     {
                         expand: true,
-                       // cwd: './directives/styles',
+                        // cwd: './directives/styles',
                         src: ['./**/styles/*.scss'],
                         dest: './dist/',
                         ext: '.css'
@@ -86,15 +81,15 @@ module.exports = function(grunt) {
 
             tbd: {
 
-               cwd: '.',
-               options: {
-                      prefix: 'templates',
-                      
-                      url: function(url) { 
-                          return  url.split('/').pop();
-                       
-                      }
-               },
+                cwd: '.',
+                options: {
+                    prefix: 'templates',
+
+                    url: function(url) {
+                        return url.split('/').pop();
+
+                    }
+                },
                 src: [
 
                     'directives/**/**.html',
@@ -105,22 +100,6 @@ module.exports = function(grunt) {
 
         },
 
-        // jshint: {
-        //     all: {
-        //         src: watchFiles.clientJS.concat(watchFiles.serverJS),
-        //         options: {
-        //             jshintrc: true
-        //         }
-        //     }
-        // },
-        // csslint: {
-        //     options: {
-        //         csslintrc: '.csslintrc',
-        //     },
-        //     all: {
-        //         src: watchFiles.clientCSS
-        //     }
-        // },
         uglify: {
             production: {
                 options: {
@@ -134,21 +113,12 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                  //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
-                  'dist/tbd-md-cards.min.css': 'dist/**/*.css'
+                    //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
+                    'dist/tbd-md-cards.min.css': 'dist/**/*.css'
                 }
             }
         }
-        // nodemon: {
-        //     dev: {
-        //         script: 'server.js',
-        //         options: {
-        //             nodeArgs: ['--debug'],
-        //             ext: 'js,html',
-        //             watch: watchFiles.serverViews.concat(watchFiles.serverJS)
-        //         }
-        //     }
-        // },
+
 
     });
 
@@ -169,4 +139,4 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['clean', 'ngtemplates', 'sass', 'concat', 'cssmin']);
 
-  };
+};

@@ -1,4 +1,4 @@
-!(function () {
+!(function() {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -14,7 +14,7 @@
         return {
 
             restrict: 'E',
-            templateUrl: function (elem, attrs) {
+            templateUrl: function(elem, attrs) {
 
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-card-image-overlay.view.html" : 'templates/_md-card-image-overlay.view.html';
             },
@@ -31,11 +31,10 @@
             controller: MdCardImageOverlayController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function (scope, element, attrs) {
+            link: function(scope, element, attrs) {
 
                 scope.title = attrs.title;
                 scope.meElement = element;
-
 
             }
         };
@@ -51,39 +50,30 @@
 
         $scope.$watch('vm.data', activate);
 
-        $scope.$watch('vm.listing', function (theListing) {
+        $scope.$watch('vm.listing', function(theListing) {
 
             if (_.isUndefined(theListing))
                 return;
-            //var el = ($scope.meElement.find('#md-card-image'));
-            
-              var el = angular.element($scope.meElement [0].querySelector('#md-card-image'));
 
-            el.css({
-                'background-image': 'url(' + theListing.photoUrl + ')'
-
-            });
-            
             $scope.listing = theListing;
         });
 
-        $scope.$watch('vm.showings', function (theShowings) {
+        $scope.$watch('vm.showings', function(theShowings) {
 
-           if (_.isUndefined(theShowings))
+            if (_.isUndefined(theShowings))
                 return;
-           for (var i = 0; i < theShowings.length; ++i) {
+            for (var i = 0; i < theShowings.length; ++i) {
 
-                      var showing = theShowings[i];
+                var showing = theShowings[i];
 
-                        if (showing.potentialOffer) {
-                              $scope.listing.trends.push("POTENTIAL OFFER");
-                            //alert();
-
-                        }
+                if (showing.potentialOffer) {
+                    $scope.listing.trends.push("POTENTIAL OFFER");
+                }
             }
-            
+
             $scope.showings = theShowings;
         });
+        
         function activate() {
             vm.displayRateOfChange = _.isUndefined(vm.displayRateOfChange) ? true : vm.displayRateOfChange;
             vm.valueType = vm.valueType || 'number';
@@ -103,7 +93,6 @@
             }
         }
     }
-
 
     function getIndicatorCss(data) {
         if (data) {
