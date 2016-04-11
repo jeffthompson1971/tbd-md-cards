@@ -19,7 +19,7 @@
     "tests"
   ],
   "scripts": {
-    "postinstall": "npm installl && grunt"
+    "postinstall": "npm install && grunt"
   },
   "dependencies": {
     "localforage": "~1.4.0",
