@@ -2,6 +2,8 @@
 
 module.exports = function(grunt) {
     // Unified Watch Object
+    
+    var shell = require('shelljs');
     var watchFiles = {
 
         clientViews: ['public/modules/**/views/**/*.html'],
@@ -11,6 +13,7 @@ module.exports = function(grunt) {
 
     };
 
+
     // Project Configuration
     grunt.initConfig({
 
@@ -19,8 +22,16 @@ module.exports = function(grunt) {
         concat: {
             basic: {
                 files: {
-                    'dist/tbd-md-cards.js': ['tbd.module.js','directives/scripts/*.js', 'filters/*.js', 'templates.js'],
-                   
+                    'dist/tbd-md-cards.js': [
+                        
+                       // 'bower_components/localforage/dist/localforage.min.js',
+                        //'bower_components/angular-localforage/dist/angular-localForage.min.js',
+                        //'bower_components/imagenie-anywhere/imagenie.js',
+                        'tbd.module.js',
+                        'directives/scripts/*.js',
+                        'filters/*.js', 'templates.js'
+                        ],
+
                 },
             },
         },
@@ -28,21 +39,10 @@ module.exports = function(grunt) {
 
         sass: {
             dist: {
-                // files: [
-                //     {
-                //         expand: true,
-                //         cwd: './directives/styles',
-                //         src: ['./*.scss'],
-                //         dest: './dist/',
-                //         ext: '.css'
-                //     }
-
-                // ]
-                
-                  files: [
+                files: [
                     {
                         expand: true,
-                       // cwd: './directives/styles',
+                        // cwd: './directives/styles',
                         src: ['./**/styles/*.scss'],
                         dest: './dist/',
                         ext: '.css'
@@ -86,15 +86,15 @@ module.exports = function(grunt) {
 
             tbd: {
 
-               cwd: '.',
-               options: {
-                      prefix: 'templates',
-                      
-                      url: function(url) { 
-                          return  url.split('/').pop();
-                       
-                      }
-               },
+                cwd: '.',
+                options: {
+                    prefix: 'templates',
+
+                    url: function(url) {
+                        return url.split('/').pop();
+
+                    }
+                },
                 src: [
 
                     'directives/**/**.html',
@@ -105,22 +105,6 @@ module.exports = function(grunt) {
 
         },
 
-        // jshint: {
-        //     all: {
-        //         src: watchFiles.clientJS.concat(watchFiles.serverJS),
-        //         options: {
-        //             jshintrc: true
-        //         }
-        //     }
-        // },
-        // csslint: {
-        //     options: {
-        //         csslintrc: '.csslintrc',
-        //     },
-        //     all: {
-        //         src: watchFiles.clientCSS
-        //     }
-        // },
         uglify: {
             production: {
                 options: {
@@ -134,23 +118,23 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                  //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
-                  'dist/tbd-md-cards.min.css': 'dist/**/*.css'
+                    //  'dist/directives.min.css': '<%= applicationCSSFiles %>'
+                    'dist/tbd-md-cards.min.css': 'dist/**/*.css'
                 }
             }
         }
-        // nodemon: {
-        //     dev: {
-        //         script: 'server.js',
-        //         options: {
-        //             nodeArgs: ['--debug'],
-        //             ext: 'js,html',
-        //             watch: watchFiles.serverViews.concat(watchFiles.serverJS)
-        //         }
-        //     }
-        // },
+
 
     });
+
+function run(cmd, msg){
+    shell.exec(cmd, {silent:true});
+    // if( msg ){
+    //   grunt.log.ok(msg);
+    // }
+  }
+  
+   
 
     // Load NPM tasks
     require('load-grunt-tasks')(grunt);
@@ -163,10 +147,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
 
     grunt.loadNpmTasks('grunt-contrib-concat');
+    
     grunt.loadNpmTasks('grunt-angular-templates');
 
     grunt.loadNpmTasks('grunt-contrib-clean');
+    
+    grunt.registerTask('submodules', 'pull any submodules', function(){
+    // Make sure we have the submodule in dist
+    run("git submodule update --init --recursive");
+    
+  });
 
-    grunt.registerTask('default', ['clean', 'ngtemplates', 'sass', 'concat', 'cssmin']);
+    grunt.registerTask('default', ['clean',  'ngtemplates', 'sass', 'concat', 'cssmin']);
 
-  };
+};

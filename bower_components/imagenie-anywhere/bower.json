@@ -1,0 +1,40 @@
+{
+  "name": "imagenie-anywhere",
+  "main": [
+    "imagenie.js",
+    "imagenie.min.js"
+  ],
+  "version": "1.0.0",
+  "homepage": "https://github.com/jeffthompson1971/imagenie-anywhere",
+  "authors": [
+    "Sani Yusuf <saniyusuf@gmail.com>"
+  ],
+  "description": "An angular js directive/component for auto caching of images with local-forage library",
+  "keywords": [
+    "images",
+    "cache",
+    "angular",
+    "storage"
+  ],
+ 
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "karma.conf.js",
+    "gulpfile.js",
+    ".gitignore"
+  ],
+  
+  "dependencies": {
+    "angular-localforage": "~1.2.2",
+    "localforage": "~1.2.2"
+  },
+  "resolutions": {
+    "localforage": "1.2.2"
+   
+  }
+}

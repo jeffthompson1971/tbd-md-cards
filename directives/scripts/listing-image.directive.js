@@ -17,18 +17,13 @@
                 listing: '='
 
             },
-            //template: '<img src="{{source}}"></img>',
-
+            transclude: true,
+          
+            template: '<div style="width: inherit; height: inherit; background-size: cover; background-position: center center; background-repeat: no-repeat;" imagenie="{{source}}"></div>',
             link: function (scope, element, attrs) {
 
                 scope.source = attrs.source;
-
-                //var el = angular.element(element.find('#image-l'));
-                var el = angular.element(element[0].querySelector('#image-l'));
-                el.css({
-                    'background-image': 'url(' + scope.source + ')'
-
-                });
+              
 
             }
         }
