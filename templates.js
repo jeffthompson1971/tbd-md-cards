@@ -1899,14 +1899,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                sysId=\"2\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
-    "              <li>\n" +
+    "              <!--<li>\n" +
     "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[10]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "                    <div style=\"width: 100%;\">\n" +
     "                        <md-card-showingassist listing=\"vm.theListing.activityAggregate.snapshots[10].snapshots\" title=\"ShowingAssist\">\n" +
     "                        </md-card-showingassist>\n" +
     "                    </div>\n" +
     "                </div>\n" +
-    "            </li>\n" +
+    "            </li>-->\n" +
     "        </ul>\n" +
     "    </div>\n" +
     "</div>"
