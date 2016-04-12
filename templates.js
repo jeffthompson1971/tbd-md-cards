@@ -1877,9 +1877,17 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </div>\n" +
     "            </li>\n" +
     "            <li>\n" +
-    "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
+    "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\" \n" +
+    "                    imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.theListing.activityAggregate.snapshots[8].data'\n" +
     "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
+    "            </li>\n" +
+    "            \n" +
+    "              <li>\n" +
+    "                <md-card-showing-assist ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\" \n" +
+    "                    imgurl=\"/assets/logos/ShowingsCom_243.png\" listing='vm.theListing.activityAggregate.snapshots[10].data'\n" +
+    "                title=\"Summary - Feedback on your showings\" sysId=\"10\">\n" +
+    "                </md-card-showing-assist>\n" +
     "            </li>\n" +
     "             <!--<li>\n" +
     "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
