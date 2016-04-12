@@ -621,6 +621,38 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-showing-assist.view.html',
+    "<md-card>\n" +
+    "    <div class=\"site-header\">\n" +
+    "        <div class=\"showingsdotcom-logo\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"feedback-div\">\n" +
+    "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
+    "\n" +
+    "\n" +
+    "            <label><b> {{showing.contact.name}}</b></label>\n" +
+    "            <span>{{showing.date | timeago }}</span>\n" +
+    "            <span>{{showing.date | date:'short' }}</span>\n" +
+    "\n" +
+    "\n" +
+    "            <p>{{showing.type.msg}}</p>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "        </div>\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "\n" +
+    "            <label><b>Show More</b></label>\n" +
+    "            <span> ... </span>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "</md-card>"
+  );
+
+
   $templateCache.put('templates/_md-card-showing-detail.view.html',
     "<style>\n" +
     "    .dialogdemoBasicUsage #popupContainer {\n" +
@@ -715,64 +747,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <!--</div>-->\n" +
     "    </form>\n" +
     "</md-dialog>"
-  );
-
-
-  $templateCache.put('templates/_md-card-showingassist.view.html',
-    "<md-card>\n" +
-    "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingassist-logo\"></div>\n" +
-    "    </div>\n" +
-    "    <div class=\"feedback-div\">\n" +
-    "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
-    "\n" +
-    "\n" +
-    "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "            <p> {{showing.feedback}}</p>\n" +
-    "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
-    "\n" +
-    "            <label><b>Show More</b></label>\n" +
-    "            <span> ... </span>\n" +
-    "            <p> {{showing.feedback}}</p>\n" +
-    "\n" +
-    "\n" +
-    "        </div>\n" +
-    "        <!--\n" +
-    "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
-    "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
-    "\"sentiment\":0,\n" +
-    "\"potentialOffer\":false,\n" +
-    "\"time\":\"9:30 AM - 10:30 AM\",\n" +
-    "\"intShowingId\":\"5e41609e-f7af-4c5a-93bd-eca04af14971\",\n" +
-    "\"listing_id\":\"4F134C97-4E33-45AC-AB89-8A36CB072DDC\",\n" +
-    "\"date\":\"11-28-2015\",\n" +
-    "\"type\":{\n" +
-    "\"result\":\"Setup\",\n" +
-    "\"name\":\"Showing\",\n" +
-    "\"msg\":\"\"\n" +
-    "},\n" +
-    "\"contact\":{\n" +
-    "\"phone\":{\n" +
-    "\"office\":\"847-395-3000\",\n" +
-    "\"mobile\":\"847-878-7653\"\n" +
-    "},\n" +
-    "\"name\":\"DIANE KELLY\",\n" +
-    "\"emails\":\"DIANEKELLY42@YAHOO.COM\"\n" +
-    "}\n" +
-    "},\n" +
-    "{\n" +
-    "\n" +
-    "-->\n" +
-    "\n" +
-    "    </div>\n" +
-    "\n" +
-    "</md-card>"
   );
 
 
@@ -1435,13 +1409,13 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "\n" +
     "\n" +
-    "            <p> {{showing.feedback}}</p>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
     "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
     "\n" +
     "            <label><b>Show More</b></label>\n" +
     "            <span> ... </span>\n" +
-    "            <p> {{showing.feedback}}</p>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
     "\n" +
     "        </div>\n" +
@@ -1882,19 +1856,19 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </div>\n" +
     "            </li>\n" +
     "            <li>\n" +
-    "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\" \n" +
-    "                    imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.theListing.activityAggregate.snapshots[8].data'\n" +
-    "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
+    "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\"\n" +
+    "                imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.theListing.activityAggregate.snapshots[8].data' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
     "            </li>\n" +
-    "            \n" +
-    "              <li>\n" +
-    "                <md-card-showing-assist ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\" \n" +
-    "                    imgurl=\"/assets/logos/ShowingsCom_243.png\" listing='vm.theListing.activityAggregate.snapshots[10].data'\n" +
-    "                title=\"Summary - Feedback on your showings\" sysId=\"10\">\n" +
+    "\n" +
+    "            <li>\n" +
+    "                <md-card-showing-assist ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\"\n" +
+    "                imgurl=\"/assets/logos/showingassist-logo.png\" showings='vm.theListing.activityAggregate.snapshots[10].data' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"10\">\n" +
     "                </md-card-showing-assist>\n" +
     "            </li>\n" +
-    "             <!--<li>\n" +
+    "            <!--<li>\n" +
     "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
     "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
@@ -1904,14 +1878,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                sysId=\"2\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
-    "              <!--<li>\n" +
-    "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[10]\" layout=\"row\" layout-align=\"space-around center\">\n" +
-    "                    <div style=\"width: 100%;\">\n" +
-    "                        <md-card-showingassist listing=\"vm.theListing.activityAggregate.snapshots[10].snapshots\" title=\"ShowingAssist\">\n" +
-    "                        </md-card-showingassist>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </li>-->\n" +
     "        </ul>\n" +
     "    </div>\n" +
     "</div>"

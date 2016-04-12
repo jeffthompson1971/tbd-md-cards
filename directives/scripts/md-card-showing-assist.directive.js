@@ -26,7 +26,7 @@
                 scope.$watch("ngClass", function(value) {
                     $(element).attr("class", value)
                 });
-                scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showings.com_40x146.png";
+                scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showingassist-logo.png";
                 scope.title = attrs.title;
                 scope.sysId = attrs.sysid;
                 scope.imgUrl = attrs.imgurl;
@@ -80,7 +80,7 @@
         };
     }
 
-    MdCardShowingAssistController.$inject = ['$scope', , '$mdDialog'];
+    MdCardShowingAssistController.$inject = ['$scope', '$mdDialog'];
 
     function DialogController($scope, $mdDialog, showing) {
 

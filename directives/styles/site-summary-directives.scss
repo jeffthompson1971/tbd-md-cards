@@ -279,7 +279,7 @@ min-height: 34px;
     background-position: 5px 5px;
 }
 
-.showingsdotcom-logo {
+.showingassist-logo {
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
@@ -289,6 +289,18 @@ min-height: 34px;
     height: inherit;
     background-position: 5px 5px;
 }
+
+.showingsdotcom-logo {
+    float: left;
+    background-repeat: no-repeat;
+    border-radius: 2px 2px 0 0;
+    background-image: url("../assets/logos/showingassist-logo.png");
+    padding: 4px;
+    width: 146px;
+    height: inherit;
+    background-position: 5px 5px;
+}
+
 
 
 
@@ -671,7 +683,8 @@ md-card-zillow .md-card-image {
   .trulia-logo,
   .redfin-logo,
   .mred-logo,
-  .showingsdotcom-logo {
+  .showingsdotcom-logo,
+  .showingassist-logo {
     background-size: 50%;
   }
 
