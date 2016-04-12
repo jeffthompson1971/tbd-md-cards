@@ -59,11 +59,11 @@
                 title="Summary - Feedback on your showings" sysId="8">
                 </md-showing-summary>
             </li>
-             <li>
+             <!--<li>
                 <md-showing-summary ng-if="vm.showings.length> 0" ng-show="vm.showings" imgurl="/assets/logos/ShowingsCom_243.png" showings='vm.showings'
                 title="Summary - Feedback on your showings" sysId="8">
                 </md-showing-summary>
-            </li>
+            </li>-->
             <li>
                 <md-card-sentri ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Summary - Feedback on your showings"
                 sysId="2">
@@ -72,7 +72,7 @@
               <li>
                 <div ng-show="vm.theListing.activityAggregate.snapshots[10]" layout="row" layout-align="space-around center">
                     <div style="width: 100%;">
-                        <md-card-showingassist listing="vm.theListing.activityAggregate.snapshots[10]" title="ShowingAssist">
+                        <md-card-showingassist listing="vm.theListing.activityAggregate.snapshots[10].snapshots" title="ShowingAssist">
                         </md-card-showingassist>
                     </div>
                 </div>

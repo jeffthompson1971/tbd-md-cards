@@ -1871,7 +1871,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <li>\n" +
     "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "                    <div style=\"width: 100%;\">\n" +
-    "                                <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4]\" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
+    "                        <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4]\" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
     "                        </md-card-trulia>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -1881,11 +1881,11 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
     "            </li>\n" +
-    "             <li>\n" +
+    "             <!--<li>\n" +
     "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
     "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
-    "            </li>\n" +
+    "            </li>-->\n" +
     "            <li>\n" +
     "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
     "                sysId=\"2\">\n" +
@@ -1894,7 +1894,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "              <li>\n" +
     "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[10]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "                    <div style=\"width: 100%;\">\n" +
-    "                        <md-card-showingassist listing=\"vm.theListing.activityAggregate.snapshots[10]\" title=\"ShowingAssist\">\n" +
+    "                        <md-card-showingassist listing=\"vm.theListing.activityAggregate.snapshots[10].snapshots\" title=\"ShowingAssist\">\n" +
     "                        </md-card-showingassist>\n" +
     "                    </div>\n" +
     "                </div>\n" +
