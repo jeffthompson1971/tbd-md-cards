@@ -7,19 +7,19 @@
     }
     angular
         .module(appName)
-        .directive('mdShowingSummary', MdShowingSummary);
+        .directive('mdCardShowingAssist', MdCardShowingAssist);
 
-    function MdShowingSummary() {
+    function MdCardShowingAssist() {
         return {
             restrict: 'E',
             templateUrl: function(elem, attrs) {
-                return (attrs.templatepath) ? attrs.templatepath + "/_md-showing-summary.view.html" : 'templates/_md-showing-summary.view.html';
+                return (attrs.templatepath) ? attrs.templatepath + "/_md-card-showing-assist.view.html" : 'templates/_md-card-showing-assist.view.html';
             },
             scope: {
                 showings: '=',
                 ngClass: "=",
             },
-            controller: MdShowingSummaryController,
+            controller: MdCardShowingAssistController,
             controllerAs: 'vm',
             bindToController: true,
             link: function(scope, element, attrs) {
@@ -80,7 +80,7 @@
         };
     }
 
-    MdShowingSummaryController.$inject = ['$scope', '$mdDialog'];
+    MdCardShowingAssistController.$inject = ['$scope', , '$mdDialog'];
 
     function DialogController($scope, $mdDialog, showing) {
 
@@ -103,7 +103,7 @@
         };
     };
 
-    function MdShowingSummaryController($scope, $mdDialog) {
+    function MdCardShowingAssistController($scope, $mdDialog) {
         var vm = this;
         $scope.showings = vm.showings;
         // activate();
@@ -139,7 +139,4 @@
 
         }
     }
-
-
-
 })();
