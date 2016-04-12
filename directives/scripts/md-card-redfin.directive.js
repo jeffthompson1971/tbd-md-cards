@@ -1,25 +1,21 @@
-!(function () {
-
+!(function() {
     var appName = "app";
     try {
         appName = THE_APP;
     } catch (e) {
 
     }
-
     angular
         .module(appName)
         .directive('mdCardRedfin', MdCardRedfin);
 
     function MdCardRedfin() {
         return {
-
             restrict: 'E',
-            templateUrl: function (elem, attrs) {
+            templateUrl: function(elem, attrs) {
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-card-redfin.view.html" : 'templates/_md-card-redfin.view.html';
             },
             scope: {
-
                 listing: '=',
                 data: '=',
                 rateDecimals: '=?',
@@ -30,16 +26,11 @@
             controller: MdCardRedfinController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function (scope, element, attrs) {
-
+            link: function(scope, element, attrs) {
                 scope.title = attrs.title;
-
-                scope.browse = function (url) {
-
-                     $window.open(url, '_blank');
-
+                scope.browse = function(url) {
+                    $window.open(url, '_blank');
                 };
-
             }
         };
     }
@@ -51,11 +42,11 @@
         $scope.listing = vm.listing;
         activate();
 
-         
+
         vm.openInBrowser = PalSvc.openWindow;
         //$scope.$watch('vm.data', activate);
-        
-        $scope.$watch('vm.listing', function (theListing) {
+
+        $scope.$watch('vm.listing', function(theListing) {
 
             if (_.isUndefined(theListing))
                 return;

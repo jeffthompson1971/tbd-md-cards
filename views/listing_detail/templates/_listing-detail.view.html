@@ -1,81 +1,82 @@
-        <div id="listing-detail" style="text-align: left;" class="content has-header">
+<div id="listing-detail" style="text-align: left;" class="content has-header">
 
-            <div id="three-columns" class="grid-container" style="display:block;">
+    <div id="three-columns" class="grid-container" style="display:block;">
 
-                <ul class="rig columns-2">
+        <ul class="rig columns-2">
 
-                    <li>
-                        <div style="width: 100%;">
-                            <md-card-image-overlay listing="vm.theListing"  showings="vm.showings" title="Listing summary stats"></md-card-image-overlay>
+            <li>
+                <div style="width: 100%;">
+                    <md-card-image-overlay listing="vm.theListing" showings="vm.showings" title="Listing summary stats"></md-card-image-overlay>
+                </div>
+            </li>
+
+            <li class=no-border>
+
+                <div class="upper-right no-border">
+
+                    <div ng-if="vm.theListing.extSysId=9" layout="row" layout-align="space-around center">
+                        <div style="width: 100%; ">
+                            <md-card-mred listing="vm.theListing" title="Activity on MRED"></md-card-mred>
                         </div>
-                    </li>
+                    </div>
 
-                    <li class=no-border>
+                    <br>
 
-                        <div class="upper-right no-border">
-
-                            <div ng-if="vm.theListing.extSysId=9" layout="row" layout-align="space-around center">
-                                <div style="width: 100%; ">
-                                    <md-card-mred listing="vm.theListing" title="Activity on MRED"></md-card-mred>
-                                </div>
-                            </div>
-
-                            <br>
-
-                            <div ng-show="vm.theListing.activityAggregate.snapshots[5]" layout="row" layout-align="space-around center">
-                                <div style="width: 100%; ">
-                                    <md-card-redfin  listing="vm.theListing.activityAggregate.snapshots[5]" title="Activity on Redfin"></md-card-redfin>
-                                </div>
-                            </div>
-
+                    <div ng-show="vm.theListing.activityAggregate.snapshots[5]" layout="row" layout-align="space-around center">
+                        <div style="width: 100%; ">
+                            <md-card-redfin listing="vm.theListing.activityAggregate.snapshots[5]" title="Activity on Redfin"></md-card-redfin>
                         </div>
-                    </li>
+                    </div>
 
-                    <li>
+                </div>
+            </li>
 
-                        <div ng-show="vm.theListing.activityAggregate.snapshots[3]" layout="row" layout-align="space-around center">
+            <li>
 
-                            <div style="width: 100%; ">
+                <div ng-show="vm.theListing.activityAggregate.snapshots[3]" layout="row" layout-align="space-around center">
 
-                                <md-card-zillow  listing="vm.theListing.activityAggregate.snapshots[3] " title="Activity on Zillow">
+                    <div style="width: 100%; ">
 
-                                </md-card-zillow>
+                        <md-card-zillow listing="vm.theListing.activityAggregate.snapshots[3] " title="Activity on Zillow">
 
-                            </div>
+                        </md-card-zillow>
 
-                        </div>
+                    </div>
 
-                    </li>
+                </div>
 
-                    <li>
-                        <div ng-show="vm.theListing.activityAggregate.snapshots[4]" layout="row" layout-align="space-around center">
-
-                            <div style="width: 100%;">
-
-                                <md-card-trulia listing="vm.theListing.activityAggregate.snapshots[4]" title="Activity on Trulia" launch="browse(url) ">
-
-                                </md-card-trulia>
-
-                            </div>
-                        </div>
-
-                    </li>
-
-                    <li>
-                        <md-showing-summary ng-if="vm.showings.length> 0" ng-show="vm.showings" imgurl="/assets/logos/ShowingsCom_243.png"
-                        showings='vm.showings' title="Summary - Feedback on your showings" sysId="8">
-                        </md-showing-summary>
-                    </li>
-
-
-                    <li>
-                        <md-card-sentri  ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Summary - Feedback on your showings" sysId="2">
-
-                        </md-card-sentri>
-                    </li>
-
-
-                </ul>
-            </div>
-
-        </div>
+            </li>
+            <li>
+                <div ng-show="vm.theListing.activityAggregate.snapshots[4]" layout="row" layout-align="space-around center">
+                    <div style="width: 100%;">
+                        <md-card-trulia listing="vm.theListing.activityAggregate.snapshots[4]" title="Activity on Trulia" launch="browse(url) ">
+                        </md-card-trulia>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <md-showing-summary ng-if="vm.showings.length> 0" ng-show="vm.showings" imgurl="/assets/logos/ShowingsCom_243.png" showings='vm.showings'
+                title="Summary - Feedback on your showings" sysId="8">
+                </md-showing-summary>
+            </li>
+             <li>
+                <md-showing-summary ng-if="vm.showings.length> 0" ng-show="vm.showings" imgurl="/assets/logos/ShowingsCom_243.png" showings='vm.showings'
+                title="Summary - Feedback on your showings" sysId="8">
+                </md-showing-summary>
+            </li>
+            <li>
+                <md-card-sentri ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Summary - Feedback on your showings"
+                sysId="2">
+                </md-card-sentri>
+            </li>
+              <li>
+                <div ng-show="vm.theListing.activityAggregate.snapshots[10]" layout="row" layout-align="space-around center">
+                    <div style="width: 100%;">
+                        <md-card-showingassist listing="vm.theListing.activityAggregate.snapshots[10]" title="ShowingAssist">
+                        </md-card-showingassist>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

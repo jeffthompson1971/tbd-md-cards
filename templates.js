@@ -284,13 +284,24 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div>\n" +
     "                <label>Current price</label>\n" +
     "                <span ng-show=\"listing.listing_price\">\n" +
-    "                    <b>{{listing.listing_price  | noFractionCurrency}} </b>\n" +
+    "                    <b>{{listing.listing_price | noFractionCurrency }} </b>\n" +
     "                    </span>\n" +
     "\n" +
     "                <span ng-show=\"! listing.listing_price\">\n" +
     "                     <b>*</b>\n" +
     "                 </span>\n" +
     "            </div>\n" +
+    "            <div>\n" +
+    "                <label>Redfin Estimate</label>\n" +
+    "                <span ng-show=\"listing.redfinEstimate\">\n" +
+    "                    <b>{{listing.redfinEstimate  | noFractionCurrency}} </b>\n" +
+    "                    </span>\n" +
+    "\n" +
+    "                <span ng-show=\"! listing.redfinEstimate\">\n" +
+    "                     <b>*</b>\n" +
+    "                 </span>\n" +
+    "            </div>\n" +
+    "\n" +
     "\n" +
     "\n" +
     "            <div style=\"border-bottom: 1px solid #eee;\">\n" +
@@ -298,9 +309,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "            <div>\n" +
     "                <label>Favorites</label>\n" +
-    "                \n" +
+    "\n" +
     "                <span ng-if=\"listing.listing_favoritesCnt\">\n" +
-    "                  <md-icon  class=\"favs\" md-svg-src=\"assets/icons/ic_favorite_black_24px.svg\"></md-icon>\n" +
+    "                  <md-icon  class=\"favs inline-small\" md-svg-src=\"assets/icons/ic_favorite_black_24px.svg\"></md-icon>\n" +
     "                  <b>{{listing.listing_favoritesCnt}}</b>\n" +
     "              \n" +
     "                </span>\n" +
@@ -412,7 +423,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "\n" +
     "    </div> -->\n" +
-    " <p class=footer> {{listing.t.time | timeago }} </p>\n" +
+    "    <p class=footer> {{listing.t.time | timeago }} </p>\n" +
     "\n" +
     "</md-card>\n" +
     "<!--\n" +
@@ -510,55 +521,48 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/_md-card-sentrilock.view.html',
     "<style>\n" +
-    " card-header {\n" +
-    "    width: 100%;\n" +
-    "    background-color: #FFF;\n" +
-    "    border-bottom: 1px;\n" +
-    "    font-weight: 600;\n" +
-    "    font-size: 90%;\n" +
-    "}\n" +
-    "    \n" +
-    "    \n" +
-    "    </style>\n" +
+    "    card-header {\n" +
+    "        width: 100%;\n" +
+    "        background-color: #FFF;\n" +
+    "        border-bottom: 1px;\n" +
+    "        font-weight: 600;\n" +
+    "        font-size: 90%;\n" +
+    "    }\n" +
+    "</style>\n" +
     "\n" +
     "\n" +
     "<md-card class=\"md-card  site-summary-card\">\n" +
-    "    \n" +
-    "<div class=\"site-header\">\n" +
-    "    <div class=\"sentrilock-logo\"></div>\n" +
-    "    \n" +
     "\n" +
-    "</div>\n" +
+    "    <div class=\"site-header\">\n" +
+    "        <div class=\"sentrilock-logo\"></div>\n" +
+    "    </div>\n" +
     "\n" +
-    "<div class=\"feedback-div\">\n" +
-    "\n" +
-    "    <div class=\"card-header\">\n" +
-    "      Serial Number  {{vm.sentrilock.LBSerialNumber}}\n" +
-    "     </div>\n" +
-    "\n" +
-    "\n" +
-    "    <div ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
+    "    <div class=\"feedback-div\">\n" +
     "       \n" +
-    "        <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
     "\n" +
-    "        <div  ng-bind-html=\"entry.AccessedByName\"></div>\n" +
-    "       <!--<span>{{entry.Date}}</span>-->\n" +
-    "       <span>{{entry.UTCAccessedDT}}</span>\n" +
-    "    <span>Access type: {{entry.AccessType}}</span>\n" +
+    "        <div ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
+    "            <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
+    "              <!--<label><b> {{showing.contact.name}}</b></label>-->\n" +
+    "            <!--<div ng-bind-html=\"entry.AccessedByName | accessorName\"></div>-->\n" +
+    "             <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "            <!--<span>{{entry.Date}}</span>-->\n" +
+    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "            <!--<span>Access type: {{entry.AccessType}}</span>-->\n" +
+    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
+    "            <label><b>Show More</b></label>\n" +
+    "            <span> ... </span>\n" +
+    "            <!--<p> {{showing.feedback}}</p>-->\n" +
+    "       </div>\n" +
+    "\n" +
     "    </div>\n" +
-    "     \n" +
-    "    <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
-    "\n" +
-    "        <label><b>Show More</b></label>\n" +
-    "        <span> ... </span>\n" +
-    "        <!--<p> {{showing.feedback}}</p>-->\n" +
-    "\n" +
-    "\n" +
-    "    </div>\n" +
-    "\n" +
-    "</div>\n" +
-    "<p class=footer> {{vm.sentrilock.updated.time | timeago }} </p>\n" +
-    "\n" +
+    "     <!--<div class=\"card-header\">\n" +
+    "            Serial #: {{vm.sentrilock.LBSerialNumber}}\n" +
+    "        </div>-->\n" +
+    "     <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
+    "    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>\n" +
     "</md-card>\n" +
     "\n" +
     "<!--\n" +
@@ -711,6 +715,55 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <!--</div>-->\n" +
     "    </form>\n" +
     "</md-dialog>"
+  );
+
+
+  $templateCache.put('templates/_md-card-showingassist.view.html',
+    "<style>\n" +
+    "    card-header {\n" +
+    "        width: 100%;\n" +
+    "        background-color: #FFF;\n" +
+    "        border-bottom: 1px;\n" +
+    "        font-weight: 600;\n" +
+    "        font-size: 90%;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "\n" +
+    "<md-card class=\"md-card  site-summary-card\">\n" +
+    "\n" +
+    "    <div class=\"site-header\">\n" +
+    "        <div class=\"showingassist-logo\"></div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"feedback-div\">\n" +
+    "       \n" +
+    "\n" +
+    "        <div ng-repeat=\"entry in vm.showingassist.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
+    "            <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
+    "              <!--<label><b> {{showing.contact.name}}</b></label>-->\n" +
+    "            <!--<div ng-bind-html=\"entry.AccessedByName | accessorName\"></div>-->\n" +
+    "             <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "            <!--<span>{{entry.Date}}</span>-->\n" +
+    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "            <!--<span>Access type: {{entry.AccessType}}</span>-->\n" +
+    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
+    "            <label><b>Show More</b></label>\n" +
+    "            <span> ... </span>\n" +
+    "            <!--<p> {{showing.feedback}}</p>-->\n" +
+    "       </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "     <!--<div class=\"card-header\">\n" +
+    "            Serial #: {{vm.showingassist.LBSerialNumber}}\n" +
+    "        </div>-->\n" +
+    "     <p class=footer>Serial #: {{vm.showingassist.LBSerialNumber}} </p>\n" +
+    "    <p class=footer>{{vm.showingassist.updated.time | timeago }} </p>\n" +
+    "</md-card>\n" +
+    "\n"
   );
 
 
@@ -987,7 +1040,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div style=\"border-bottom: 1px solid #eee;\">\n" +
     "\n" +
-    "                <label style=\"color: #636075; font-size: 11px;\"><b>Real Estate Trends for {{listing.PostalCode}}</b></label>\n" +
+    "                <label style=\"color: #636075; font-size: 11px;\"><b>Real Estate Trends for {{mZip}}</b></label>\n" +
     "            </div>\n" +
     "\n" +
     "            <div>\n" +
@@ -1767,87 +1820,88 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.view.html',
-    "        <div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
+    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
     "\n" +
-    "            <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
+    "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
-    "                <ul class=\"rig columns-2\">\n" +
+    "        <ul class=\"rig columns-2\">\n" +
     "\n" +
-    "                    <li>\n" +
-    "                        <div style=\"width: 100%;\">\n" +
-    "                            <md-card-image-overlay listing=\"vm.theListing\"  showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
+    "            <li>\n" +
+    "                <div style=\"width: 100%;\">\n" +
+    "                    <md-card-image-overlay listing=\"vm.theListing\" showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
+    "\n" +
+    "            <li class=no-border>\n" +
+    "\n" +
+    "                <div class=\"upper-right no-border\">\n" +
+    "\n" +
+    "                    <div ng-if=\"vm.theListing.extSysId=9\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                        <div style=\"width: 100%; \">\n" +
+    "                            <md-card-mred listing=\"vm.theListing\" title=\"Activity on MRED\"></md-card-mred>\n" +
     "                        </div>\n" +
-    "                    </li>\n" +
+    "                    </div>\n" +
     "\n" +
-    "                    <li class=no-border>\n" +
+    "                    <br>\n" +
     "\n" +
-    "                        <div class=\"upper-right no-border\">\n" +
-    "\n" +
-    "                            <div ng-if=\"vm.theListing.extSysId=9\" layout=\"row\" layout-align=\"space-around center\">\n" +
-    "                                <div style=\"width: 100%; \">\n" +
-    "                                    <md-card-mred listing=\"vm.theListing\" title=\"Activity on MRED\"></md-card-mred>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "\n" +
-    "                            <br>\n" +
-    "\n" +
-    "                            <div ng-show=\"vm.theListing.activityAggregate.snapshots[5]\" layout=\"row\" layout-align=\"space-around center\">\n" +
-    "                                <div style=\"width: 100%; \">\n" +
-    "                                    <md-card-redfin  listing=\"vm.theListing.activityAggregate.snapshots[5]\" title=\"Activity on Redfin\"></md-card-redfin>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "\n" +
+    "                    <div ng-show=\"vm.theListing.activityAggregate.snapshots[5]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                        <div style=\"width: 100%; \">\n" +
+    "                            <md-card-redfin listing=\"vm.theListing.activityAggregate.snapshots[5]\" title=\"Activity on Redfin\"></md-card-redfin>\n" +
     "                        </div>\n" +
-    "                    </li>\n" +
+    "                    </div>\n" +
     "\n" +
-    "                    <li>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
     "\n" +
-    "                        <div ng-show=\"vm.theListing.activityAggregate.snapshots[3]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "            <li>\n" +
     "\n" +
-    "                            <div style=\"width: 100%; \">\n" +
+    "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[3]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "\n" +
-    "                                <md-card-zillow  listing=\"vm.theListing.activityAggregate.snapshots[3] \" title=\"Activity on Zillow\">\n" +
+    "                    <div style=\"width: 100%; \">\n" +
     "\n" +
-    "                                </md-card-zillow>\n" +
+    "                        <md-card-zillow listing=\"vm.theListing.activityAggregate.snapshots[3] \" title=\"Activity on Zillow\">\n" +
     "\n" +
-    "                            </div>\n" +
+    "                        </md-card-zillow>\n" +
     "\n" +
-    "                        </div>\n" +
+    "                    </div>\n" +
     "\n" +
-    "                    </li>\n" +
+    "                </div>\n" +
     "\n" +
-    "                    <li>\n" +
-    "                        <div ng-show=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
-    "\n" +
-    "                            <div style=\"width: 100%;\">\n" +
-    "\n" +
-    "                                <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4] \" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
-    "\n" +
-    "                                </md-card-trulia>\n" +
-    "\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                    </li>\n" +
-    "\n" +
-    "                    <li>\n" +
-    "                        <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\"\n" +
-    "                        showings='vm.showings' title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
-    "                        </md-showing-summary>\n" +
-    "                    </li>\n" +
-    "\n" +
-    "\n" +
-    "                    <li>\n" +
-    "                        <md-card-sentri  ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\" sysId=\"2\">\n" +
-    "\n" +
-    "                        </md-card-sentri>\n" +
-    "                    </li>\n" +
-    "\n" +
-    "\n" +
-    "                </ul>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n"
+    "            </li>\n" +
+    "            <li>\n" +
+    "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                    <div style=\"width: 100%;\">\n" +
+    "                        <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4]\" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
+    "                        </md-card-trulia>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
+    "            <li>\n" +
+    "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
+    "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
+    "                </md-showing-summary>\n" +
+    "            </li>\n" +
+    "             <li>\n" +
+    "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
+    "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
+    "                </md-showing-summary>\n" +
+    "            </li>\n" +
+    "            <li>\n" +
+    "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"2\">\n" +
+    "                </md-card-sentri>\n" +
+    "            </li>\n" +
+    "              <li>\n" +
+    "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[10]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                    <div style=\"width: 100%;\">\n" +
+    "                        <md-card-showingassist listing=\"vm.theListing.activityAggregate.snapshots[10]\" title=\"ShowingAssist\">\n" +
+    "                        </md-card-showingassist>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "    </div>\n" +
+    "</div>"
   );
 
 }]);
