@@ -16,7 +16,7 @@
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-card-showingassist.view.html" : 'templates/_md-card-showingassist.view.html';
             },
             scope: {
-                listing: '='
+                showings: '='
             },
             controller: MdCardShowingAssistController,
             controllerAs: 'vm',

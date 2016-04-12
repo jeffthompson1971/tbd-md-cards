@@ -719,51 +719,60 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-showingassist.view.html',
-    "<style>\n" +
-    "    card-header {\n" +
-    "        width: 100%;\n" +
-    "        background-color: #FFF;\n" +
-    "        border-bottom: 1px;\n" +
-    "        font-weight: 600;\n" +
-    "        font-size: 90%;\n" +
-    "    }\n" +
-    "</style>\n" +
-    "\n" +
-    "\n" +
-    "<md-card class=\"md-card  site-summary-card\">\n" +
-    "\n" +
+    "<md-card>\n" +
     "    <div class=\"site-header\">\n" +
     "        <div class=\"showingassist-logo\"></div>\n" +
     "    </div>\n" +
-    "\n" +
     "    <div class=\"feedback-div\">\n" +
-    "       \n" +
+    "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
     "\n" +
-    "        <div ng-repeat=\"entry in vm.showingassist.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
-    "            <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
-    "              <!--<label><b> {{showing.contact.name}}</b></label>-->\n" +
-    "            <!--<div ng-bind-html=\"entry.AccessedByName | accessorName\"></div>-->\n" +
-    "             <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "            <!--<span>{{entry.Date}}</span>-->\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "            <!--<span>Access type: {{entry.AccessType}}</span>-->\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "\n" +
+    "            <label><b> {{showing.contact.name}}</b></label>\n" +
+    "            <span>{{showing.startTime | timeago }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "            <p> {{showing.feedback}}</p>\n" +
     "        </div>\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
     "\n" +
-    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
     "            <label><b>Show More</b></label>\n" +
     "            <span> ... </span>\n" +
-    "            <!--<p> {{showing.feedback}}</p>-->\n" +
-    "       </div>\n" +
+    "            <p> {{showing.feedback}}</p>\n" +
+    "\n" +
+    "\n" +
+    "        </div>\n" +
+    "        <!--\n" +
+    "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
+    "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
+    "\"sentiment\":0,\n" +
+    "\"potentialOffer\":false,\n" +
+    "\"time\":\"9:30 AM - 10:30 AM\",\n" +
+    "\"intShowingId\":\"5e41609e-f7af-4c5a-93bd-eca04af14971\",\n" +
+    "\"listing_id\":\"4F134C97-4E33-45AC-AB89-8A36CB072DDC\",\n" +
+    "\"date\":\"11-28-2015\",\n" +
+    "\"type\":{\n" +
+    "\"result\":\"Setup\",\n" +
+    "\"name\":\"Showing\",\n" +
+    "\"msg\":\"\"\n" +
+    "},\n" +
+    "\"contact\":{\n" +
+    "\"phone\":{\n" +
+    "\"office\":\"847-395-3000\",\n" +
+    "\"mobile\":\"847-878-7653\"\n" +
+    "},\n" +
+    "\"name\":\"DIANE KELLY\",\n" +
+    "\"emails\":\"DIANEKELLY42@YAHOO.COM\"\n" +
+    "}\n" +
+    "},\n" +
+    "{\n" +
+    "\n" +
+    "-->\n" +
     "\n" +
     "    </div>\n" +
-    "     <!--<div class=\"card-header\">\n" +
-    "            Serial #: {{vm.showingassist.LBSerialNumber}}\n" +
-    "        </div>-->\n" +
-    "     <p class=footer>Serial #: {{vm.showingassist.LBSerialNumber}} </p>\n" +
-    "    <p class=footer>{{vm.showingassist.updated.time | timeago }} </p>\n" +
-    "</md-card>\n" +
-    "\n"
+    "\n" +
+    "</md-card>"
   );
 
 
@@ -1412,35 +1421,31 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-showing-summary.view.html',
-    "\n" +
     "<md-card>\n" +
-    "<div class=\"site-header\">\n" +
-    "    <div class=\"showingsdotcom-logo\"></div>\n" +
-    "  \n" +
-    "</div>\n" +
-    "<div class= \"feedback-div\">\n" +
+    "    <div class=\"site-header\">\n" +
+    "        <div class=\"showingsdotcom-logo\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"feedback-div\">\n" +
+    "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
     "\n" +
-    "<!--<div ng-repeat=\"showing in vm.showings | maxRecords:4  | groupBy:['potentialOffer']\" ng-click=\"show($event, showing)\">-->\n" +
-    "  <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
     "\n" +
-    "    \n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "    <span>{{showing.startTime | timeago }}</span>\n" +
-    "    <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "            <span>{{showing.startTime | timeago }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
     "\n" +
     "\n" +
     "\n" +
     "            <p> {{showing.feedback}}</p>\n" +
-    "</div>\n" +
-    "    <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "        </div>\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
     "\n" +
-    "        <label><b>Show More</b></label>\n" +
-    "        <span> ... </span>\n" +
-    "        <p> {{showing.feedback}}</p>\n" +
+    "            <label><b>Show More</b></label>\n" +
+    "            <span> ... </span>\n" +
+    "            <p> {{showing.feedback}}</p>\n" +
     "\n" +
     "\n" +
-    "    </div>\n" +
-    "            <!--\n" +
+    "        </div>\n" +
+    "        <!--\n" +
     "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
     "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
     "\"sentiment\":0,\n" +
@@ -1467,8 +1472,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "-->\n" +
     "\n" +
-    "</div>\n" +
-    "</md-card>\n"
+    "    </div>\n" +
+    "</md-card>"
   );
 
 
