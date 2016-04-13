@@ -624,7 +624,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-showing-assist.view.html',
     "<md-card>\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingsdotcom-logo\"></div>\n" +
+    "        <div class=\"showingassist-logo\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
