@@ -1823,7 +1823,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                    <br>\n" +
     "\n" +
-    "                    <div ng-show=\"vm.theListing.activityAggregate.snapshots[5]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                    <div ng-if=\"vm.theListing.activityAggregate.snapshots[5]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "                        <div style=\"width: 100%; \">\n" +
     "                            <md-card-redfin listing=\"vm.theListing.activityAggregate.snapshots[5]\" title=\"Activity on Redfin\"></md-card-redfin>\n" +
     "                        </div>\n" +
@@ -1831,10 +1831,11 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                </div>\n" +
     "            </li>\n" +
+    "            \n" +
     "\n" +
-    "            <li>\n" +
+    "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[3]\">\n" +
     "\n" +
-    "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[3]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                <div ng-if=\"vm.theListing.activityAggregate.snapshots[3]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "\n" +
     "                    <div style=\"width: 100%; \">\n" +
     "\n" +
@@ -1847,22 +1848,24 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </div>\n" +
     "\n" +
     "            </li>\n" +
-    "            <li>\n" +
-    "                <div ng-show=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "            \n" +
+    "            <li  ng-if=\"vm.theListing.activityAggregate.snapshots[4]\">\n" +
+    "                <div ng-if=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "                    <div style=\"width: 100%;\">\n" +
     "                        <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4]\" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
     "                        </md-card-trulia>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </li>\n" +
-    "            <li>\n" +
+    "            \n" +
+    "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\">\n" +
     "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\"\n" +
     "                imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.theListing.activityAggregate.snapshots[8].data' title=\"Summary - Feedback on your showings\"\n" +
     "                sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
     "            </li>\n" +
     "\n" +
-    "            <li>\n" +
+    "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\">\n" +
     "                <md-card-showing-assist ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\"\n" +
     "                imgurl=\"/assets/logos/showingassist-logo.png\" showings='vm.theListing.activityAggregate.snapshots[10].data' title=\"Summary - Feedback on your showings\"\n" +
     "                sysId=\"10\">\n" +
@@ -1873,7 +1876,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
     "                </md-showing-summary>\n" +
     "            </li>-->\n" +
-    "            <li>\n" +
+    "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
     "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
     "                sysId=\"2\">\n" +
     "                </md-card-sentri>\n" +

@@ -116,6 +116,9 @@ md-card-image-overlay {
   /*  stuff for small screens  */
   @media screen and (max-width: 767px) {
 
+#md-card-image {
+      height: 250px;
+}
     .trend-box {
         font-size: 18px;
 
@@ -644,7 +647,8 @@ md-card-zillow .md-card-image {
   md-card-zillow .md-card-image,
   md-card-trulia .md-card-image,
   md-card-redfin .md-card-image,
-  md-card-mred .md-card-image {
+  md-card-mred .md-card-image,
+  md-card-sentri .md-card-image {
 
     background-position-x: 3px;
     background-size: 50%;
@@ -652,6 +656,7 @@ md-card-zillow .md-card-image {
     background-position: center center;
     background-repeat: no-repeat;
   }
+
 
   
   .md-card-image {
@@ -680,14 +685,17 @@ md-card-zillow .md-card-image {
   .redfin-logo,
   .mred-logo,
   .showingsdotcom-logo,
-  .showingassist-logo {
+  .showingassist-logo
+ {
     background-size: 50%;
   }
 
 
   }
-
-
+ .sentrilock-logo {
+ background-size: 120px;
+    background-position: 2px 1px;
+ }
 
 .stats-detail-parent {
 

@@ -22,7 +22,7 @@
 
                     <br>
 
-                    <div ng-show="vm.theListing.activityAggregate.snapshots[5]" layout="row" layout-align="space-around center">
+                    <div ng-if="vm.theListing.activityAggregate.snapshots[5]" layout="row" layout-align="space-around center">
                         <div style="width: 100%; ">
                             <md-card-redfin listing="vm.theListing.activityAggregate.snapshots[5]" title="Activity on Redfin"></md-card-redfin>
                         </div>
@@ -30,10 +30,11 @@
 
                 </div>
             </li>
+            
 
-            <li>
+            <li ng-if="vm.theListing.activityAggregate.snapshots[3]">
 
-                <div ng-show="vm.theListing.activityAggregate.snapshots[3]" layout="row" layout-align="space-around center">
+                <div ng-if="vm.theListing.activityAggregate.snapshots[3]" layout="row" layout-align="space-around center">
 
                     <div style="width: 100%; ">
 
@@ -46,22 +47,24 @@
                 </div>
 
             </li>
-            <li>
-                <div ng-show="vm.theListing.activityAggregate.snapshots[4]" layout="row" layout-align="space-around center">
+            
+            <li  ng-if="vm.theListing.activityAggregate.snapshots[4]">
+                <div ng-if="vm.theListing.activityAggregate.snapshots[4]" layout="row" layout-align="space-around center">
                     <div style="width: 100%;">
                         <md-card-trulia listing="vm.theListing.activityAggregate.snapshots[4]" title="Activity on Trulia" launch="browse(url) ">
                         </md-card-trulia>
                     </div>
                 </div>
             </li>
-            <li>
+            
+            <li ng-if="vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0">
                 <md-showing-summary ng-if="vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0"
                 imgurl="/assets/logos/ShowingsCom_243.png" showings='vm.theListing.activityAggregate.snapshots[8].data' title="Summary - Feedback on your showings"
                 sysId="8">
                 </md-showing-summary>
             </li>
 
-            <li>
+            <li ng-if="vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0">
                 <md-card-showing-assist ng-if="vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0"
                 imgurl="/assets/logos/showingassist-logo.png" showings='vm.theListing.activityAggregate.snapshots[10].data' title="Summary - Feedback on your showings"
                 sysId="10">
@@ -72,7 +75,7 @@
                 title="Summary - Feedback on your showings" sysId="8">
                 </md-showing-summary>
             </li>-->
-            <li>
+            <li ng-if="vm.sentrilock.entries.length>0">
                 <md-card-sentri ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Summary - Feedback on your showings"
                 sysId="2">
                 </md-card-sentri>
