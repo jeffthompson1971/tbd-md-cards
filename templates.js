@@ -751,7 +751,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-site-summary.html',
-    "<md-card class=\"md-card\">\n" +
+    "<md-card class=\"site-summary-card\">\n" +
     "\n" +
     "    <div layout=\"row\" layout-align=\"space-around center\" style=\"padding: 10px\">\n" +
     "\n" +
