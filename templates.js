@@ -1413,7 +1413,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/_md-showing-summary.view.html',
     "\n" +
-    "<md-card>\n" +
+    "<md-card class=\"site-summary-card\">\n" +
     "<div class=\"site-header\">\n" +
     "    <div class=\"showingsdotcom-logo\"></div>\n" +
     "  \n" +

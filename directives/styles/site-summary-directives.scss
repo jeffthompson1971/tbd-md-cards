@@ -1,4 +1,3 @@
-
 md-card-image-overlay {
 
   md-card {
@@ -145,8 +144,21 @@ md-card-image-overlay {
 
 .site-summary-card {
     
-   
     
+    @media screen and (max-width: 767px) {
+          
+        .left div span,
+        .right div span {
+            font-size: 12px;
+        }
+        
+    
+  }
+
+
+    
+   
+    margin: 0!important;
 $card-title-bar-height: 30px;
 text-align: left;
 
@@ -222,7 +234,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url(../assets/logos/sentrilock-logo.png);
+    background-image: url("/assets/logos/sentrilock-logo.png");
     height: 400px;
     padding: 4px;
     width: 100%;
@@ -234,7 +246,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("../assets/logos/zillow_logo_40x189.png");
+    background-image: url("/assets/logos/zillow_logo_40x189.png");
  
     height: inherit;
  
@@ -248,7 +260,7 @@ min-height: 34px;
  
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("../assets/logos/trulia_logo_40x113.png");
+    background-image: url("/assets/logos/trulia_logo_40x113.png");
     padding: 4px;
     width: 113px;
     height: inherit;
@@ -260,7 +272,7 @@ min-height: 34px;
 
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("../assets/logos/redfin_logo_40x166.png");
+    background-image: url("/assets/logos/redfin_logo_40x166.png");
     padding: 4px;
     width: 166px;
     height: inherit;
@@ -272,7 +284,7 @@ min-height: 34px;
 
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("../assets/logos/mred-logo-small.png");
+    background-image: url("/assets/logos/mred-logo-small.png");
     padding: 4px;
     width: 166px;
     height: inherit;
@@ -283,7 +295,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("../assets/logos/showings.com_logo_40x146.png");
+    background-image: url("/assets/logos/showings.com_logo_40x146.png");
     padding: 4px;
     width: 146px;
     height: inherit;
@@ -580,23 +592,6 @@ md-card-zillow .md-card-image {
     font-size: 12px;
   }
 }
-
-// .safari .appointment-detail-div {
-//   height:148px;
-// }
-
-// .safari .offer-header {
-//   margin-top:14px;
-// }
-
-// .safari .offers-div {
-//   height: 302px;
-// }
-
-// .safari .feedback-header {
-//   margin-top:20px; 
-//   height:150px;
-// }
 
 
 .contact-method {
