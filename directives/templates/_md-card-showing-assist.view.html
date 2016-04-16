@@ -1,0 +1,28 @@
+<md-card>
+    <div class="site-header">
+        <div class="showingassist-logo"></div>
+    </div>
+    <div class="feedback-div">
+        <div ng-repeat="showing in vm.showings | maxRecords:5" ng-click="show($event, showing)">
+
+
+            <label><b> {{showing.contact.name}}</b></label>
+            <span>{{showing.date | timeago }}</span>
+            <span>{{showing.date | date:'short' }}</span>
+
+
+            <p>{{showing.type.msg}}</p>
+            <p>{{showing.feedback}}</p>
+        </div>
+        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()">
+
+            <label><b>Show More</b></label>
+            <span> ... </span>
+            <p>{{showing.feedback}}</p>
+
+
+        </div>
+
+    </div>
+
+</md-card>

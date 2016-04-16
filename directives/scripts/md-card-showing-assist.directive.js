@@ -7,26 +7,26 @@
     }
     angular
         .module(appName)
-        .directive('mdShowingSummary', MdShowingSummary);
+        .directive('mdCardShowingAssist', MdCardShowingAssist);
 
-    function MdShowingSummary() {
+    function MdCardShowingAssist() {
         return {
             restrict: 'E',
             templateUrl: function(elem, attrs) {
-                return (attrs.templatepath) ? attrs.templatepath + "/_md-showing-summary.view.html" : 'templates/_md-showing-summary.view.html';
+                return (attrs.templatepath) ? attrs.templatepath + "/_md-card-showing-assist.view.html" : 'templates/_md-card-showing-assist.view.html';
             },
             scope: {
                 showings: '=',
                 ngClass: "=",
             },
-            controller: MdShowingSummaryController,
+            controller: MdCardShowingAssistController,
             controllerAs: 'vm',
             bindToController: true,
             link: function(scope, element, attrs) {
                 scope.$watch("ngClass", function(value) {
                     $(element).attr("class", value)
                 });
-                scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showings.com_40x146.png";
+                scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showingassist-logo.png";
                 scope.title = attrs.title;
                 scope.sysId = attrs.sysid;
                 scope.imgUrl = attrs.imgurl;
@@ -80,7 +80,7 @@
         };
     }
 
-    MdShowingSummaryController.$inject = ['$scope', '$mdDialog'];
+    MdCardShowingAssistController.$inject = ['$scope', '$mdDialog'];
 
     function DialogController($scope, $mdDialog, showing) {
 
@@ -103,7 +103,7 @@
         };
     };
 
-    function MdShowingSummaryController($scope, $mdDialog) {
+    function MdCardShowingAssistController($scope, $mdDialog) {
         var vm = this;
         $scope.showings = vm.showings;
         // activate();
@@ -139,7 +139,4 @@
 
         }
     }
-
-
-
 })();
