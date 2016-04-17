@@ -621,6 +621,38 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-showing-assist.view.html',
+    "<md-card>\n" +
+    "    <div class=\"site-header\">\n" +
+    "        <div class=\"showingassist-logo\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"feedback-div\">\n" +
+    "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
+    "\n" +
+    "\n" +
+    "            <label><b> {{showing.contact.name}}</b></label>\n" +
+    "            <span>{{showing.date | timeago }}</span>\n" +
+    "            <span>{{showing.date | date:'short' }}</span>\n" +
+    "\n" +
+    "\n" +
+    "            <p>{{showing.type.msg}}</p>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "        </div>\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "\n" +
+    "            <label><b>Show More</b></label>\n" +
+    "            <span> ... </span>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "</md-card>"
+  );
+
+
   $templateCache.put('templates/_md-card-showing-detail.view.html',
     "<style>\n" +
     "    .dialogdemoBasicUsage #popupContainer {\n" +
@@ -719,7 +751,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-site-summary.html',
-    "<md-card class=\"md-card\">\n" +
+    "<md-card class=\"site-summary-card\">\n" +
     "\n" +
     "    <div layout=\"row\" layout-align=\"space-around center\" style=\"padding: 10px\">\n" +
     "\n" +
@@ -1363,35 +1395,31 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-showing-summary.view.html',
-    "\n" +
-    "<md-card>\n" +
-    "<div class=\"site-header\">\n" +
-    "    <div class=\"showingsdotcom-logo\"></div>\n" +
-    "  \n" +
-    "</div>\n" +
-    "<div class= \"feedback-div\">\n" +
-    "\n" +
-    "<!--<div ng-repeat=\"showing in vm.showings | maxRecords:4  | groupBy:['potentialOffer']\" ng-click=\"show($event, showing)\">-->\n" +
-    "  <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
-    "\n" +
-    "    \n" +
-    "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "    <span>{{showing.startTime | timeago }}</span>\n" +
-    "    <span>{{showing.startTime | date:'short' }}</span>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "            <p> {{showing.feedback}}</p>\n" +
-    "</div>\n" +
-    "    <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
-    "\n" +
-    "        <label><b>Show More</b></label>\n" +
-    "        <span> ... </span>\n" +
-    "        <p> {{showing.feedback}}</p>\n" +
-    "\n" +
-    "\n" +
+    "<md-card class=\"site-summary-card\">\n" +
+    "    <div class=\"site-header\">\n" +
+    "        <div class=\"showingsdotcom-logo\"></div>\n" +
     "    </div>\n" +
-    "            <!--\n" +
+    "    <div class=\"feedback-div\">\n" +
+    "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
+    "\n" +
+    "\n" +
+    "            <label><b> {{showing.contact.name}}</b></label>\n" +
+    "            <span>{{showing.startTime | timeago }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "        </div>\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "\n" +
+    "            <label><b>Show More</b></label>\n" +
+    "            <span> ... </span>\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "\n" +
+    "\n" +
+    "        </div>\n" +
+    "        <!--\n" +
     "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
     "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
     "\"sentiment\":0,\n" +
@@ -1418,8 +1446,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "-->\n" +
     "\n" +
-    "</div>\n" +
-    "</md-card>\n"
+    "    </div>\n" +
+    "</md-card>"
   );
 
 
@@ -1771,87 +1799,91 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.view.html',
-    "        <div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
+    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
     "\n" +
-    "            <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
+    "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
-    "                <ul class=\"rig columns-2\">\n" +
+    "        <ul class=\"rig columns-2\">\n" +
     "\n" +
-    "                    <li>\n" +
-    "                        <div style=\"width: 100%;\">\n" +
-    "                            <md-card-image-overlay listing=\"vm.theListing\"  showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
+    "            <li>\n" +
+    "                <div style=\"width: 100%;\">\n" +
+    "                    <md-card-image-overlay listing=\"vm.theListing\" showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
+    "\n" +
+    "            <li class=no-border>\n" +
+    "\n" +
+    "                <div class=\"upper-right no-border\">\n" +
+    "\n" +
+    "                    <div ng-if=\"vm.theListing.extSysId=9\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                        <div style=\"width: 100%; \">\n" +
+    "                            <md-card-mred listing=\"vm.theListing\" title=\"Activity on MRED\"></md-card-mred>\n" +
     "                        </div>\n" +
-    "                    </li>\n" +
+    "                    </div>\n" +
     "\n" +
-    "                    <li class=no-border>\n" +
+    "                    <br>\n" +
     "\n" +
-    "                        <div class=\"upper-right no-border\">\n" +
-    "\n" +
-    "                            <div ng-if=\"vm.theListing.extSysId=9\" layout=\"row\" layout-align=\"space-around center\">\n" +
-    "                                <div style=\"width: 100%; \">\n" +
-    "                                    <md-card-mred listing=\"vm.theListing\" title=\"Activity on MRED\"></md-card-mred>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "\n" +
-    "                            <br>\n" +
-    "\n" +
-    "                            <div ng-show=\"vm.theListing.activityAggregate.snapshots[5]\" layout=\"row\" layout-align=\"space-around center\">\n" +
-    "                                <div style=\"width: 100%; \">\n" +
-    "                                    <md-card-redfin  listing=\"vm.theListing.activityAggregate.snapshots[5]\" title=\"Activity on Redfin\"></md-card-redfin>\n" +
-    "                                </div>\n" +
-    "                            </div>\n" +
-    "\n" +
+    "                    <div ng-if=\"vm.theListing.activityAggregate.snapshots[5]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                        <div style=\"width: 100%; \">\n" +
+    "                            <md-card-redfin listing=\"vm.theListing.activityAggregate.snapshots[5]\" title=\"Activity on Redfin\"></md-card-redfin>\n" +
     "                        </div>\n" +
-    "                    </li>\n" +
+    "                    </div>\n" +
     "\n" +
-    "                    <li>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
+    "            \n" +
     "\n" +
-    "                        <div ng-show=\"vm.theListing.activityAggregate.snapshots[3]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[3]\">\n" +
     "\n" +
-    "                            <div style=\"width: 100%; \">\n" +
+    "                <div ng-if=\"vm.theListing.activityAggregate.snapshots[3]\" layout=\"row\" layout-align=\"space-around center\">\n" +
     "\n" +
-    "                                <md-card-zillow  listing=\"vm.theListing.activityAggregate.snapshots[3] \" title=\"Activity on Zillow\">\n" +
+    "                    <div style=\"width: 100%; \">\n" +
     "\n" +
-    "                                </md-card-zillow>\n" +
+    "                        <md-card-zillow listing=\"vm.theListing.activityAggregate.snapshots[3] \" title=\"Activity on Zillow\">\n" +
     "\n" +
-    "                            </div>\n" +
+    "                        </md-card-zillow>\n" +
     "\n" +
-    "                        </div>\n" +
+    "                    </div>\n" +
     "\n" +
-    "                    </li>\n" +
+    "                </div>\n" +
     "\n" +
-    "                    <li>\n" +
-    "                        <div ng-show=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "            </li>\n" +
+    "            \n" +
+    "            <li  ng-if=\"vm.theListing.activityAggregate.snapshots[4]\">\n" +
+    "                <div ng-if=\"vm.theListing.activityAggregate.snapshots[4]\" layout=\"row\" layout-align=\"space-around center\">\n" +
+    "                    <div style=\"width: 100%;\">\n" +
+    "                        <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4]\" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
+    "                        </md-card-trulia>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </li>\n" +
+    "            \n" +
+    "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\">\n" +
+    "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\"\n" +
+    "                imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.theListing.activityAggregate.snapshots[8].data' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"8\">\n" +
+    "                </md-showing-summary>\n" +
+    "            </li>\n" +
     "\n" +
-    "                            <div style=\"width: 100%;\">\n" +
-    "\n" +
-    "                                <md-card-trulia listing=\"vm.theListing.activityAggregate.snapshots[4]\" title=\"Activity on Trulia\" launch=\"browse(url) \">\n" +
-    "\n" +
-    "                                </md-card-trulia>\n" +
-    "\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "\n" +
-    "                    </li>\n" +
-    "\n" +
-    "                    <li>\n" +
-    "                        <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\"\n" +
-    "                        showings='vm.showings' title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
-    "                        </md-showing-summary>\n" +
-    "                    </li>\n" +
-    "\n" +
-    "\n" +
-    "                    <li>\n" +
-    "                        <md-card-sentri  ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\" sysId=\"2\">\n" +
-    "\n" +
-    "                        </md-card-sentri>\n" +
-    "                    </li>\n" +
-    "\n" +
-    "\n" +
-    "                </ul>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n"
+    "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\">\n" +
+    "                <md-card-showing-assist ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\"\n" +
+    "                imgurl=\"/assets/logos/showingassist-logo.png\" showings='vm.theListing.activityAggregate.snapshots[10].data' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"10\">\n" +
+    "                </md-card-showing-assist>\n" +
+    "            </li>\n" +
+    "            <!--<li>\n" +
+    "                <md-showing-summary ng-if=\"vm.showings.length> 0\" ng-show=\"vm.showings\" imgurl=\"/assets/logos/ShowingsCom_243.png\" showings='vm.showings'\n" +
+    "                title=\"Summary - Feedback on your showings\" sysId=\"8\">\n" +
+    "                </md-showing-summary>\n" +
+    "            </li>-->\n" +
+    "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
+    "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"2\">\n" +
+    "                </md-card-sentri>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "    </div>\n" +
+    "</div>"
   );
 
 }]);

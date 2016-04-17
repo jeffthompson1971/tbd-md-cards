@@ -1,32 +1,28 @@
-
-<md-card>
-<div class="site-header">
-    <div class="showingsdotcom-logo"></div>
-  
-</div>
-<div class= "feedback-div">
-
-<!--<div ng-repeat="showing in vm.showings | maxRecords:4  | groupBy:['potentialOffer']" ng-click="show($event, showing)">-->
-  <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">
-
-    
-            <label><b> {{showing.contact.name}}</b></label>
-    <span>{{showing.startTime | timeago }}</span>
-    <span>{{showing.startTime | date:'short' }}</span>
-
-
-
-            <p> {{showing.feedback}}</p>
-</div>
-    <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()">
-
-        <label><b>Show More</b></label>
-        <span> ... </span>
-        <p> {{showing.feedback}}</p>
-
-
+<md-card class="site-summary-card">
+    <div class="site-header">
+        <div class="showingsdotcom-logo"></div>
     </div>
-            <!--
+    <div class="feedback-div">
+        <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">
+
+
+            <label><b> {{showing.contact.name}}</b></label>
+            <span>{{showing.startTime | timeago }}</span>
+            <span>{{showing.startTime | date:'short' }}</span>
+
+
+
+            <p>{{showing.feedback}}</p>
+        </div>
+        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()">
+
+            <label><b>Show More</b></label>
+            <span> ... </span>
+            <p>{{showing.feedback}}</p>
+
+
+        </div>
+        <!--
             "feedback":"1 feedback requests have been sent.",
 "startTime":"2015-11-28T09:30:00-06:00",
 "sentiment":0,
@@ -53,5 +49,5 @@
 
 -->
 
-</div>
+    </div>
 </md-card>
