@@ -622,7 +622,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-showing-assist.view.html',
-    "<md-card>\n" +
+    "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <div class=\"showingassist-logo\"></div>\n" +
     "    </div>\n" +
