@@ -1,3 +1,19 @@
+b {
+    font-weight: 700;
+}
+h5 {
+    font-size: 14px;
+}
+@media screen and (max-width: 400px) {
+
+ md-card {
+label {
+    font-size: 12px!important;
+}
+ }
+}
+
+
 md-card-image-overlay {
 
   md-card {
@@ -202,6 +218,9 @@ min-height: 34px;
 //md-card{
     label {
        white-space: nowrap;
+       font-weight: 400;
+        font-size: 14px;
+        line-height: 1.42857;
     }
     text-align: left;
     
