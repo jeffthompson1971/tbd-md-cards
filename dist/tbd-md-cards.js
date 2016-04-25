@@ -206,9 +206,9 @@ angular.module('tbd', []);
         };
     }
 
-    ShareItController.$inject = ['$scope', 'ShareSvc', '$mdDialog', 'PalSvc'];
+    ShareItController.$inject = ['$scope', 'ShareSvc', '$mdDialog', 'PalSvc', '$cordovaSocialSharing', 'ConfigSvc'];
 
-    function ShareItController($scope, ShareSvc, $mdDialog, PalSvc ) {
+    function ShareItController($scope, ShareSvc, $mdDialog, PalSvc, $cordovaSocialSharing,  ConfigSvc) {
 
         var vm = this;
         
@@ -217,21 +217,30 @@ angular.module('tbd', []);
         $scope.listing = vm.listing;
 
         vm.share = function() {
-
+            
+              // access multiple numbers in a string like: '0612345678,0687654321'
+  $cordovaSocialSharing
+    .shareViaSMS("test bitch", "8475677182")
+    .then(function(result) {
+        console.log("successfully shared");
+    }, function(err) {
+        alert(JSON.stringify(err)); 
+    });
+    
             // show("some long as URL that keeps getting longer and longer");
-            ShareSvc.shareIt($scope.listing).then(function(resp) {
+            // ShareSvc.shareIt($scope.listing).then(function(resp) {
 
 
-                if (resp.data === null || _.isUndefined(resp.data.success) || (resp.data.success === false)) {
+            //     if (resp.data === null || _.isUndefined(resp.data.success) || (resp.data.success === false)) {
                     
-                    PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a minute..");
-                } else {
-                 $scope.url = resp.data.fullUrl;
+            //         PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a minute..");
+            //     } else {
+            //      $scope.url = resp.data.fullUrl;
 
-                 show($scope.url);
-                }
+            //      show($scope.url);
+            //     }
 
-            })
+            // })
         }
         $scope.share = vm.share;
         
@@ -240,10 +249,8 @@ angular.module('tbd', []);
             if (_.isUndefined(theListing))
                 return;
             $scope.listing = theListing;
-            
+         });
          
-
-        });
         vm.mdDialog = $mdDialog;
 
         var show = function(url) {
