@@ -261,39 +261,39 @@ min-height: 34px;
 .sentrilock-logo {
     
     float: left;
-    background-repeat: no-repeat;
+   // background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
     //background-image: url("/assets/logos/sentrilock-logo.png");
     height: 400px;
     padding: 4px;
     width: 100%;
-    background-position: 5px 5px;
-    background-size: 160px;
+   // background-position: 5px 5px;
+    //background-size: 160px;
 }
 
 .zillow-logo {
     float: left;
-    background-repeat: no-repeat;
+    //background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
     //background-image: url("/assets/logos/zillow_logo_40x189.png");
  
-    height: inherit;
+   // height: inherit;
  
     padding: 4px;
     width: 189px;
-    background-position: 5px 5px;  
+  //  background-position: 5px 5px;  
 }
 
 .trulia-logo {
     float: left;
  
-    background-repeat: no-repeat;
+  //  background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
    // background-image: url("/assets/logos/trulia_logo_40x113.png");
     padding: 4px;
     width: 113px;
-    height: inherit;
-    background-position: 5px 3px;
+    //height: inherit;
+   // background-position: 5px 3px;
 }
 
 .redfin-logo {
@@ -304,42 +304,42 @@ min-height: 34px;
    // background-image: url("/assets/logos/redfin_logo_40x166.png");
     padding: 4px;
     width: 166px;
-    height: inherit;
+  //  height: inherit;
     background-position: 5px 5px;
 }
 
 .mred-logo {
     float: left;
 
-    background-repeat: no-repeat;
+  //  background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
    // background-image: url("/assets/logos/mred-logo-small.png");
     padding: 4px;
     width: 166px;
-    height: inherit;
+   // height: inherit;
     background-position: 5px 5px;
 }
 
 .showingassist-logo {
     float: left;
-    background-repeat: no-repeat;
+  //  background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
    // background-image: url("/assets/logos/showingassist-logo.png");
     padding: 4px;
     width: 167px;
-    height: inherit;
-    background-position: 5px 5px;
+   // height: inherit;
+//    background-position: 5px 5px;
 }
 
 .showingsdotcom-logo {
     float: left;
-    background-repeat: no-repeat;
+  //  background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
    // background-image: url("/assets/logos/showings.com_logo_40x146.png");
     padding: 4px;
     width: 146px;
-    height: inherit;
-    background-position: 5px 5px;
+   // height: inherit;
+ //   background-position: 5px 5px;
 }
 
 
