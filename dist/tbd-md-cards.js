@@ -172,7 +172,7 @@ angular.module('tbd', []);
     }
 
 })();
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -195,8 +195,8 @@ angular.module('tbd', []);
             controllerAs: 'vm',
             bindToController: true,
 
-            link: function(scope, element, attrs) {
-                element.bind('click', function() {
+            link: function (scope, element, attrs) {
+                element.bind('click', function () {
 
                     scope.share();
                 });
@@ -206,47 +206,64 @@ angular.module('tbd', []);
         };
     }
 
-    ShareItController.$inject = ['$scope', 'ShareSvc', '$mdDialog', 'PalSvc'];
+    ShareItController.$inject = ['$scope', 'ShareSvc', '$mdDialog', 'PalSvc', 'ConfigSvc', '$cordovaSocialSharing'];
 
-    function ShareItController($scope, ShareSvc, $mdDialog, PalSvc ) {
+    function ShareItController($scope, ShareSvc, $mdDialog, PalSvc, ConfigSvc, $cordovaSocialSharing) {
 
         var vm = this;
-        
+
         vm.expired = true;
 
         $scope.listing = vm.listing;
 
-        vm.share = function() {
+        vm.share = function () {
 
             // show("some long as URL that keeps getting longer and longer");
-            ShareSvc.shareIt($scope.listing).then(function(resp) {
+            ShareSvc.shareIt($scope.listing).then(function (resp) {
 
 
                 if (resp.data === null || _.isUndefined(resp.data.success) || (resp.data.success === false)) {
-                    
+
                     PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a minute..");
                 } else {
-                 $scope.url = resp.data.fullUrl;
 
-                 show($scope.url);
+                    $scope.url = resp.data.fullUrl;
+
+                    if (ConfigSvc.isMobileApp()) {
+
+                        var msgStr = "Current activity on \"" + $scope.listing.address + "\": \n";
+
+                        $cordovaSocialSharing
+                            .share(msgStr, "Your listing details from SnapListings.io!", null, $scope.url) // Share via native share sheet
+                            .then(function (result) {
+                                PalSvc.alert("Share successful", "OK", "Your share was successful...");
+                                //alert("successfully shared: " + JSON.stringify(result));
+
+                            }, function (err) {
+                                PalSvc.alert("Share failed", "OK", JSON.stringify(err));
+                                // alert(JSON.stringify(err));
+                            });
+
+                    } else {
+
+                        show($scope.url);
+                    }
                 }
 
             })
         }
         $scope.share = vm.share;
-        
-        $scope.$watch('vm.listing', function(theListing) {
+
+        $scope.$watch('vm.listing', function (theListing) {
 
             if (_.isUndefined(theListing))
                 return;
             $scope.listing = theListing;
-            
-         
-
         });
+
         vm.mdDialog = $mdDialog;
 
-        var show = function(url) {
+        var show = function (url) {
 
             $scope.theUrl = url;
             $scope.vm.mdDialog.show({
@@ -267,37 +284,37 @@ angular.module('tbd', []);
 
                 clickOutsideToClose: true
             })
-                .then(function(answer) {
+                .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
+                }, function () {
                     $scope.status = 'You cancelled the dialog.';
                 });
         }
 
         function DialogController($scope, $mdDialog, theUrl) {
-             $scope.$on('keypress', function(onEvent, keypressEvent) {
-          if (keypress.which === 120) {
-            $scope.keyPressed = 'x';
-          }
-          else {
-            $scope.keyPressed = 'Keycode: ' + keypressEvent.which;
-          }
-        });
+            $scope.$on('keypress', function (onEvent, keypressEvent) {
+                if (keypress.which === 120) {
+                    $scope.keyPressed = 'x';
+                }
+                else {
+                    $scope.keyPressed = 'Keycode: ' + keypressEvent.which;
+                }
+            });
 
 
             $scope.theUrl = theUrl;
-            $scope.hide = function() {
+            $scope.hide = function () {
                 $mdDialog.hide();
             };
-            $scope.cancel = function() {
+            $scope.cancel = function () {
                 $mdDialog.cancel();
             };
-            $scope.answer = function(answer) {
+            $scope.answer = function (answer) {
                 $mdDialog.hide(answer);
             };
 
             $scope.copyError = false;
-            $scope.onSuccess = function(e) {
+            $scope.onSuccess = function (e) {
                 $scope.hide()
                 console.info('Action:', e.action);
                 console.info('Text:', e.text);
@@ -305,12 +322,12 @@ angular.module('tbd', []);
 
                 e.clearSelection();
             };
-            $scope.onError = function(e) {
+            $scope.onError = function (e) {
 
-                var myEl = angular.element( document.querySelector( '#errorTip' ) );
-                myEl.css('visibility','visible');
+                var myEl = angular.element(document.querySelector('#errorTip'));
+                myEl.css('visibility', 'visible');
                 $scope.copyError = true;
-              
+
             }
         }
 
