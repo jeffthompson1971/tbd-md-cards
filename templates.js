@@ -129,15 +129,13 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-mred.view.html',
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"mred-logo\"></div>\n" +
-    "        <!--<i class=\"mdi md-accent mdi-share-variant\"></i>-->\n" +
+    "     \n" +
+    "        <div class=\"mred-logo\">\n" +
+    "            \n" +
+    "         <img src=\"assets/logos/mred-logo-small.png\" alt=\"MRED\"/>         \n" +
     "\n" +
-    "        <!--<div class=\"card-icons-wrapper\">\n" +
-    "            <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
-    "                <md-icon md-svg-src=\"assets/icons/ic_open_in_browser_black_48px.svg\" aria-label=\"Launch in browser\"></md-icon>\n" +
-    "            </md-button>\n" +
-    "        </div>-->\n" +
+    "        </div>\n" +
+    "   \n" +
     "    </div>\n" +
     "    <div layout=\"row\">\n" +
     "        <div flex class=\"left\">\n" +
@@ -226,7 +224,11 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"redfin-logo\"></div>\n" +
+    "        <div class=\"redfin-logo\">\n" +
+    "             <img src=\"assets/logos/redfin_logo_40x166.png\" alt=\"Redfin\"/>\n" +
+    "      \n" +
+    "           \n" +
+    "        </div>\n" +
     "        <!--<i class=\"mdi md-accent mdi-share-variant\"></i>-->\n" +
     "\n" +
     "        <div class=\"card-icons-wrapper\">\n" +
@@ -534,6 +536,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
+    "         <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\"/>\n" +
+    "\n" +
+    "        \n" +
     "        <div class=\"sentrilock-logo\"></div>\n" +
     "    </div>\n" +
     "\n" +
@@ -624,7 +629,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-showing-assist.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingassist-logo\"></div>\n" +
+    "        <div class=\"showingassist-logo\">\n" +
+    "                 <img src=\"assets/logos/showingassist-logo.png\" alt=\"Showing Assist\"/>         \n" +
+    "        </div> \n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
@@ -959,7 +966,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-trulia.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"trulia-logo\"></div>\n" +
+    "        <div class=\"trulia-logo\">\n" +
+    "             <img src=\"assets/logos/trulia_logo_40x113.png\" alt=\"Trulia\"/>\n" +
+    "        </div>\n" +
     "       \n" +
     "       <div class=\"card-icons-wrapper\">\n" +
     "        <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
@@ -1244,7 +1253,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-zillow.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"zillow-logo\"></div>\n" +
+    "        <div class=\"zillow-logo\">\n" +
+    "            <img src=\"assets/logos/zillow_logo_40x189.png\" alt=\"\"/>\n" +
+    "        </div>\n" +
     "      \n" +
     "\n" +
     "\n" +
@@ -1397,7 +1408,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-showing-summary.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingsdotcom-logo\"></div>\n" +
+    "        <div class=\"showingsdotcom-logo\">\n" +
+    "         <img src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\"/>         \n" +
+    " \n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +

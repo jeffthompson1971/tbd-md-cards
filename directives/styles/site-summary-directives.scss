@@ -163,6 +163,13 @@ md-card-image-overlay {
 
 .site-summary-card {
     
+    img {
+      
+          max-width: 100%;
+    height: auto;
+    margin: 0 0 10px;
+    width: auto;
+    }
     
     @media screen and (max-width: 767px) {
           
@@ -256,7 +263,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/sentrilock-logo.png");
+    //background-image: url("/assets/logos/sentrilock-logo.png");
     height: 400px;
     padding: 4px;
     width: 100%;
@@ -268,7 +275,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/zillow_logo_40x189.png");
+    //background-image: url("/assets/logos/zillow_logo_40x189.png");
  
     height: inherit;
  
@@ -282,7 +289,7 @@ min-height: 34px;
  
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/trulia_logo_40x113.png");
+   // background-image: url("/assets/logos/trulia_logo_40x113.png");
     padding: 4px;
     width: 113px;
     height: inherit;
@@ -294,7 +301,7 @@ min-height: 34px;
 
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/redfin_logo_40x166.png");
+   // background-image: url("/assets/logos/redfin_logo_40x166.png");
     padding: 4px;
     width: 166px;
     height: inherit;
@@ -306,7 +313,7 @@ min-height: 34px;
 
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/mred-logo-small.png");
+   // background-image: url("/assets/logos/mred-logo-small.png");
     padding: 4px;
     width: 166px;
     height: inherit;
@@ -317,7 +324,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/showingassist-logo.png");
+   // background-image: url("/assets/logos/showingassist-logo.png");
     padding: 4px;
     width: 167px;
     height: inherit;
@@ -328,7 +335,7 @@ min-height: 34px;
     float: left;
     background-repeat: no-repeat;
     border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/showings.com_logo_40x146.png");
+   // background-image: url("/assets/logos/showings.com_logo_40x146.png");
     padding: 4px;
     width: 146px;
     height: inherit;

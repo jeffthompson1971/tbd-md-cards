@@ -1,6 +1,9 @@
 <md-card class="site-summary-card">
     <div class="site-header">
-        <div class="showingsdotcom-logo"></div>
+        <div class="showingsdotcom-logo">
+         <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com"/>         
+ 
+        </div>
     </div>
     <div class="feedback-div">
         <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">

@@ -1,6 +1,8 @@
 <md-card class="site-summary-card">
     <div class="site-header">
-        <div class="showingassist-logo"></div>
+        <div class="showingassist-logo">
+                 <img src="assets/logos/showingassist-logo.png" alt="Showing Assist"/>         
+        </div> 
     </div>
     <div class="feedback-div">
         <div ng-repeat="showing in vm.showings | maxRecords:5" ng-click="show($event, showing)">
