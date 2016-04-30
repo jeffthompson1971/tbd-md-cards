@@ -47,10 +47,10 @@
             // show("some long as URL that keeps getting longer and longer");
             ShareSvc.shareIt($scope.listing).then(function (resp) {
 
-
                 if (resp.data === null || _.isUndefined(resp.data.success) || (resp.data.success === false)) {
 
-                    PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a minute..");
+                    PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a few minutes...");
+
                 } else {
 
                     $scope.url = resp.data.fullUrl;
@@ -60,13 +60,13 @@
                         var msgStr = "Current activity on \"" + $scope.listing.address + "\": \n";
 
                         $cordovaSocialSharing
-                            .share(msgStr, "Your listing details from SnapListings.io!", null, $scope.url) // Share via native share sheet
+                            .share(msgStr, "What's trending on your listing - only from SnapListings.io!", null, $scope.url) // Share via native share sheet
                             .then(function (result) {
-                                PalSvc.alert("Share successful", "OK", "Your share was successful...");
+                                PalSvc.alert("Success", "OK", "Your listing trends were shared successfuly...");
                                 //alert("successfully shared: " + JSON.stringify(result));
 
                             }, function (err) {
-                                PalSvc.alert("Share failed", "OK", JSON.stringify(err));
+                                PalSvc.alert("Fail", "OK", JSON.stringify(err));
                                 // alert(JSON.stringify(err));
                             });
 
@@ -75,7 +75,6 @@
                         show($scope.url);
                     }
                 }
-
             })
         }
         $scope.share = vm.share;
@@ -106,7 +105,6 @@
                          <md-tooltip id="errorTip" md-visible="copyError" style="visibility: hidden; font-size: 16px; font-weight: 600" md-direction="left">Link selected - press Ctrl-C \n to copy </md-tooltip></md-button> </md-dialog-content></md-dialog>',
 
                 parent: angular.element(document.body),
-
 
                 clickOutsideToClose: true
             })
