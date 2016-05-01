@@ -130,7 +130,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "     \n" +
-    "        <div class=\"mred-logo\">\n" +
+    "        <div class=\"logo\">\n" +
     "            \n" +
     "         <img src=\"assets/logos/mred-logo-small.png\" alt=\"MRED\"/>         \n" +
     "\n" +
@@ -224,7 +224,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"redfin-logo\">\n" +
+    "        <div class=\"logo\">\n" +
     "             <img src=\"assets/logos/redfin_logo_40x166.png\" alt=\"Redfin\"/>\n" +
     "      \n" +
     "           \n" +
@@ -522,51 +522,38 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-sentrilock.view.html',
-    "<style>\n" +
-    "    card-header {\n" +
-    "        width: 100%;\n" +
-    "        background-color: #FFF;\n" +
-    "        border-bottom: 1px;\n" +
-    "        font-weight: 600;\n" +
-    "        font-size: 90%;\n" +
-    "    }\n" +
-    "</style>\n" +
-    "\n" +
-    "\n" +
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
-    "         <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\"/>\n" +
+    "       \n" +
     "\n" +
-    "        \n" +
-    "        <div class=\"sentrilock-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
+    "\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"feedback-div\">\n" +
-    "       \n" +
+    "\n" +
     "\n" +
     "        <div ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
-    "            <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
-    "              <!--<label><b> {{showing.contact.name}}</b></label>-->\n" +
-    "            <!--<div ng-bind-html=\"entry.AccessedByName | accessorName\"></div>-->\n" +
-    "             <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "            <!--<span>{{entry.Date}}</span>-->\n" +
+    "\n" +
+    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "\n" +
     "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "            <!--<span>Access type: {{entry.AccessType}}</span>-->\n" +
+    "\n" +
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
     "        </div>\n" +
     "\n" +
     "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
     "            <label><b>Show More</b></label>\n" +
     "            <span> ... </span>\n" +
-    "            <!--<p> {{showing.feedback}}</p>-->\n" +
-    "       </div>\n" +
+    "\n" +
+    "        </div>\n" +
     "\n" +
     "    </div>\n" +
-    "     <!--<div class=\"card-header\">\n" +
-    "            Serial #: {{vm.sentrilock.LBSerialNumber}}\n" +
-    "        </div>-->\n" +
-    "     <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
+    "\n" +
+    "    <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
     "    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>\n" +
     "</md-card>\n" +
     "\n" +
@@ -629,7 +616,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-showing-assist.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingassist-logo\">\n" +
+    "        <div class=\"logo\">\n" +
     "                 <img src=\"assets/logos/showingassist-logo.png\" alt=\"Showing Assist\"/>         \n" +
     "        </div> \n" +
     "    </div>\n" +
@@ -966,7 +953,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-trulia.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"trulia-logo\">\n" +
+    "        <div class=\"logo\">\n" +
     "             <img src=\"assets/logos/trulia_logo_40x113.png\" alt=\"Trulia\"/>\n" +
     "        </div>\n" +
     "       \n" +
@@ -1253,7 +1240,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-zillow.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"zillow-logo\">\n" +
+    "        <div class=\"logo\">\n" +
     "            <img src=\"assets/logos/zillow_logo_40x189.png\" alt=\"\"/>\n" +
     "        </div>\n" +
     "      \n" +
@@ -1408,7 +1395,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-showing-summary.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingsdotcom-logo\">\n" +
+    "        <div class=\"logo\">\n" +
     "         <img src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\"/>         \n" +
     " \n" +
     "        </div>\n" +
