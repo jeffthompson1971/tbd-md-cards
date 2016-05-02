@@ -30,7 +30,7 @@
         </div>
 
         <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback() ">
-            <label><b>Show More</b></label>
+            <label ng-click="vm.showAll($event, vm.sentrilock)"><b>Show All</b></label>
             <span> ... </span>
             <!--<p> {{showing.feedback}}</p>-->
        </div>

@@ -11,17 +11,17 @@
             <span>{{showing.startTime | date:'short' }}</span>
 
 
-
             <p>{{showing.feedback}}</p>
         </div>
-        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()">
-
-            <label><b>Show More</b></label>
+        <div ng-hide="vm.showings.length <= 1" ng-click="showMoreFeedback()">
+           <label ng-click="vm.showAll($event, vm.showings)"><b> Show All</b></label> 
             <span> ... </span>
             <p>{{showing.feedback}}</p>
 
-
         </div>
+        
+        
+       
         <!--
             "feedback":"1 feedback requests have been sent.",
 "startTime":"2015-11-28T09:30:00-06:00",

@@ -1,4 +1,4 @@
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -12,7 +12,7 @@
     function MdShowingSummary() {
         return {
             restrict: 'E',
-            templateUrl: function(elem, attrs) {
+            templateUrl: function (elem, attrs) {
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-showing-summary.view.html" : 'templates/_md-showing-summary.view.html';
             },
             scope: {
@@ -22,8 +22,8 @@
             controller: MdShowingSummaryController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function(scope, element, attrs) {
-                scope.$watch("ngClass", function(value) {
+            link: function (scope, element, attrs) {
+                scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
                 scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showings.com_40x146.png";
@@ -49,7 +49,7 @@
                 });
 
                 // watch for changes in the listing to update the new photo
-                scope.$watch('vm.showings', function(showings) {
+                scope.$watch('vm.showings', function (showings) {
 
                     // ng-class failed in a directive - so i use this approach
                     // to color the feedback based on sentiment
@@ -79,23 +79,23 @@
             }
         };
     }
-
+    //Controller for the small pop-up
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog'];
 
     function DialogController($scope, $mdDialog, showing) {
 
         $scope.showing = showing;
 
-        $scope.hide = function() {
+        $scope.hide = function () {
             $mdDialog.hide();
         };
-        $scope.cancel = function() {
+        $scope.cancel = function () {
             $mdDialog.cancel();
         };
-        $scope.answer = function(answer) {
+        $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
-        $scope.dial = function(number) {
+        $scope.dial = function (number) {
             if (window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
@@ -103,16 +103,38 @@
         };
     };
 
+    function DialogControllerAll($scope, $mdDialog, showings) {
+
+        $scope.showings = showings;
+
+        $scope.hide = function () {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function (answer) {
+            $mdDialog.hide(answer);
+        };
+        $scope.dial = function (number) {
+            if (window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+            }
+
+        };
+    };
+    
+
     function MdShowingSummaryController($scope, $mdDialog) {
         var vm = this;
         $scope.showings = vm.showings;
+
         // activate();
 
         vm.mdDialog = $mdDialog;
-        vm.show = function(ev, selShowing) {
-
+        vm.show = function (ev, selShowing) {
+            console.log(selShowing);
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
-
             $scope.vm.mdDialog.show(
                 {
                     locals: {
@@ -124,12 +146,36 @@
                     targetEvent: ev,
                     clickOutsideToClose: true
                 })
-                .then(function(answer) {
+                .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
+                }, function () {
                     $scope.status = 'You cancelled the dialog.';
                 });
         }
+
+        vm.showAll = function (ev, showings) {
+            console.log("show all called");
+            var parentEl = angular.element($scope.meElement.find('md-list-item'));
+            $scope.vm.mdDialog.show(
+                {
+                    locals: {
+                        showings: showings
+                    },
+                    controller: DialogControllerAll,
+                    templateUrl: 'templates/_md-card-showing-detail-all.view.html',
+                    parent: parentEl,
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                .then(function (answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+        }
+
+
+
 
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
