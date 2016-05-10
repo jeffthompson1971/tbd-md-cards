@@ -56,6 +56,13 @@
                 return;
 
             $scope.listing = theListing;
+            
+            if (theListing.activityAggregate && theListing.activityAggregate.snapshots) {
+                if (theListing.activityAggregate.snapshots["8"]) {
+              
+                    vm.showings = theListing.activityAggregate.snapshots["8"].data;
+                }
+            }
         });
 
         $scope.$watch('vm.showings', function(theShowings) {
