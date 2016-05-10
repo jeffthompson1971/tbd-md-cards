@@ -758,18 +758,68 @@ angular.module('tbd', []);
             link: function (scope, element, attrs) {
                 scope.title = attrs.title;
                 scope.pass = attrs.pass;
+                scope.meElement = element;
             }
         };
     }
 
-    MdCardSentriController.$inject = ['$scope'];
 
-    function MdCardSentriController($scope) {
-        var vm = this;
+    function DialogControllerAll($scope, $mdDialog, sentrilock) {
+        console.log("DATA", sentrilock);
         
+        $scope.sentrilock = sentrilock;
+
+        $scope.hide = function () {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function (answer) {
+            $mdDialog.hide(answer);
+        };
+        $scope.dial = function (number) {
+            if (window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+            }
+
+        };
+    }
+    
+
+
+
+    MdCardSentriController.$inject = ['$scope', '$mdDialog'];
+
+    function MdCardSentriController($scope, $mdDialog) {
+        var vm = this;
+        vm.mdDialog = $mdDialog;
         $scope.sentrilock = vm.sentrilock;
         console.log("sentri controller");
         
+        vm.showAll = function (ev, sentrilock) {
+            console.log("show all called", sentrilock);
+            var parentEl = angular.element($scope.meElement.find('md-list-item'));
+            console.log(sentrilock)
+            $scope.vm.mdDialog.show(
+                {
+                    locals: {
+                        sentrilock: sentrilock
+                    },
+                    controller: DialogControllerAll,
+                    templateUrl: 'templates/_md-card-sentrilock-detail-all.view.html',
+                    parent: parentEl,
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                    
+                })
+                .then(function (answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+                console.log(sentrilock)
+        }
         
      
         
@@ -1361,7 +1411,7 @@ angular.module('tbd', []);
         }
     }
 })();
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -1375,7 +1425,7 @@ angular.module('tbd', []);
     function MdShowingSummary() {
         return {
             restrict: 'E',
-            templateUrl: function(elem, attrs) {
+            templateUrl: function (elem, attrs) {
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-showing-summary.view.html" : 'templates/_md-showing-summary.view.html';
             },
             scope: {
@@ -1385,8 +1435,8 @@ angular.module('tbd', []);
             controller: MdShowingSummaryController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function(scope, element, attrs) {
-                scope.$watch("ngClass", function(value) {
+            link: function (scope, element, attrs) {
+                scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
                 scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showings.com_40x146.png";
@@ -1412,7 +1462,7 @@ angular.module('tbd', []);
                 });
 
                 // watch for changes in the listing to update the new photo
-                scope.$watch('vm.showings', function(showings) {
+                scope.$watch('vm.showings', function (showings) {
 
                     // ng-class failed in a directive - so i use this approach
                     // to color the feedback based on sentiment
@@ -1442,23 +1492,23 @@ angular.module('tbd', []);
             }
         };
     }
-
+    //Controller for the small pop-up
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog'];
 
     function DialogController($scope, $mdDialog, showing) {
 
         $scope.showing = showing;
 
-        $scope.hide = function() {
+        $scope.hide = function () {
             $mdDialog.hide();
         };
-        $scope.cancel = function() {
+        $scope.cancel = function () {
             $mdDialog.cancel();
         };
-        $scope.answer = function(answer) {
+        $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
-        $scope.dial = function(number) {
+        $scope.dial = function (number) {
             if (window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
@@ -1466,16 +1516,38 @@ angular.module('tbd', []);
         };
     };
 
+    function DialogControllerAll($scope, $mdDialog, showings) {
+
+        $scope.showings = showings;
+
+        $scope.hide = function () {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function (answer) {
+            $mdDialog.hide(answer);
+        };
+        $scope.dial = function (number) {
+            if (window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+            }
+
+        };
+    };
+    
+
     function MdShowingSummaryController($scope, $mdDialog) {
         var vm = this;
         $scope.showings = vm.showings;
+
         // activate();
 
         vm.mdDialog = $mdDialog;
-        vm.show = function(ev, selShowing) {
-
+        vm.show = function (ev, selShowing) {
+            console.log(selShowing);
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
-
             $scope.vm.mdDialog.show(
                 {
                     locals: {
@@ -1487,12 +1559,36 @@ angular.module('tbd', []);
                     targetEvent: ev,
                     clickOutsideToClose: true
                 })
-                .then(function(answer) {
+                .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
+                }, function () {
                     $scope.status = 'You cancelled the dialog.';
                 });
         }
+
+        vm.showAll = function (ev, showings) {
+            console.log("show all called");
+            var parentEl = angular.element($scope.meElement.find('md-list-item'));
+            $scope.vm.mdDialog.show(
+                {
+                    locals: {
+                        showings: showings
+                    },
+                    controller: DialogControllerAll,
+                    templateUrl: 'templates/_md-card-showing-detail-all.view.html',
+                    parent: parentEl,
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                .then(function (answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+        }
+
+
+
 
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
@@ -2791,6 +2887,108 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-sentrilock-detail-all.view.html',
+    "<!--template for the little popo up. -->\n" +
+    "<style>\n" +
+    "    .dialogdemoBasicUsage #popupContainer {\n" +
+    "        position: relative;\n" +
+    "    }\n" +
+    "    \n" +
+    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
+    "        font-weight: bold;\n" +
+    "        /*color: blue;*/\n" +
+    "        text-decoration: underline;\n" +
+    "    }\n" +
+    "    \n" +
+    "    i.plain {\n" +
+    "        text-decoration: none;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
+    "\n" +
+    "\n" +
+    "    <form ng-repeat=\"entry in sentrilock.entries\">\n" +
+    "        <md-toolbar ng-if=\"$index == 0\">\n" +
+    "            <div class=\"md-toolbar-tools md-primary\">\n" +
+    "                <h2>\n" +
+    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "<md-button class=\"md-icon-button\" ng-if=\"$index == 0\">\n" +
+    "                    </md-icon>\n" +
+    "                </h2>\n" +
+    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
+    "                <!--<h3>{{entry.CompanyName}}</h3>-->\n" +
+    "                <span flex></span>\n" +
+    "                \n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\"  ng-click=\"cancel()\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </md-toolbar>\n" +
+    "        \n" +
+    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
+    "            <div>\n" +
+    "                  \n" +
+    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
+    "                \n" +
+    "                <h3>{{entry.CompanyName}}</h3>\n" +
+    "                \n" +
+    "                <h3>{{entry.City}}</h3>\n" +
+    "                <h4>{{entry.State}}</h4>\n" +
+    "                <h5 class=\"order-address\">{{entry.Time | date: \"medium\" }} - {{entry.UTCAccessedDT | timeago }}</h5>\n" +
+    "                <hr>\n" +
+    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
+    "                <div ng-click=\"dial(entry.ContactNumber)\"  class=\"contact-method\">\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.ContactNumber }} (Mobile)\n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "                </a>\n" +
+    "                <div ng-click=\"dial(entry.PhoneNumber)\" class=\"contact-method\">\n" +
+    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
+    "                       <a class='plain'  ng-href=\"\">\n" +
+    " \n" +
+    "\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.PhoneNumber }} (Phone Number)\n" +
+    "                    </span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <div class=\"contact-method\">\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                   {{entry.EmailAddress}}\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "\n" +
+    "        </md-dialog-content>\n" +
+    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
+    "\n" +
+    "        <!--<span flex></span>-->\n" +
+    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
+    "        <!--PHONE-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
+    "        <!--EMAIL-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--</div>-->\n" +
+    "    </form>\n" +
+    "</md-dialog>"
+  );
+
+
   $templateCache.put('templates/_md-card-sentrilock.view.html',
     "<style>\n" +
     "    card-header {\n" +
@@ -2824,7 +3022,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "\n" +
     "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
-    "            <label><b>Show More</b></label>\n" +
+    "            <label ng-click=\"vm.showAll($event, vm.sentrilock)\"><b>Show All</b></label>\n" +
     "            <span> ... </span>\n" +
     "            <!--<p> {{showing.feedback}}</p>-->\n" +
     "       </div>\n" +
@@ -2925,7 +3123,105 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-showing-detail-all.view.html',
+    "<!--template for the little popo up. -->\n" +
+    "<style>\n" +
+    "    .dialogdemoBasicUsage #popupContainer {\n" +
+    "        position: relative;\n" +
+    "    }\n" +
+    "    \n" +
+    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
+    "        font-weight: bold;\n" +
+    "        /*color: blue;*/\n" +
+    "        text-decoration: underline;\n" +
+    "    }\n" +
+    "    \n" +
+    "    i.plain {\n" +
+    "        text-decoration: none;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
+    "    <form ng-repeat=\"showing in showings\">\n" +
+    "       <!-- <md-toolbar>\n" +
+    "            <div class=\"md-toolbar-tools md- primary\">\n" +
+    "                <h2>\n" +
+    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "\n" +
+    "                    </md-icon>\n" +
+    "                </h2>\n" +
+    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{showing.contact.name}}</h3>\n" +
+    "                <span flex></span>\n" +
+    "                <md-button class=\"md-icon-button\" ng-if=\"$index == 0 \"ng-click=\"cancel()\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "      <!--  </md-toolbar>-->\n" +
+    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
+    "            <div>\n" +
+    "               <h3> {{showing.contact.name}}</h3>\n" +
+    "                <h5 class=\"order-address\">{{showing.startTime | date: \"medium\" }} - {{showing.startTime | timeago }}</h5>\n" +
+    "                 \n" +
+    "                <h4>\n" +
+    "                    {{showing.feedback}}\n" +
+    "                </h4>\n" +
+    "                <hr>\n" +
+    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
+    "                <div ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile' class=\"contact-method\">\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
+    "              \n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "                </a>\n" +
+    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
+    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
+    "                       <a class='plain'  ng-href=\"\">\n" +
+    " \n" +
+    "\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{showing.contact.phone.office}} (Office)\n" +
+    "                    </span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <div class=\"contact-method\">\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                   {{email}}\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "\n" +
+    "        </md-dialog-content>\n" +
+    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
+    "\n" +
+    "        <!--<span flex></span>-->\n" +
+    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
+    "        <!--PHONE-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
+    "        <!--EMAIL-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--</div>-->\n" +
+    "    </form>\n" +
+    "</md-dialog>"
+  );
+
+
   $templateCache.put('templates/_md-card-showing-detail.view.html',
+    "<!--template for the little popo up. -->\n" +
     "<style>\n" +
     "    .dialogdemoBasicUsage #popupContainer {\n" +
     "        position: relative;\n" +
@@ -2964,6 +3260,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <h4>\n" +
     "                    {{showing.feedback}}\n" +
+    "                    Hello world Orignal\n" +
     "                </h4>\n" +
     "                <hr>\n" +
     "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
@@ -3680,17 +3977,17 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <span>{{showing.startTime | date:'short' }}</span>\n" +
     "\n" +
     "\n" +
-    "\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
-    "\n" +
-    "            <label><b>Show More</b></label>\n" +
+    "        <div ng-hide=\"vm.showings.length <= 1\" ng-click=\"showMoreFeedback()\">\n" +
+    "           <label ng-click=\"vm.showAll($event, vm.showings)\"><b> Show All</b></label> \n" +
     "            <span> ... </span>\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
-    "\n" +
     "        </div>\n" +
+    "        \n" +
+    "        \n" +
+    "       \n" +
     "        <!--\n" +
     "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
     "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
