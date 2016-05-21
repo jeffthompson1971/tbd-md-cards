@@ -440,10 +440,26 @@ angular.module('tbd', []);
                 return;
 
             $scope.listing = theListing;
+            
+            // TODO - this needs to look for any showing service ID not just
+            // hardcode CSS 
+            if (theListing.activityAggregate && theListing.activityAggregate.snapshots) {
+                if (theListing.activityAggregate.snapshots["8"]) {
+                    
+                    vm.showings = (theListing.activityAggregate.snapshots["8"].data) ? 
+                    theListing.activityAggregate.snapshots["8"].data : [];
+                } else {
+                     vm.showings = [];
+                     
+                }
+            } else {
+                 vm.showings = [];
+            }
         });
 
         $scope.$watch('vm.showings', function(theShowings) {
-
+            
+            
             if (_.isUndefined(theShowings))
                 return;
             for (var i = 0; i < theShowings.length; ++i) {
