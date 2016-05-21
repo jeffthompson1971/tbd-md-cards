@@ -59,9 +59,9 @@
             }
         }
     }
-    SignupCssController.$inject = ['$scope', 'PrincipalSvc', 'CssSvc', 'PalSvc'];
+    SignupCssController.$inject = ['$scope', 'PrincipalSvc', 'CssSvc', 'PalSvc', '$ionicScrollDelegate'];
 
-    function SignupCssController($scope, PrincipalSvc, CssSvc, PalSvc) {
+    function SignupCssController($scope, PrincipalSvc, CssSvc, PalSvc, $ionicScrollDelegate) {
 
         var vm = this;
         var myId = 8; // TODO - do this better using config and enums
@@ -83,7 +83,18 @@
             userName: "",
             password: ""
         }
+        
+        $scope.$watch('vm.showForm', function(show) {
 
+            if (_.isUndefined(show))
+                return;
+
+           if (show) {
+                $ionicScrollDelegate.scrollBottom();
+           }
+           
+            
+        })
         vm.submitLogin = function (values) {
 
             vm.login.extSysId = myId;

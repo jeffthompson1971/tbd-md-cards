@@ -1242,9 +1242,9 @@ angular.module('tbd', []);
             }
         }
     }
-    SignupCssController.$inject = ['$scope', 'PrincipalSvc', 'CssSvc', 'PalSvc'];
+    SignupCssController.$inject = ['$scope', 'PrincipalSvc', 'CssSvc', 'PalSvc', '$ionicScrollDelegate'];
 
-    function SignupCssController($scope, PrincipalSvc, CssSvc, PalSvc) {
+    function SignupCssController($scope, PrincipalSvc, CssSvc, PalSvc, $ionicScrollDelegate) {
 
         var vm = this;
         var myId = 8; // TODO - do this better using config and enums
@@ -1266,7 +1266,18 @@ angular.module('tbd', []);
             userName: "",
             password: ""
         }
+        
+        $scope.$watch('vm.showForm', function(show) {
 
+            if (_.isUndefined(show))
+                return;
+
+           if (show) {
+                $ionicScrollDelegate.scrollBottom();
+           }
+           
+            
+        })
         vm.submitLogin = function (values) {
 
             vm.login.extSysId = myId;
@@ -1337,9 +1348,9 @@ angular.module('tbd', []);
             }
         }
     }
-    SignupSentriController.$inject = ['$scope', 'PalSvc', 'PrincipalSvc'];
+    SignupSentriController.$inject = ['$scope', 'PalSvc', 'PrincipalSvc', '$ionicScrollDelegate'];
 
-    function SignupSentriController($scope, PalSvc, PrincipalSvc) {
+    function SignupSentriController($scope, PalSvc, PrincipalSvc, $ionicScrollDelegate) {
         var vm = this;
         var myId = 2; // TODO - do this better using config and enums
         vm.showForm = false;
@@ -1355,6 +1366,18 @@ angular.module('tbd', []);
             userName: "", // "51259-MCH",
             password: "" // "janebug"
         }
+          
+        $scope.$watch('vm.showForm', function(show) {
+
+            if (_.isUndefined(show))
+                return;
+
+           if (show) {
+                $ionicScrollDelegate.scrollBottom();
+           }
+           
+            
+        })
 
         vm.submitLogin = function (values) {
             //if (vm.login.perm)
@@ -1627,15 +1650,15 @@ angular.module('tbd', []);
                         </md-input-container>\
                         </div>\
                         <div class= "input-background">\
-                               <h5>{{agentId}}</h5>\
-                            <md-input-container md-no-float >\
-                                <input placeholder="" name="agentId" ng-model="vm.mlsdata.agentId" class="input-border" required>\
+                            <md-input-container >\
+                                <label class="label">{{agentId}}</label>\
+                                <input autocomplete="off"  name="agentId" ng-model="vm.mlsdata.agentId" required class="input-border" >\
                             </md-input-container>\
                         </div>\
                         <div class= "input-background">\
-                            <h5>{{pass}}</h5>\
-                            <md-input-container md-no-float >\
-                                <input type= "password" name="agentPassword" placeholder="" ng-model="vm.mlsdata.password" class="input-border" required>\
+                            <md-input-container>\
+                                <label class="label">{{pass}}</label>\
+                                <input autocomplete="off" type= "password" name="agentPassword" required ng-model="vm.mlsdata.password" class="input-border" >\
                             </md-input-container>\
                         </div>\
                     </div>',
