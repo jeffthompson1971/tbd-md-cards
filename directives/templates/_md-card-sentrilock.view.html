@@ -21,7 +21,7 @@
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
         </div>
 
-        <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback() ">
+        <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback()" >
             <label><b>Show More</b></label>
             <span> ... </span>
 
@@ -29,8 +29,8 @@
 
     </div>
 
-    <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>
-    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>
+  <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>
+    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p> 
 </md-card>
 
 <!--
