@@ -546,15 +546,15 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "\n" +
     "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
-    "            <label><b>Show More</b></label>\n" +
-    "            <span> ... </span>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: listingId})\"><b>Show More</b></label>\n" +
+    "            <span ui-sref=\"app.feedback({ listingId: listingId})\"> ... </span>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
-    "  <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
-    "    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p> \n" +
+    "  <p class=footer><!--Serial #: {{vm.sentrilock.LBSerialNumber}}--> </p>\n" +
+    "    <p class=footer><!--{{vm.sentrilock.updated.time | timeago }}--> </p> \n" +
     "</md-card>\n" +
     "\n" +
     "<!--\n" +
@@ -1412,9 +1412,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\" >\n" +
     "\n" +
-    "            <label><b>Show More</b></label>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: listingId})\" ><b>Show More </b></label>\n" +
     "            <span> ... </span>\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
@@ -1809,7 +1809,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <ion-list>\n" +
     "\n" +
-    "        <ion-item style=\"background-color: transparent\" ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
+    "        <ion-item ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
     "\n" +
     "        <!-- | maxRecords:5-->\n" +
     "\n" +
@@ -1821,8 +1821,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <p>{{showing.feedback}}</p>\n" +
     "        </ion-item>\n" +
     "\n" +
-    "       </ion-list>\n" +
-    "\n" +
+    "        </ion-list>\n" +
+    "<p class=footer>Serial #: {{showing.intShowingId}} </p>\n" +
+    "    <p class=footer>{{showing.startTime | timeago }} </p> \n" +
     "        <!--\n" +
     "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
     "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +

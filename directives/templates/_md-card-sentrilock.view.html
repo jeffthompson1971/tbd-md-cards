@@ -22,15 +22,15 @@
         </div>
 
         <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback()" >
-            <label><b>Show More</b></label>
-            <span> ... </span>
+            <label ui-sref="app.feedback({ listingId: listingId})"><b>Show More</b></label>
+            <span ui-sref="app.feedback({ listingId: listingId})"> ... </span>
 
         </div>
 
     </div>
 
-  <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>
-    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p> 
+  <p class=footer><!--Serial #: {{vm.sentrilock.LBSerialNumber}}--> </p>
+    <p class=footer><!--{{vm.sentrilock.updated.time | timeago }}--> </p> 
 </md-card>
 
 <!--
