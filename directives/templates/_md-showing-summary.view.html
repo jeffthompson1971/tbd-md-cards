@@ -19,7 +19,7 @@
         </div>
         <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()" >
 
-            <label ui-sref="app.feedback({ listingId: listingId})" ><b>Show More </b></label>
+            <label ui-sref="app.feedback({ listingId: theListing.listing_id})" ><b>Show More </b></label>
             <span> ... </span>
             <p>{{showing.feedback}}</p>
 

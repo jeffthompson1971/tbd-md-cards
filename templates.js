@@ -546,8 +546,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "\n" +
     "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
-    "            <label ui-sref=\"app.feedback({ listingId: listingId})\"><b>Show More</b></label>\n" +
-    "            <span ui-sref=\"app.feedback({ listingId: listingId})\"> ... </span>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber})\"><b>Show More </b></label>\n" +
+    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
@@ -1414,7 +1414,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\" >\n" +
     "\n" +
-    "            <label ui-sref=\"app.feedback({ listingId: listingId})\" ><b>Show More </b></label>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: theListing.listing_id})\" ><b>Show More </b></label>\n" +
     "            <span> ... </span>\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
@@ -1800,7 +1800,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.feedback.view.html',
-    "\n" +
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "      <!--  <div class=\"showingsdotcom-logo\"></div> -->\n" +
@@ -1822,8 +1821,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </ion-item>\n" +
     "\n" +
     "        </ion-list>\n" +
-    "<p class=footer>Serial #: {{showing.intShowingId}} </p>\n" +
-    "    <p class=footer>{{showing.startTime | timeago }} </p> \n" +
+    "<p class=footer>Serial #: {{theListing.listing_id}} </p>\n" +
+    "    <p class=footer>{{theListing.ModificationTimestamp | timeago }} </p> \n" +
     "        <!--\n" +
     "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
     "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
