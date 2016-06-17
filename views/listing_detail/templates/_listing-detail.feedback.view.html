@@ -1,30 +1,26 @@
 <md-card class="site-summary-card">
     <div class="site-header">
-        <div class="logo">
-         <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com"/>         
- 
-        </div>
+      <!--  <div class="showingsdotcom-logo"></div> -->
     </div>
     <div class="feedback-div">
-        <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">
+
+    <ion-list>
+
+        <ion-item ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)">
+
+        <!-- | maxRecords:5-->
 
 
             <label><b> {{showing.contact.name}}</b></label>
             <span>{{showing.startTime | timeago }}</span>
             <span>{{showing.startTime | date:'short' }}</span>
 
-
-
             <p>{{showing.feedback}}</p>
-        </div>
-        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()" >
+        </ion-item>
 
-            <label ui-sref="app.feedback({ listingId: theListing.listing_id})" ><b>Show More </b></label>
-            <span> ... </span>
-            <p>{{showing.feedback}}</p>
-
-
-        </div>
+        </ion-list>
+<p class=footer>Serial #: {{theListing.listing_id}} </p>
+    <p class=footer>{{theListing.ModificationTimestamp | timeago }} </p> 
         <!--
             "feedback":"1 feedback requests have been sent.",
 "startTime":"2015-11-28T09:30:00-06:00",

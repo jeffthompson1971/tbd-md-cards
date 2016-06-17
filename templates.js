@@ -545,16 +545,16 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
-    "            <label><b>Show More</b></label>\n" +
-    "            <span> ... </span>\n" +
+    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber})\"><b>Show More </b></label>\n" +
+    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
-    "    <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
-    "    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>\n" +
+    "  <p class=footer><!--Serial #: {{vm.sentrilock.LBSerialNumber}}--> </p>\n" +
+    "    <p class=footer><!--{{vm.sentrilock.updated.time | timeago }}--> </p> \n" +
     "</md-card>\n" +
     "\n" +
     "<!--\n" +
@@ -1412,9 +1412,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\" >\n" +
     "\n" +
-    "            <label><b>Show More</b></label>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: theListing.listing_id})\" ><b>Show More </b></label>\n" +
     "            <span> ... </span>\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
@@ -1796,6 +1796,62 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "],\n" +
     "\"success\":true\n" +
     "-->\n"
+  );
+
+
+  $templateCache.put('templates/_listing-detail.feedback.view.html',
+    "<md-card class=\"site-summary-card\">\n" +
+    "    <div class=\"site-header\">\n" +
+    "      <!--  <div class=\"showingsdotcom-logo\"></div> -->\n" +
+    "    </div>\n" +
+    "    <div class=\"feedback-div\">\n" +
+    "\n" +
+    "    <ion-list>\n" +
+    "\n" +
+    "        <ion-item ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
+    "\n" +
+    "        <!-- | maxRecords:5-->\n" +
+    "\n" +
+    "\n" +
+    "            <label><b> {{showing.contact.name}}</b></label>\n" +
+    "            <span>{{showing.startTime | timeago }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "\n" +
+    "            <p>{{showing.feedback}}</p>\n" +
+    "        </ion-item>\n" +
+    "\n" +
+    "        </ion-list>\n" +
+    "<p class=footer>Serial #: {{theListing.listing_id}} </p>\n" +
+    "    <p class=footer>{{theListing.ModificationTimestamp | timeago }} </p> \n" +
+    "        <!--\n" +
+    "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
+    "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
+    "\"sentiment\":0,\n" +
+    "\"potentialOffer\":false,\n" +
+    "\"time\":\"9:30 AM - 10:30 AM\",\n" +
+    "\"intShowingId\":\"5e41609e-f7af-4c5a-93bd-eca04af14971\",\n" +
+    "\"listing_id\":\"4F134C97-4E33-45AC-AB89-8A36CB072DDC\",\n" +
+    "\"date\":\"11-28-2015\",\n" +
+    "\"type\":{\n" +
+    "\"result\":\"Setup\",\n" +
+    "\"name\":\"Showing\",\n" +
+    "\"msg\":\"\"\n" +
+    "},\n" +
+    "\"contact\":{\n" +
+    "\"phone\":{\n" +
+    "\"office\":\"847-395-3000\",\n" +
+    "\"mobile\":\"847-878-7653\"\n" +
+    "},\n" +
+    "\"name\":\"DIANE KELLY\",\n" +
+    "\"emails\":\"DIANEKELLY42@YAHOO.COM\"\n" +
+    "}\n" +
+    "},\n" +
+    "{\n" +
+    "\n" +
+    "-->\n" +
+    "\n" +
+    "    </div>\n" +
+    "</md-card>"
   );
 
 

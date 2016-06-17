@@ -21,16 +21,16 @@
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
         </div>
 
-        <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback() ">
-            <label><b>Show More</b></label>
-            <span> ... </span>
+        <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback()" >
+            <label ui-sref="app.feedback({ listingId: sentrilock.MLSNumber})"><b>Show More </b></label>
+            <span ui-sref="app.feedback({ listingId: theListing.listing_id})"> ... </span>
 
         </div>
 
     </div>
 
-    <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>
-    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>
+  <p class=footer><!--Serial #: {{vm.sentrilock.LBSerialNumber}}--> </p>
+    <p class=footer><!--{{vm.sentrilock.updated.time | timeago }}--> </p> 
 </md-card>
 
 <!--
