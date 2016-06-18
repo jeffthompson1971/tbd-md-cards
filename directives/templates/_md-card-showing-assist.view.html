@@ -10,7 +10,7 @@
 
             <label><b> {{showing.contact.name}}</b></label>
             <span>{{showing.date | timeago }}</span>
-            <span>{{showing.date | date:'short' }}</span>
+            <span>{{showing.date | date:'short' : 'UTC' }}</span>
 
 
             <p>{{showing.type.msg}}</p>

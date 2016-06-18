@@ -11,7 +11,7 @@
 
             <label><b> {{showing.contact.name}}</b></label>
             <span>{{showing.startTime | timeago }}</span>
-            <span>{{showing.startTime | date:'short' }}</span>
+            <span>{{showing.startTime | date:'short' : 'UTC'}}</span>
 
 
 
