@@ -221,10 +221,10 @@ angular.module('tbd', []);
             // show("some long as URL that keeps getting longer and longer");
             ShareSvc.shareIt($scope.listing).then(function (resp) {
 
-
                 if (resp.data === null || _.isUndefined(resp.data.success) || (resp.data.success === false)) {
 
-                    PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a minute..");
+                    PalSvc.alert("Sorry :(", "Got it...", "Share service is not contactable please try again in a few minutes...");
+
                 } else {
 
                     $scope.url = resp.data.fullUrl;
@@ -234,13 +234,13 @@ angular.module('tbd', []);
                         var msgStr = "Current activity on \"" + $scope.listing.address + "\": \n";
 
                         $cordovaSocialSharing
-                            .share(msgStr, "Your listing details from SnapListings.io!", null, $scope.url) // Share via native share sheet
+                            .share(msgStr, "What's trending on your listing - only from SnapListings.io!", null, $scope.url) // Share via native share sheet
                             .then(function (result) {
-                                PalSvc.alert("Share successful", "OK", "Your share was successful...");
+                                PalSvc.alert("Success", "OK", "Your listing trends were shared successfuly...");
                                 //alert("successfully shared: " + JSON.stringify(result));
 
                             }, function (err) {
-                                PalSvc.alert("Share failed", "OK", JSON.stringify(err));
+                                PalSvc.alert("Fail", "OK", JSON.stringify(err));
                                 // alert(JSON.stringify(err));
                             });
 
@@ -249,7 +249,6 @@ angular.module('tbd', []);
                         show($scope.url);
                     }
                 }
-
             })
         }
         $scope.share = vm.share;
@@ -280,7 +279,6 @@ angular.module('tbd', []);
                          <md-tooltip id="errorTip" md-visible="copyError" style="visibility: hidden; font-size: 16px; font-weight: 600" md-direction="left">Link selected - press Ctrl-C \n to copy </md-tooltip></md-button> </md-dialog-content></md-dialog>',
 
                 parent: angular.element(document.body),
-
 
                 clickOutsideToClose: true
             })
@@ -442,10 +440,26 @@ angular.module('tbd', []);
                 return;
 
             $scope.listing = theListing;
+            
+            // TODO - this needs to look for any showing service ID not just
+            // hardcode CSS 
+            if (theListing.activityAggregate && theListing.activityAggregate.snapshots) {
+                if (theListing.activityAggregate.snapshots["8"]) {
+                    
+                    vm.showings = (theListing.activityAggregate.snapshots["8"].data) ? 
+                    theListing.activityAggregate.snapshots["8"].data : [];
+                } else {
+                     vm.showings = [];
+                     
+                }
+            } else {
+                 vm.showings = [];
+            }
         });
 
         $scope.$watch('vm.showings', function(theShowings) {
-
+            
+            
             if (_.isUndefined(theShowings))
                 return;
             for (var i = 0; i < theShowings.length; ++i) {
@@ -758,6 +772,7 @@ angular.module('tbd', []);
             link: function (scope, element, attrs) {
                 scope.title = attrs.title;
                 scope.pass = attrs.pass;
+                scope.limit = attrs.limit;
             }
         };
     }
@@ -1228,9 +1243,9 @@ angular.module('tbd', []);
             }
         }
     }
-    SignupCssController.$inject = ['$scope', 'PrincipalSvc', 'CssSvc', 'PalSvc'];
+    SignupCssController.$inject = ['$scope', 'PrincipalSvc', 'CssSvc', 'PalSvc', '$ionicScrollDelegate'];
 
-    function SignupCssController($scope, PrincipalSvc, CssSvc, PalSvc) {
+    function SignupCssController($scope, PrincipalSvc, CssSvc, PalSvc, $ionicScrollDelegate) {
 
         var vm = this;
         var myId = 8; // TODO - do this better using config and enums
@@ -1252,7 +1267,18 @@ angular.module('tbd', []);
             userName: "",
             password: ""
         }
+        
+        $scope.$watch('vm.showForm', function(show) {
 
+            if (_.isUndefined(show))
+                return;
+
+           if (show) {
+                $ionicScrollDelegate.scrollBottom();
+           }
+           
+            
+        })
         vm.submitLogin = function (values) {
 
             vm.login.extSysId = myId;
@@ -1323,9 +1349,9 @@ angular.module('tbd', []);
             }
         }
     }
-    SignupSentriController.$inject = ['$scope', 'PalSvc', 'PrincipalSvc'];
+    SignupSentriController.$inject = ['$scope', 'PalSvc', 'PrincipalSvc', '$ionicScrollDelegate'];
 
-    function SignupSentriController($scope, PalSvc, PrincipalSvc) {
+    function SignupSentriController($scope, PalSvc, PrincipalSvc, $ionicScrollDelegate) {
         var vm = this;
         var myId = 2; // TODO - do this better using config and enums
         vm.showForm = false;
@@ -1341,6 +1367,18 @@ angular.module('tbd', []);
             userName: "", // "51259-MCH",
             password: "" // "janebug"
         }
+          
+        $scope.$watch('vm.showForm', function(show) {
+
+            if (_.isUndefined(show))
+                return;
+
+           if (show) {
+                $ionicScrollDelegate.scrollBottom();
+           }
+           
+            
+        })
 
         vm.submitLogin = function (values) {
             //if (vm.login.perm)
@@ -1613,15 +1651,15 @@ angular.module('tbd', []);
                         </md-input-container>\
                         </div>\
                         <div class= "input-background">\
-                               <h5>{{agentId}}</h5>\
-                            <md-input-container md-no-float >\
-                                <input placeholder="" name="agentId" ng-model="vm.mlsdata.agentId" class="input-border" required>\
+                            <md-input-container >\
+                                <label class="label">{{agentId}}</label>\
+                                <input autocomplete="off"  name="agentId" ng-model="vm.mlsdata.agentId" required class="input-border" >\
                             </md-input-container>\
                         </div>\
                         <div class= "input-background">\
-                            <h5>{{pass}}</h5>\
-                            <md-input-container md-no-float >\
-                                <input type= "password" name="agentPassword" placeholder="" ng-model="vm.mlsdata.password" class="input-border" required>\
+                            <md-input-container>\
+                                <label class="label">{{pass}}</label>\
+                                <input autocomplete="off" type= "password" name="agentPassword" required ng-model="vm.mlsdata.password" class="input-border" >\
                             </md-input-container>\
                         </div>\
                     </div>',
@@ -2401,15 +2439,13 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-mred.view.html',
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"mred-logo\"></div>\n" +
-    "        <!--<i class=\"mdi md-accent mdi-share-variant\"></i>-->\n" +
+    "     \n" +
+    "        <div class=\"logo\">\n" +
+    "            \n" +
+    "         <img src=\"assets/logos/mred-logo-small.png\" alt=\"MRED\"/>         \n" +
     "\n" +
-    "        <!--<div class=\"card-icons-wrapper\">\n" +
-    "            <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
-    "                <md-icon md-svg-src=\"assets/icons/ic_open_in_browser_black_48px.svg\" aria-label=\"Launch in browser\"></md-icon>\n" +
-    "            </md-button>\n" +
-    "        </div>-->\n" +
+    "        </div>\n" +
+    "   \n" +
     "    </div>\n" +
     "    <div layout=\"row\">\n" +
     "        <div flex class=\"left\">\n" +
@@ -2498,7 +2534,11 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"redfin-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/redfin_logo_40x166.png\" alt=\"Redfin\"/>\n" +
+    "      \n" +
+    "           \n" +
+    "        </div>\n" +
     "        <!--<i class=\"mdi md-accent mdi-share-variant\"></i>-->\n" +
     "\n" +
     "        <div class=\"card-icons-wrapper\">\n" +
@@ -2792,49 +2832,45 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-sentrilock.view.html',
-    "<style>\n" +
-    "    card-header {\n" +
-    "        width: 100%;\n" +
-    "        background-color: #FFF;\n" +
-    "        border-bottom: 1px;\n" +
-    "        font-weight: 600;\n" +
-    "        font-size: 90%;\n" +
-    "    }\n" +
-    "</style>\n" +
-    "\n" +
-    "\n" +
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"sentrilock-logo\"></div>\n" +
+    "       \n" +
+    "\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
+    "\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"feedback-div\">\n" +
-    "       \n" +
     "\n" +
-    "        <div ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
-    "            <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
-    "              <!--<label><b> {{showing.contact.name}}</b></label>-->\n" +
-    "            <!--<div ng-bind-html=\"entry.AccessedByName | accessorName\"></div>-->\n" +
-    "             <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "            <!--<span>{{entry.Date}}</span>-->\n" +
+    "\n" +
+    "        <div ng-if=\"limit == -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen\">  <!--| maxRecords: 5-->\n" +
+    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "\n" +
     "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "            <!--<span>Access type: {{entry.AccessType}}</span>-->\n" +
+    "\n" +
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
-    "            <label><b>Show More</b></label>\n" +
-    "            <span> ... </span>\n" +
-    "            <!--<p> {{showing.feedback}}</p>-->\n" +
-    "       </div>\n" +
+    " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\">\n" +
+    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "\n" +
+    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "\n" +
+    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "        </div>\n" +
+    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
+    "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +
+    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
+    "\n" +
+    "        </div>\n" +
     "\n" +
     "    </div>\n" +
-    "     <!--<div class=\"card-header\">\n" +
-    "            Serial #: {{vm.sentrilock.LBSerialNumber}}\n" +
-    "        </div>-->\n" +
-    "     <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
-    "    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>\n" +
+    "\n" +
+    "  <p class=footer><!--Serial #: {{vm.sentrilock.LBSerialNumber}}--> </p>\n" +
+    "    <p class=footer><!--{{vm.sentrilock.updated.time | timeago }}--> </p> \n" +
     "</md-card>\n" +
     "\n" +
     "<!--\n" +
@@ -2896,7 +2932,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-showing-assist.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingassist-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "                 <img src=\"assets/logos/showingassist-logo.png\" alt=\"Showing Assist\"/>         \n" +
+    "        </div> \n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
@@ -2904,7 +2942,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <span>{{showing.date | timeago }}</span>\n" +
-    "            <span>{{showing.date | date:'short' }}</span>\n" +
+    "            <span>{{showing.date | date:'short' : 'UTC' }}</span>\n" +
     "\n" +
     "\n" +
     "            <p>{{showing.type.msg}}</p>\n" +
@@ -3231,7 +3269,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-trulia.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"trulia-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/trulia_logo_40x113.png\" alt=\"Trulia\"/>\n" +
+    "        </div>\n" +
     "       \n" +
     "       <div class=\"card-icons-wrapper\">\n" +
     "        <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
@@ -3516,7 +3556,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-zillow.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"zillow-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "            <img src=\"assets/logos/zillow_logo_40x189.png\" alt=\"\"/>\n" +
+    "        </div>\n" +
     "      \n" +
     "\n" +
     "\n" +
@@ -3669,7 +3711,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-showing-summary.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingsdotcom-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "         <img src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\"/>         \n" +
+    " \n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
@@ -3677,15 +3722,15 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' : 'UTC'}}</span>\n" +
     "\n" +
     "\n" +
     "\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\" >\n" +
     "\n" +
-    "            <label><b>Show More</b></label>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: theListing.listing_id})\" ><b>Show More </b></label>\n" +
     "            <span> ... </span>\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
@@ -4070,13 +4115,22 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_listing-detail.feedback.view.html',
+    "<div ng-if=\"card == 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
+    "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
+    "    sysId=\"2\" limit=\"-1\">\n" +
+    "    </md-card-sentri>\n" +
+    "</div>\n" +
+    "\n"
+  );
+
+
   $templateCache.put('templates/_listing-detail.view.html',
     "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
     "\n" +
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
     "        <ul class=\"rig columns-2\">\n" +
-    "\n" +
     "            <li>\n" +
     "                <div style=\"width: 100%;\">\n" +
     "                    <md-card-image-overlay listing=\"vm.theListing\" showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
@@ -4150,7 +4204,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </li>-->\n" +
     "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
     "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
-    "                sysId=\"2\">\n" +
+    "                sysId=\"2\" limit=\"5\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
     "        </ul>\n" +

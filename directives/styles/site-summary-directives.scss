@@ -163,9 +163,26 @@ md-card-image-overlay {
 
 .site-summary-card {
     
+    img {
+      
+          max-width: 100%;
+    height: 100% !important;
+   // margin: 0 0 10px;
+    width: auto;
+    }
+    
+    
+.logo {
+     float: left;
+      height: 80%;
+     
+}
+
     
     @media screen and (max-width: 767px) {
-          
+          .logo {
+            height: 95%;
+          }
         .left div span,
         .right div span {
             font-size: 12px;
@@ -243,97 +260,12 @@ min-height: 34px;
     }
 //}
 
+// .logo {
+//     height: inherit;
+//     width: 200px;
+//     height: 40px;
+// }
 
-
-.logo {
-    height: inherit;
-    width: 200px;
-    height: 40px;
-}
-
-.sentrilock-logo {
-    
-    float: left;
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/sentrilock-logo.png");
-    height: 400px;
-    padding: 4px;
-    width: 100%;
-    background-position: 5px 5px;
-    background-size: 160px;
-}
-
-.zillow-logo {
-    float: left;
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/zillow_logo_40x189.png");
- 
-    height: inherit;
- 
-    padding: 4px;
-    width: 189px;
-    background-position: 5px 5px;  
-}
-
-.trulia-logo {
-    float: left;
- 
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/trulia_logo_40x113.png");
-    padding: 4px;
-    width: 113px;
-    height: inherit;
-    background-position: 5px 3px;
-}
-
-.redfin-logo {
-    float: left;
-
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/redfin_logo_40x166.png");
-    padding: 4px;
-    width: 166px;
-    height: inherit;
-    background-position: 5px 5px;
-}
-
-.mred-logo {
-    float: left;
-
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/mred-logo-small.png");
-    padding: 4px;
-    width: 166px;
-    height: inherit;
-    background-position: 5px 5px;
-}
-
-.showingassist-logo {
-    float: left;
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/showingassist-logo.png");
-    padding: 4px;
-    width: 167px;
-    height: inherit;
-    background-position: 5px 5px;
-}
-
-.showingsdotcom-logo {
-    float: left;
-    background-repeat: no-repeat;
-    border-radius: 2px 2px 0 0;
-    background-image: url("/assets/logos/showings.com_logo_40x146.png");
-    padding: 4px;
-    width: 146px;
-    height: inherit;
-    background-position: 5px 5px;
-}
 
 
 
@@ -419,6 +351,7 @@ md-card-trulia .md-card-image {
 .site-header {
   background-color: #F0F2F2;
   height: 50px;
+  padding: 4px;
  
   .md-icon-button {
    margin: 0 0; 
@@ -439,9 +372,9 @@ md-card-trulia .md-card-image {
    }
 
   }
-  .logo {
-    height: 40px;
-  }
+  // .logo {
+  //   height: 40px;
+  // }
 }
 
 
@@ -662,21 +595,7 @@ md-card-zillow .md-card-image {
 
   }
 
-  // zillow card resize
-  md-card-zillow .md-card-image,
-  md-card-trulia .md-card-image,
-  md-card-redfin .md-card-image,
-  md-card-mred .md-card-image,
-  md-card-sentri .md-card-image {
-
-    background-position-x: 3px;
-    background-size: 50%;
-    background-position-y: 4px;
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-
-
+ 
   
   .md-card-image {
     height: 250px;
@@ -685,8 +604,8 @@ md-card-zillow .md-card-image {
 
   .site-header {
     
-    height: 30px;
-        
+    height: 40px;
+  
     
     
     .mdi, button {
@@ -699,23 +618,9 @@ md-card-zillow .md-card-image {
     }
 
 
-  .zillow-logo,
-  .trulia-logo,
-  .redfin-logo,
-  .mred-logo,
-  .showingsdotcom-logo,
-  .showingassist-logo
- {
-    background-size: 50%;
-  }
-
 
   }
- .sentrilock-logo {
- background-size: 120px;
-    background-position: 2px 1px;
- }
-
+ 
 .stats-detail-parent {
 
     span.label {

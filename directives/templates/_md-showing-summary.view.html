@@ -1,6 +1,9 @@
 <md-card class="site-summary-card">
     <div class="site-header">
-        <div class="showingsdotcom-logo"></div>
+        <div class="logo">
+         <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com"/>         
+ 
+        </div>
     </div>
     <div class="feedback-div">
         <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">
@@ -8,15 +11,15 @@
 
             <label><b> {{showing.contact.name}}</b></label>
             <span>{{showing.startTime | timeago }}</span>
-            <span>{{showing.startTime | date:'short' }}</span>
+            <span>{{showing.startTime | date:'short' : 'UTC'}}</span>
 
 
 
             <p>{{showing.feedback}}</p>
         </div>
-        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()">
+        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()" >
 
-            <label><b>Show More</b></label>
+            <label ui-sref="app.feedback({ listingId: theListing.listing_id})" ><b>Show More </b></label>
             <span> ... </span>
             <p>{{showing.feedback}}</p>
 

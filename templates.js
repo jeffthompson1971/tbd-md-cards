@@ -129,15 +129,13 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-mred.view.html',
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"mred-logo\"></div>\n" +
-    "        <!--<i class=\"mdi md-accent mdi-share-variant\"></i>-->\n" +
+    "     \n" +
+    "        <div class=\"logo\">\n" +
+    "            \n" +
+    "         <img src=\"assets/logos/mred-logo-small.png\" alt=\"MRED\"/>         \n" +
     "\n" +
-    "        <!--<div class=\"card-icons-wrapper\">\n" +
-    "            <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
-    "                <md-icon md-svg-src=\"assets/icons/ic_open_in_browser_black_48px.svg\" aria-label=\"Launch in browser\"></md-icon>\n" +
-    "            </md-button>\n" +
-    "        </div>-->\n" +
+    "        </div>\n" +
+    "   \n" +
     "    </div>\n" +
     "    <div layout=\"row\">\n" +
     "        <div flex class=\"left\">\n" +
@@ -226,7 +224,11 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <!--<div id= \"md-card-image\"></div>-->\n" +
-    "        <div class=\"redfin-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/redfin_logo_40x166.png\" alt=\"Redfin\"/>\n" +
+    "      \n" +
+    "           \n" +
+    "        </div>\n" +
     "        <!--<i class=\"mdi md-accent mdi-share-variant\"></i>-->\n" +
     "\n" +
     "        <div class=\"card-icons-wrapper\">\n" +
@@ -520,49 +522,45 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-sentrilock.view.html',
-    "<style>\n" +
-    "    card-header {\n" +
-    "        width: 100%;\n" +
-    "        background-color: #FFF;\n" +
-    "        border-bottom: 1px;\n" +
-    "        font-weight: 600;\n" +
-    "        font-size: 90%;\n" +
-    "    }\n" +
-    "</style>\n" +
-    "\n" +
-    "\n" +
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"sentrilock-logo\"></div>\n" +
+    "       \n" +
+    "\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
+    "\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"feedback-div\">\n" +
-    "       \n" +
     "\n" +
-    "        <div ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
-    "            <!--<label><b> {{entry.AccessedByName}}</b></label>-->\n" +
-    "              <!--<label><b> {{showing.contact.name}}</b></label>-->\n" +
-    "            <!--<div ng-bind-html=\"entry.AccessedByName | accessorName\"></div>-->\n" +
-    "             <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "            <!--<span>{{entry.Date}}</span>-->\n" +
+    "\n" +
+    "        <div ng-if=\"limit == -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen\">  <!--| maxRecords: 5-->\n" +
+    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "\n" +
     "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "            <!--<span>Access type: {{entry.AccessType}}</span>-->\n" +
+    "\n" +
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback() \">\n" +
-    "            <label><b>Show More</b></label>\n" +
-    "            <span> ... </span>\n" +
-    "            <!--<p> {{showing.feedback}}</p>-->\n" +
-    "       </div>\n" +
+    " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\">\n" +
+    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "\n" +
+    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "\n" +
+    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "        </div>\n" +
+    "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
+    "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +
+    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
+    "\n" +
+    "        </div>\n" +
     "\n" +
     "    </div>\n" +
-    "     <!--<div class=\"card-header\">\n" +
-    "            Serial #: {{vm.sentrilock.LBSerialNumber}}\n" +
-    "        </div>-->\n" +
-    "     <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>\n" +
-    "    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>\n" +
+    "\n" +
+    "  <p class=footer><!--Serial #: {{vm.sentrilock.LBSerialNumber}}--> </p>\n" +
+    "    <p class=footer><!--{{vm.sentrilock.updated.time | timeago }}--> </p> \n" +
     "</md-card>\n" +
     "\n" +
     "<!--\n" +
@@ -624,7 +622,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-showing-assist.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingassist-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "                 <img src=\"assets/logos/showingassist-logo.png\" alt=\"Showing Assist\"/>         \n" +
+    "        </div> \n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
@@ -632,7 +632,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <span>{{showing.date | timeago }}</span>\n" +
-    "            <span>{{showing.date | date:'short' }}</span>\n" +
+    "            <span>{{showing.date | date:'short' : 'UTC' }}</span>\n" +
     "\n" +
     "\n" +
     "            <p>{{showing.type.msg}}</p>\n" +
@@ -959,7 +959,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-trulia.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"trulia-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "             <img src=\"assets/logos/trulia_logo_40x113.png\" alt=\"Trulia\"/>\n" +
+    "        </div>\n" +
     "       \n" +
     "       <div class=\"card-icons-wrapper\">\n" +
     "        <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
@@ -1244,7 +1246,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-card-zillow.view.html',
     "<md-card class=\"md-card site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"zillow-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "            <img src=\"assets/logos/zillow_logo_40x189.png\" alt=\"\"/>\n" +
+    "        </div>\n" +
     "      \n" +
     "\n" +
     "\n" +
@@ -1397,7 +1401,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/_md-showing-summary.view.html',
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
-    "        <div class=\"showingsdotcom-logo\"></div>\n" +
+    "        <div class=\"logo\">\n" +
+    "         <img src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\"/>         \n" +
+    " \n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div ng-repeat=\"showing in vm.showings | orderBy:'-startTime' | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
@@ -1405,15 +1412,15 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' : 'UTC'}}</span>\n" +
     "\n" +
     "\n" +
     "\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\" >\n" +
     "\n" +
-    "            <label><b>Show More</b></label>\n" +
+    "            <label ui-sref=\"app.feedback({ listingId: theListing.listing_id})\" ><b>Show More </b></label>\n" +
     "            <span> ... </span>\n" +
     "            <p>{{showing.feedback}}</p>\n" +
     "\n" +
@@ -1798,13 +1805,22 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_listing-detail.feedback.view.html',
+    "<div ng-if=\"card == 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
+    "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
+    "    sysId=\"2\" limit=\"-1\">\n" +
+    "    </md-card-sentri>\n" +
+    "</div>\n" +
+    "\n"
+  );
+
+
   $templateCache.put('templates/_listing-detail.view.html',
     "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
     "\n" +
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
     "        <ul class=\"rig columns-2\">\n" +
-    "\n" +
     "            <li>\n" +
     "                <div style=\"width: 100%;\">\n" +
     "                    <md-card-image-overlay listing=\"vm.theListing\" showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
@@ -1878,7 +1894,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </li>-->\n" +
     "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
     "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
-    "                sysId=\"2\">\n" +
+    "                sysId=\"2\" limit=\"5\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
     "        </ul>\n" +
