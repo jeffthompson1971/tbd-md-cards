@@ -536,8 +536,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <div class=\"feedback-div\">\n" +
     "\n" +
     "\n" +
-    "        <div ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 \">\n" +
-    "\n" +
+    "        <div ng-if=\"limit == -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen\">  <!--| maxRecords: 5-->\n" +
     "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
     "\n" +
     "            <span>{{entry.UTCAccessedDT}} </span>\n" +
@@ -545,8 +544,15 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
     "        </div>\n" +
     "\n" +
+    " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\">\n" +
+    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "\n" +
+    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "\n" +
+    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "        </div>\n" +
     "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
-    "            <label ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber})\"><b>Show More </b></label>\n" +
+    "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +
     "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
     "\n" +
     "        </div>\n" +
@@ -626,7 +632,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <span>{{showing.date | timeago }}</span>\n" +
-    "            <span>{{showing.date | date:'short' }}</span>\n" +
+    "            <span>{{showing.date | date:'short' : 'UTC' }}</span>\n" +
     "\n" +
     "\n" +
     "            <p>{{showing.type.msg}}</p>\n" +
@@ -1406,7 +1412,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
+    "            <span>{{showing.startTime | date:'short' : 'UTC'}}</span>\n" +
     "\n" +
     "\n" +
     "\n" +
@@ -1800,58 +1806,12 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.feedback.view.html',
-    "<md-card class=\"site-summary-card\">\n" +
-    "    <div class=\"site-header\">\n" +
-    "      <!--  <div class=\"showingsdotcom-logo\"></div> -->\n" +
-    "    </div>\n" +
-    "    <div class=\"feedback-div\">\n" +
-    "\n" +
-    "    <ion-list>\n" +
-    "\n" +
-    "        <ion-item ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
-    "\n" +
-    "        <!-- | maxRecords:5-->\n" +
-    "\n" +
-    "\n" +
-    "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short' }}</span>\n" +
-    "\n" +
-    "            <p>{{showing.feedback}}</p>\n" +
-    "        </ion-item>\n" +
-    "\n" +
-    "        </ion-list>\n" +
-    "<p class=footer>Serial #: {{theListing.listing_id}} </p>\n" +
-    "    <p class=footer>{{theListing.ModificationTimestamp | timeago }} </p> \n" +
-    "        <!--\n" +
-    "            \"feedback\":\"1 feedback requests have been sent.\",\n" +
-    "\"startTime\":\"2015-11-28T09:30:00-06:00\",\n" +
-    "\"sentiment\":0,\n" +
-    "\"potentialOffer\":false,\n" +
-    "\"time\":\"9:30 AM - 10:30 AM\",\n" +
-    "\"intShowingId\":\"5e41609e-f7af-4c5a-93bd-eca04af14971\",\n" +
-    "\"listing_id\":\"4F134C97-4E33-45AC-AB89-8A36CB072DDC\",\n" +
-    "\"date\":\"11-28-2015\",\n" +
-    "\"type\":{\n" +
-    "\"result\":\"Setup\",\n" +
-    "\"name\":\"Showing\",\n" +
-    "\"msg\":\"\"\n" +
-    "},\n" +
-    "\"contact\":{\n" +
-    "\"phone\":{\n" +
-    "\"office\":\"847-395-3000\",\n" +
-    "\"mobile\":\"847-878-7653\"\n" +
-    "},\n" +
-    "\"name\":\"DIANE KELLY\",\n" +
-    "\"emails\":\"DIANEKELLY42@YAHOO.COM\"\n" +
-    "}\n" +
-    "},\n" +
-    "{\n" +
-    "\n" +
-    "-->\n" +
-    "\n" +
-    "    </div>\n" +
-    "</md-card>"
+    "<div ng-if=\"card == 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
+    "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
+    "    sysId=\"2\" limit=\"-1\">\n" +
+    "    </md-card-sentri>\n" +
+    "</div>\n" +
+    "\n"
   );
 
 
@@ -1861,7 +1821,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
     "        <ul class=\"rig columns-2\">\n" +
-    "\n" +
     "            <li>\n" +
     "                <div style=\"width: 100%;\">\n" +
     "                    <md-card-image-overlay listing=\"vm.theListing\" showings=\"vm.showings\" title=\"Listing summary stats\"></md-card-image-overlay>\n" +
@@ -1935,7 +1894,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </li>-->\n" +
     "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
     "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
-    "                sysId=\"2\">\n" +
+    "                sysId=\"2\" limit=\"5\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
     "        </ul>\n" +

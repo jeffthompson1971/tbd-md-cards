@@ -12,8 +12,7 @@
     <div class="feedback-div">
 
 
-        <div ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 ">
-
+        <div ng-if="limit == -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen">  <!--| maxRecords: 5-->
             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
 
             <span>{{entry.UTCAccessedDT}} </span>
@@ -21,8 +20,15 @@
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
         </div>
 
+ <div ng-if="limit > -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5">
+            <label><b> {{entry.AccessedByName | accessorName}}</b></label>
+
+            <span>{{entry.UTCAccessedDT}} </span>
+
+            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
+        </div>
         <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback()" >
-            <label ui-sref="app.feedback({ listingId: sentrilock.MLSNumber})"><b>Show More </b></label>
+            <label ng-if="limit > -1" ui-sref="app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})"><b>Show More</b></label>
             <span ui-sref="app.feedback({ listingId: theListing.listing_id})"> ... </span>
 
         </div>

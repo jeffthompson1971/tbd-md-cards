@@ -29,6 +29,7 @@
             link: function (scope, element, attrs) {
                 scope.title = attrs.title;
                 scope.pass = attrs.pass;
+                scope.limit = attrs.limit;
             }
         };
     }
