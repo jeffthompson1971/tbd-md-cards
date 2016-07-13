@@ -12,7 +12,8 @@
     <div class="feedback-div">
 
 
-        <div ng-if="limit == -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen">  <!--| maxRecords: 5-->
+        <div ng-if="limit == -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen" ng-click="show($event, entry)">  <!--| maxRecords: 5-->
+           
             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
 
             <span>{{entry.UTCAccessedDT}} </span>
@@ -20,7 +21,7 @@
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
         </div>
 
- <div ng-if="limit > -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5">
+ <div ng-if="limit > -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5" ng-click="show($event, entry)">>
             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
 
             <span>{{entry.UTCAccessedDT}} </span>

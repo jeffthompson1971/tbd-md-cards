@@ -58,14 +58,15 @@
             
             <li ng-if="vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0">
                 <md-showing-summary ng-if="vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0"
-                imgurl="/assets/logos/ShowingsCom_243.png" showings='vm.theListing.activityAggregate.snapshots[8].data' title="Summary - Feedback on your showings"
-                sysId="8">
+                imgurl="/assets/logos/ShowingsCom_243.png" listing='{{vm.theListing}}' showings='vm.theListing.activityAggregate.snapshots[8].data' title="Summary - Feedback on your showings" 
+                sysId="8" limit="5">
                 </md-showing-summary>
+                <!---->
             </li>
 
             <li ng-if="vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0">
                 <md-card-showing-assist ng-if="vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0"
-                imgurl="/assets/logos/showingassist-logo.png" showings='vm.theListing.activityAggregate.snapshots[10].data' title="Summary - Feedback on your showings"
+                imgurl="/assets/logos/showingassist-logo.png" showings='c' title="Summary - Feedback on your showings"
                 sysId="10">
                 </md-card-showing-assist>
             </li>
@@ -76,7 +77,7 @@
             </li>-->
             <li ng-if="vm.sentrilock.entries.length>0">
                 <md-card-sentri ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Summary - Feedback on your showings"
-                sysId="2" limit="5">
+                sysId="2" limit= "5">
                 </md-card-sentri>
             </li>
         </ul>

@@ -6,6 +6,7 @@
         </div>
     </div>
     <div class="feedback-div">
+       
         <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">
 
 
@@ -17,13 +18,12 @@
 
             <p>{{showing.feedback}}</p>
         </div>
-        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()" >
+        <div ng-hide="vm.showings.length <= 1" ng-click="showMoreFeedback()" >
 
-            <label ui-sref="app.feedback({ listingId: theListing.listing_id})" ><b>Show More </b></label>
-            <span> ... </span>
+            <label   ng-if="limit > -1" ui-sref="app.feedback({ listingId: mitochondria.ListingId, card:'showings'})" ><b>Show More </b></label>
+            <!--<span ui-sref="app.feedback({listingId: theListing.listing_id})"> ... </span>-->
             <p>{{showing.feedback}}</p>
-
-
+            
         </div>
         <!--
             "feedback":"1 feedback requests have been sent.",
@@ -51,6 +51,5 @@
 {
 
 -->
-
     </div>
 </md-card>

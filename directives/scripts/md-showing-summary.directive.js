@@ -26,6 +26,7 @@
                 scope.$watch("ngClass", function(value) {
                     $(element).attr("class", value)
                 });
+                scope.limit = attrs.limit;
                 scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showings.com_40x146.png";
                 scope.title = attrs.title;
                 scope.sysId = attrs.sysid;
@@ -47,7 +48,9 @@
                 el.css({
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
-
+                //console.log("LISTING", attrs.listing);
+                scope.mitochondria = JSON.parse(attrs.listing)
+                console.log("mitochondria",scope.mitochondria);
                 // watch for changes in the listing to update the new photo
                 scope.$watch('vm.showings', function(showings) {
 
