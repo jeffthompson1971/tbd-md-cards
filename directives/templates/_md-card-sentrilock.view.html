@@ -19,6 +19,8 @@
             <span>{{entry.UTCAccessedDT}} </span>
 
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
+           
+            
         </div>
 
  <div ng-if="limit > -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5" ng-click="show($event, entry)">>
@@ -27,6 +29,7 @@
             <span>{{entry.UTCAccessedDT}} </span>
 
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
+            
         </div>
         <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback()" >
             <label ng-if="limit > -1" ui-sref="app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})"><b>Show More</b></label>

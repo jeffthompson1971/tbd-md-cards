@@ -777,10 +777,10 @@ angular.module('tbd', []);
         };
     }
 
-    MdCardSentriController.$inject = ['$scope','$mdDialog'];
+    MdCardSentriController.$inject = ['$scope','$mdDialog', '$cordovaContacts'];
 
 
-    function DialogController($scope, $mdDialog, sentri) {
+    function DialogController($scope, $mdDialog, $cordovaContacts, sentri) {
 
         $scope.sentri = sentri;
 
@@ -799,6 +799,17 @@ angular.module('tbd', []);
             }
 
         };
+
+        $scope.saveContact = function(name, phone) {
+            console.log(phone);
+                $scope.hide()
+            $cordovaContacts.save({
+                nickname: name,
+                phoneNumbers: [phone]
+            }).then(function(result) {
+                console.log("Saved contact", result);
+            });
+        }
     };
 
     function MdCardSentriController($scope, $mdDialog) {
@@ -2904,6 +2915,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
+    "                <button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
@@ -2944,6 +2956,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <form  ng-submit=\"vm.submitLogin(login.perm, login.username, login.password)\" >\n" +
     "\n" +
+    "    {{ contact.name }}\n" +
+    "    <button ng-click=\"saveContact(contact.name, contact.phone)\">Save</button>\n" +
     "    \n" +
     "      <md-input-container ng-disabled=\"false\" >\n" +
     "        <label for=\"i2\">user name</label>\n" +
@@ -2997,6 +3011,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <span>{{entry.UTCAccessedDT}} </span>\n" +
     "\n" +
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "           \n" +
+    "            \n" +
     "        </div>\n" +
     "\n" +
     " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\" ng-click=\"show($event, entry)\">>\n" +
@@ -3005,6 +3021,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <span>{{entry.UTCAccessedDT}} </span>\n" +
     "\n" +
     "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "            \n" +
     "        </div>\n" +
     "        <div ng-hide=\"data.entries <=5 \" ng-click=\"showMoreFeedback()\" >\n" +
     "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +

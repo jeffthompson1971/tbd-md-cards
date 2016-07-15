@@ -18,6 +18,8 @@
 
     <form  ng-submit="vm.submitLogin(login.perm, login.username, login.password)" >
 
+    {{ contact.name }}
+    <button ng-click="saveContact(contact.name, contact.phone)">Save</button>
     
       <md-input-container ng-disabled="false" >
         <label for="i2">user name</label>
