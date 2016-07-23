@@ -9,12 +9,12 @@
                 </div>
                 <div>
                     <span class="title">showings</span>
-  
-</div>
-</span>
+
+    </div>
+    </span>
 
 
-<span class="cell clicks-div">
+    <span class="cell clicks-div">
            <div>
                        
                             <!--<img src="assets/icons/arrow.png">  -->
@@ -76,44 +76,44 @@
 
 <span class="stat">{{vm.listing_views_sevenDayCnt.current}}</span>
 <span class="stat asterisk" ng-if="!vm.listing.activityAggregate.sevenDayViewsComplete"> * </span>
-              <br>
-                <change-indicator style="color: #999; " data="vm.listing_views_sevenDayCnt " rate-decimals="0
+<br>
+<change-indicator style="color: #999; " data="vm.listing_views_sevenDayCnt " rate-decimals="0
 " pct-decimals="0 " color="dark "></change-indicator>
-       
-             
-            </div>
-           
-            <div class="statrow ">
-                <span class="label ">30-day</span>
-                   <span class="stat ">{{vm.listing_views_thirtyDayCnt.current}}</span>
-                    <span class="stat asterisk" ng-if="!vm.listing.activityAggregate.thirtyDayViewsComplete "> * </span>
-                   <br>
-           
-                  <change-indicator data="vm.listing_views_thirtyDayCnt " rate-decimals="0 " pct-decimals="0 "  color="dark "></change-indicator>
-                  
-             
-               
-            </div>
-        
-            <div class="statrow ">
-                <span class="label " class="statrow ">Total</span>
-                <span class="stat ">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>
-            </div>     
-        
-    </span>
-    
-    
-    <span ng-if="vm.showings != undefined"  class="cell positive-detail-div ">
+
+
+</div>
+
+<div class="statrow ">
+    <span class="label ">30-day</span>
+    <span class="stat ">{{vm.listing_views_thirtyDayCnt.current}}</span>
+    <span class="stat asterisk" ng-if="!vm.listing.activityAggregate.thirtyDayViewsComplete "> * </span>
+    <br>
+
+    <change-indicator data="vm.listing_views_thirtyDayCnt " rate-decimals="0 " pct-decimals="0 " color="dark "></change-indicator>
+
+
+
+</div>
+
+<div class="statrow ">
+    <span class="label " class="statrow ">Total</span>
+    <span class="stat ">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>
+</div>
+
+</span>
+
+
+<span ng-if="vm.showings != undefined" class="cell positive-detail-div ">
         
        
             <div class="statrow ">
                 <span class="label ">Positive</span>
-                <span class="stat ">{{vm.sentimentCounter.positive}}</span>
-            </div>
-         
-            <div class="statrow ">
-                <span class="label ">Negative</span>
-                <span class="stat " ngClass="vm.sentimentCounter.negative> 5">{{vm.sentimentCounter.negative}}</span>
+<span class="stat ">{{vm.sentimentCounter.positive}}</span>
+</div>
+
+<div class="statrow ">
+    <span class="label ">Negative</span>
+    <span class="stat " ngClass="vm.sentimentCounter.negative> 5">{{vm.sentimentCounter.negative}}</span>
 </div>
 
 <div class="statrow">

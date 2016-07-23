@@ -1,4 +1,4 @@
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -12,18 +12,21 @@
     function MdShowingSummary() {
         return {
             restrict: 'E',
-            templateUrl: function(elem, attrs) {
+            templateUrl: function (elem, attrs) {
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-showing-summary.view.html" : 'templates/_md-showing-summary.view.html';
             },
             scope: {
                 showings: '=',
+                listing: '=',
+                limit: "@",
                 ngClass: "=",
             },
             controller: MdShowingSummaryController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function(scope, element, attrs) {
-                scope.$watch("ngClass", function(value) {
+            link: function (scope, element, attrs) {
+
+                scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
                 scope.limit = attrs.limit;
@@ -35,6 +38,8 @@
                 scope.positiveFB = [];
                 scope.negativeFB = [];
                 scope.meElement = element;
+
+
 
                 // the following used for the aggregate showing stats
                 scope.posCnt = 0;
@@ -48,57 +53,28 @@
                 el.css({
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
-                //console.log("LISTING", attrs.listing);
-                scope.mitochondria = JSON.parse(attrs.listing)
-                console.log("mitochondria",scope.mitochondria);
-                // watch for changes in the listing to update the new photo
-                scope.$watch('vm.showings', function(showings) {
 
-                    // ng-class failed in a directive - so i use this approach
-                    // to color the feedback based on sentiment
-                    for (var i = 0; i < showings.length; ++i) {
-
-                        var myEl = angular.element(element.find('md-list-item')[i]);
-
-                        if (showings.potentialOffer) {
-
-
-                        }
-                        if (showings[i].sentiment < -2) {
-                            scope.negativeFB.push(showings[i]);
-                            scope.negCnt += 1;
-                            myEl.addClass('negative-color');
-
-                        } else if (showings[i].sentiment > 2) {
-                            scope.posCnt += 1;
-                            scope.positiveFB.push(showings[i]);
-                            myEl.addClass('positive-color');
-                        }
-                        scope.totalCnt += 1;
-                    }
-
-                });
 
             }
         };
     }
 
-    MdShowingSummaryController.$inject = ['$scope', '$mdDialog'];
+    MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
     function DialogController($scope, $mdDialog, showing) {
 
         $scope.showing = showing;
 
-        $scope.hide = function() {
+        $scope.hide = function () {
             $mdDialog.hide();
         };
-        $scope.cancel = function() {
+        $scope.cancel = function () {
             $mdDialog.cancel();
         };
-        $scope.answer = function(answer) {
+        $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
-        $scope.dial = function(number) {
+        $scope.dial = function (number) {
             if (window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
@@ -106,13 +82,62 @@
         };
     };
 
-    function MdShowingSummaryController($scope, $mdDialog) {
+    function MdShowingSummaryController($scope, $mdDialog, ListingSvc) {
+
         var vm = this;
-        $scope.showings = vm.showings;
-        // activate();
+
+        if (vm.limit && vm.limit != -1) {
+
+            $scope.showings = vm.showings.slice(0, vm.limit);
+        } else {
+            $scope.showings = vm.showings;
+
+        }
+
+        $scope.theListing = ListingSvc.getSelectedListing();
+  
+        $scope.$watch('vm.showings', function (showings, previousShowings) {
+
+            // ng-class failed in a directive - so i use this approach
+            // to color the feedback based on sentiment
+
+            // trim to 'limit'
+            if (vm.limit && vm.limit != -1) {
+
+                $scope.showings = showings.slice(0, vm.limit);
+            }  else {
+                $scope.showings = showings;
+            }
+  
+
+            for (var i = 0; i < showings.length; ++i) {
+
+                // var myEl = angular.element(element.find('md-list-item')[i]);
+
+                // if (showings.potentialOffer) {
+
+
+                // }
+                // if (showings[i].sentiment < -2) {
+                //     scope.negativeFB.push(showings[i]);
+                //     scope.negCnt += 1;
+                //     myEl.addClass('negative-color');
+
+                // } else if (showings[i].sentiment > 2) {
+                //     scope.posCnt += 1;
+                //     scope.positiveFB.push(showings[i]);
+                //     myEl.addClass('positive-color');
+                // }
+               // scope.totalCnt += 1;
+            }
+
+        });
 
         vm.mdDialog = $mdDialog;
-        vm.show = function(ev, selShowing) {
+
+
+
+        vm.show = function (ev, selShowing) {
 
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
 
@@ -127,18 +152,17 @@
                     targetEvent: ev,
                     clickOutsideToClose: true
                 })
-                .then(function(answer) {
+                .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
+                }, function () {
                     $scope.status = 'You cancelled the dialog.';
                 });
         }
 
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
+        
         function activate() {
-
-
 
         }
     }
