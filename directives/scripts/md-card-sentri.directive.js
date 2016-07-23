@@ -73,7 +73,7 @@
     };
 
     function MdCardSentriController($scope, $mdDialog) {
-
+        var vm = this;
         if (vm.limit && vm.limit != -1) {
 
             $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
@@ -82,11 +82,8 @@
 
         }
 
-        // $scope.theListing = ListingSvc.getSelectedListing();
-        // $scope.sentrilock = vm.sentrilock;
-        console.log("sentri controller");
-
         vm.mdDialog = $mdDialog;
+
         vm.show = function (ev, selSentri) {
             console.log('selsentri', selSentri);
             // var parentEl = angular.element($scope.$$watchers.find('md-list-item'));
@@ -107,6 +104,7 @@
 
         // // watch for changes in the listing to update the new photo
         $scope.show = $scope.vm.show;
+
         $scope.$watch('vm.sentrilock', function (data) {
 
             if (_.isUndefined(data))
@@ -114,6 +112,7 @@
             if (vm.limit && vm.limit != -1) {
 
                 $scope.entries = data.entries.slice(0, vm.limit);
+
             } else {
                 $scope.entries = data.entries
 

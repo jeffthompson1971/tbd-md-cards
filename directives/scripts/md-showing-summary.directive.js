@@ -84,25 +84,6 @@
 
     function MdShowingSummaryController($scope, $mdDialog, ListingSvc) {
 
-        $scope.showings = showings;
-
-        $scope.hide = function () {
-            $mdDialog.hide();
-        };
-        $scope.cancel = function () {
-            $mdDialog.cancel();
-        };
-        $scope.answer = function (answer) {
-            $mdDialog.hide(answer);
-        };
-        $scope.dial = function (number) {
-            if (window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
-            }
-
-        };
-    };
-    
 
         var vm = this;
 
@@ -115,7 +96,7 @@
         }
 
         $scope.theListing = ListingSvc.getSelectedListing();
-  
+
         $scope.$watch('vm.showings', function (showings, previousShowings) {
 
             // ng-class failed in a directive - so i use this approach
@@ -125,10 +106,10 @@
             if (vm.limit && vm.limit != -1) {
 
                 $scope.showings = showings.slice(0, vm.limit);
-            }  else {
+            } else {
                 $scope.showings = showings;
             }
-  
+
 
             for (var i = 0; i < showings.length; ++i) {
 
@@ -148,7 +129,7 @@
                 //     scope.positiveFB.push(showings[i]);
                 //     myEl.addClass('positive-color');
                 // }
-               // scope.totalCnt += 1;
+                // scope.totalCnt += 1;
             }
 
         });
@@ -199,17 +180,12 @@
                 });
         }
 
-
-
-
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
-        
+
         function activate() {
 
         }
     }
-
-
 
 })();

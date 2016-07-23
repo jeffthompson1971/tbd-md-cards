@@ -632,6 +632,108 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-sentrilock-detail-all.view.html',
+    "<!--template for the little popo up. -->\n" +
+    "<style>\n" +
+    "    .dialogdemoBasicUsage #popupContainer {\n" +
+    "        position: relative;\n" +
+    "    }\n" +
+    "    \n" +
+    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
+    "        font-weight: bold;\n" +
+    "        /*color: blue;*/\n" +
+    "        text-decoration: underline;\n" +
+    "    }\n" +
+    "    \n" +
+    "    i.plain {\n" +
+    "        text-decoration: none;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
+    "\n" +
+    "\n" +
+    "    <form ng-repeat=\"entry in sentrilock.entries\">\n" +
+    "        <md-toolbar ng-if=\"$index == 0\">\n" +
+    "            <div class=\"md-toolbar-tools md-primary\">\n" +
+    "                <h2>\n" +
+    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "<md-button class=\"md-icon-button\" ng-if=\"$index == 0\">\n" +
+    "                    </md-icon>\n" +
+    "                </h2>\n" +
+    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
+    "                <!--<h3>{{entry.CompanyName}}</h3>-->\n" +
+    "                <span flex></span>\n" +
+    "                \n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\"  ng-click=\"cancel()\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </md-toolbar>\n" +
+    "        \n" +
+    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
+    "            <div>\n" +
+    "                  \n" +
+    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
+    "                \n" +
+    "                <h3>{{entry.CompanyName}}</h3>\n" +
+    "                \n" +
+    "                <h3>{{entry.City}}</h3>\n" +
+    "                <h4>{{entry.State}}</h4>\n" +
+    "                <h5 class=\"order-address\">{{entry.Time | date: \"medium\" }} - {{entry.UTCAccessedDT | timeago }}</h5>\n" +
+    "                <hr>\n" +
+    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
+    "                <div ng-click=\"dial(entry.ContactNumber)\"  class=\"contact-method\">\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.ContactNumber }} (Mobile)\n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "                </a>\n" +
+    "                <div ng-click=\"dial(entry.PhoneNumber)\" class=\"contact-method\">\n" +
+    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
+    "                       <a class='plain'  ng-href=\"\">\n" +
+    " \n" +
+    "\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.PhoneNumber }} (Phone Number)\n" +
+    "                    </span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <div class=\"contact-method\">\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                   {{entry.EmailAddress}}\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "\n" +
+    "        </md-dialog-content>\n" +
+    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
+    "\n" +
+    "        <!--<span flex></span>-->\n" +
+    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
+    "        <!--PHONE-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
+    "        <!--EMAIL-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--</div>-->\n" +
+    "    </form>\n" +
+    "</md-dialog>"
+  );
+
+
   $templateCache.put('templates/_md-card-sentrilock.view.html',
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
@@ -779,7 +881,105 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-showing-detail-all.view.html',
+    "<!--template for the little popo up. -->\n" +
+    "<style>\n" +
+    "    .dialogdemoBasicUsage #popupContainer {\n" +
+    "        position: relative;\n" +
+    "    }\n" +
+    "    \n" +
+    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
+    "        font-weight: bold;\n" +
+    "        /*color: blue;*/\n" +
+    "        text-decoration: underline;\n" +
+    "    }\n" +
+    "    \n" +
+    "    i.plain {\n" +
+    "        text-decoration: none;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
+    "    <form ng-repeat=\"showing in showings\">\n" +
+    "       <!-- <md-toolbar>\n" +
+    "            <div class=\"md-toolbar-tools md- primary\">\n" +
+    "                <h2>\n" +
+    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "\n" +
+    "                    </md-icon>\n" +
+    "                </h2>\n" +
+    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{showing.contact.name}}</h3>\n" +
+    "                <span flex></span>\n" +
+    "                <md-button class=\"md-icon-button\" ng-if=\"$index == 0 \"ng-click=\"cancel()\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "      <!--  </md-toolbar>-->\n" +
+    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
+    "            <div>\n" +
+    "               <h3> {{showing.contact.name}}</h3>\n" +
+    "                <h5 class=\"order-address\">{{showing.startTime | date: \"medium\" }} - {{showing.startTime | timeago }}</h5>\n" +
+    "                 \n" +
+    "                <h4>\n" +
+    "                    {{showing.feedback}}\n" +
+    "                </h4>\n" +
+    "                <hr>\n" +
+    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
+    "                <div ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile' class=\"contact-method\">\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
+    "              \n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "                </a>\n" +
+    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
+    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
+    "                       <a class='plain'  ng-href=\"\">\n" +
+    " \n" +
+    "\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{showing.contact.phone.office}} (Office)\n" +
+    "                    </span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <div class=\"contact-method\">\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                   {{email}}\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "\n" +
+    "        </md-dialog-content>\n" +
+    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
+    "\n" +
+    "        <!--<span flex></span>-->\n" +
+    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
+    "        <!--PHONE-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
+    "        <!--EMAIL-->\n" +
+    "        <!--</md-button>-->\n" +
+    "        <!--</div>-->\n" +
+    "    </form>\n" +
+    "</md-dialog>"
+  );
+
+
   $templateCache.put('templates/_md-card-showing-detail.view.html',
+    "<!--template for the little popo up. -->\n" +
     "<style>\n" +
     "    .dialogdemoBasicUsage #popupContainer {\n" +
     "        position: relative;\n" +
