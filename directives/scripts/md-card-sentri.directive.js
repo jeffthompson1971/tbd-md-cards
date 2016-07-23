@@ -18,7 +18,9 @@
             restrict: 'E',
 
             scope: {
-                sentrilock: '='
+                sentrilock: '=',
+                listing: '=',
+                limit: "@",
 
             },
             controller: MdCardSentriController,
@@ -30,15 +32,17 @@
                 scope.title = attrs.title;
                 scope.pass = attrs.pass;
                 scope.meElement = element;
+                scope.limit = attrs.limit;
             }
         };
     }
 
+    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$cordovaContacts'];
 
-    function DialogControllerAll($scope, $mdDialog, sentrilock) {
-        console.log("DATA", sentrilock);
-        
-        $scope.sentrilock = sentrilock;
+
+    function DialogController($scope, $mdDialog, $cordovaContacts, sentri) {
+
+        $scope.sentri = sentri;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -55,53 +59,65 @@
             }
 
         };
-    }
-    
 
-
-
-    MdCardSentriController.$inject = ['$scope', '$mdDialog'];
+        $scope.saveContact = function (name, phone) {
+            console.log(phone);
+            $scope.hide()
+            $cordovaContacts.save({
+                nickname: name,
+                phoneNumbers: [phone]
+            }).then(function (result) {
+                console.log("Saved contact", result);
+            });
+        }
+    };
 
     function MdCardSentriController($scope, $mdDialog) {
-        var vm = this;
-        vm.mdDialog = $mdDialog;
-        $scope.sentrilock = vm.sentrilock;
-        console.log("sentri controller");
-        
-        vm.showAll = function (ev, sentrilock) {
-            console.log("show all called", sentrilock);
-            var parentEl = angular.element($scope.meElement.find('md-list-item'));
-            console.log(sentrilock)
-            $scope.vm.mdDialog.show(
-                {
-                    locals: {
-                        sentrilock: sentrilock
-                    },
-                    controller: DialogControllerAll,
-                    templateUrl: 'templates/_md-card-sentrilock-detail-all.view.html',
-                    parent: parentEl,
-                    targetEvent: ev,
-                    clickOutsideToClose: true
-                    
-                })
-                .then(function (answer) {
-                    $scope.status = 'You said the information was "' + answer + '".';
-                }, function () {
-                    $scope.status = 'You cancelled the dialog.';
-                });
-                console.log(sentrilock)
+
+        if (vm.limit && vm.limit != -1) {
+
+            $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+        } else {
+            $scope.entries = vm.sentrilock.entries;
+
         }
-        
-     
-        
+
+        // $scope.theListing = ListingSvc.getSelectedListing();
+        // $scope.sentrilock = vm.sentrilock;
+        console.log("sentri controller");
+
+        vm.mdDialog = $mdDialog;
+        vm.show = function (ev, selSentri) {
+            console.log('selsentri', selSentri);
+            // var parentEl = angular.element($scope.$$watchers.find('md-list-item'));
+            $scope.vm.mdDialog.show({
+                locals: {
+                    sentri: selSentri
+                },
+                controller: DialogController,
+                templateUrl: 'templates/_md-card-sentri-detail.view.html',
+                targetEvent: ev,
+                clickOutsideToClose: true
+            }).then(function (answer) {
+                $scope.status = 'You said the information was "' + answer + '".';
+            }, function () {
+                $scope.status = 'You cancelled the dialog.';
+            });
+        }
+
         // // watch for changes in the listing to update the new photo
+        $scope.show = $scope.vm.show;
         $scope.$watch('vm.sentrilock', function (data) {
 
             if (_.isUndefined(data))
                 return;
-            $scope.sentrilock = data;
+            if (vm.limit && vm.limit != -1) {
 
+                $scope.entries = data.entries.slice(0, vm.limit);
+            } else {
+                $scope.entries = data.entries
+
+            }
         });
-
     }
 })();

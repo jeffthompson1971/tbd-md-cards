@@ -1,46 +1,57 @@
-<style>
-    card-header {
-        width: 100%;
-        background-color: #FFF;
-        border-bottom: 1px;
-        font-weight: 600;
-        font-size: 90%;
-    }
-</style>
-
-
 <md-card class="md-card  site-summary-card">
 
     <div class="site-header">
-        <div class="sentrilock-logo"></div>
+       
+
+        <div class="logo">
+             <img src="assets/logos/sentrilock-logo.png" alt="Sentrilock" />
+
+        </div>
     </div>
 
     <div class="feedback-div">
-       
 
-        <div ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords:5 ">
-            <!--<label><b> {{entry.AccessedByName}}</b></label>-->
-              <!--<label><b> {{showing.contact.name}}</b></label>-->
-            <!--<div ng-bind-html="entry.AccessedByName | accessorName"></div>-->
-             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
-            <!--<span>{{entry.Date}}</span>-->
+
+        <div ng-repeat="entry in entries | filterOutOneDayCodeGen" ng-click="show($event, entry)">  <!--| maxRecords: 5-->
+           
+            <label><b> {{entry.AccessedByName | accessorName}}</b></label>
+
             <span>{{entry.UTCAccessedDT}} </span>
-            <!--<span>Access type: {{entry.AccessType}}</span>-->
+
             <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
+           
+            
         </div>
 
-        <div ng-hide="data.entries <=5 " ng-click="showMoreFeedback() ">
-            <label ng-click="vm.showAll($event, vm.sentrilock)"><b>Show All</b></label>
-            <span> ... </span>
-            <!--<p> {{showing.feedback}}</p>-->
-       </div>
+        
+<!--
+ <div ng-if="limit > -1" ng-repeat="entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5" ng-click="show($event, entry)">
+            <label><b> {{entry.AccessedByName | accessorName}}</b></label>
+
+            <span>{{entry.UTCAccessedDT}} </span>
+
+            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
+            
+        </div>-->
+
+         <div ng-if="vm.limit != -1 && vm.sentrilock.entries.length > vm.limit" ng-click="showMoreFeedback()">
+            <span style="width: 100%">
+            <md-button style="float: left" class="md-icon-button" ui-sref="app.feedback({card:'sentri'})">
+                <md-icon md-svg-src="assets/icons/ic_more_horiz_black_48px.svg" aria-label="more"></md-icon>
+            </md-button>
+
+          <span class="nofm">{{vm.limit}} of {{vm.sentrilock.entries.length}}</span>
+          </span>
+
+        </div>
+        <!--<div ng-hide="data.entries <=5" ng-click="showMoreFeedback()" >
+            <label ng-if="limit > -1" ui-sref="app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})"><b>Show More</b></label>
+            <span ui-sref="app.feedback({ listingId: theListing.listing_id})"> ... </span>
+
+        </div>-->
 
     </div>
-     <!--<div class="card-header">
-            Serial #: {{vm.sentrilock.LBSerialNumber}}
-        </div>-->
-     <p class=footer>Serial #: {{vm.sentrilock.LBSerialNumber}} </p>
-    <p class=footer>{{vm.sentrilock.updated.time | timeago }} </p>
+
 </md-card>
 
 <!--

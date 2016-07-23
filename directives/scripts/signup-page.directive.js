@@ -33,15 +33,15 @@
                         </md-input-container>\
                         </div>\
                         <div class= "input-background">\
-                               <h5>{{agentId}}</h5>\
-                            <md-input-container md-no-float >\
-                                <input placeholder="" name="agentId" ng-model="vm.mlsdata.agentId" class="input-border" required>\
+                            <md-input-container >\
+                                <label class="label">{{agentId}}</label>\
+                                <input autocomplete="off"  name="agentId" ng-model="vm.mlsdata.agentId" required class="input-border" >\
                             </md-input-container>\
                         </div>\
                         <div class= "input-background">\
-                            <h5>{{pass}}</h5>\
-                            <md-input-container md-no-float >\
-                                <input type= "password" name="agentPassword" placeholder="" ng-model="vm.mlsdata.password" class="input-border" required>\
+                            <md-input-container>\
+                                <label class="label">{{pass}}</label>\
+                                <input autocomplete="off" type= "password" name="agentPassword" required ng-model="vm.mlsdata.password" class="input-border" >\
                             </md-input-container>\
                         </div>\
                     </div>',

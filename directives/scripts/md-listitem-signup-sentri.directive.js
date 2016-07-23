@@ -49,9 +49,9 @@
             }
         }
     }
-    SignupSentriController.$inject = ['$scope', 'PalSvc', 'PrincipalSvc'];
+    SignupSentriController.$inject = ['$scope', 'PalSvc', 'PrincipalSvc', '$ionicScrollDelegate'];
 
-    function SignupSentriController($scope, PalSvc, PrincipalSvc) {
+    function SignupSentriController($scope, PalSvc, PrincipalSvc, $ionicScrollDelegate) {
         var vm = this;
         var myId = 2; // TODO - do this better using config and enums
         vm.showForm = false;
@@ -67,6 +67,18 @@
             userName: "", // "51259-MCH",
             password: "" // "janebug"
         }
+          
+        $scope.$watch('vm.showForm', function(show) {
+
+            if (_.isUndefined(show))
+                return;
+
+           if (show) {
+                $ionicScrollDelegate.scrollBottom();
+           }
+           
+            
+        })
 
         vm.submitLogin = function (values) {
             //if (vm.login.perm)

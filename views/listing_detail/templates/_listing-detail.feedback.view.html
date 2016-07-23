@@ -1,0 +1,16 @@
+<div style="margin-top:35px">
+<div ng-if="card === 'sentri'"> <!--ng-if="vm.sentrilock.entries.length>0"-->
+    <md-card-sentri sentrilock='vm.sentrilock' title="Summary - Feedback on your sentrilock"
+    sysId="2" limit="-1" >
+    </md-card-sentri>
+</div>
+<div ng-if="card == 'showings'">
+    <md-showing-summary 
+                imgurl="/assets/logos/ShowingsCom_243.png" listing='vm.theListing' showings='vm.showings' title="Summary - Feedback on your showings" 
+                sysId="8" limit="-1">
+    </md-showing-summary>
+            
+</div>
+
+
+</div>
