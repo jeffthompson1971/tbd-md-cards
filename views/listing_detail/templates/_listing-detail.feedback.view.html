@@ -1,52 +1,16 @@
-<md-card class="site-summary-card">
-    <div class="site-header">
-      <!--  <div class="showingsdotcom-logo"></div> -->
-    </div>
-    <div class="feedback-div">
+<div style="margin-top:35px">
+<div ng-if="card === 'sentri'"> <!--ng-if="vm.sentrilock.entries.length>0"-->
+    <md-card-sentri sentrilock='vm.sentrilock' title="Summary - Feedback on your sentrilock"
+    sysId="2" limit="-1" >
+    </md-card-sentri>
+</div>
+<div ng-if="card == 'showings'">
+    <md-showing-summary 
+                imgurl="/assets/logos/ShowingsCom_243.png" listing='vm.theListing' showings='vm.showings' title="Summary - Feedback on your showings" 
+                sysId="8" limit="-1">
+    </md-showing-summary>
+            
+</div>
 
-    <ion-list>
 
-        <ion-item ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)">
-
-        <!-- | maxRecords:5-->
-
-
-            <label><b> {{showing.contact.name}}</b></label>
-            <span>{{showing.startTime | timeago }}</span>
-            <span>{{showing.startTime | date:'short' }}</span>
-
-            <p>{{showing.feedback}}</p>
-        </ion-item>
-
-        </ion-list>
-<p class=footer>Serial #: {{theListing.listing_id}} </p>
-    <p class=footer>{{theListing.ModificationTimestamp | timeago }} </p> 
-        <!--
-            "feedback":"1 feedback requests have been sent.",
-"startTime":"2015-11-28T09:30:00-06:00",
-"sentiment":0,
-"potentialOffer":false,
-"time":"9:30 AM - 10:30 AM",
-"intShowingId":"5e41609e-f7af-4c5a-93bd-eca04af14971",
-"listing_id":"4F134C97-4E33-45AC-AB89-8A36CB072DDC",
-"date":"11-28-2015",
-"type":{
-"result":"Setup",
-"name":"Showing",
-"msg":""
-},
-"contact":{
-"phone":{
-"office":"847-395-3000",
-"mobile":"847-878-7653"
-},
-"name":"DIANE KELLY",
-"emails":"DIANEKELLY42@YAHOO.COM"
-}
-},
-{
-
--->
-
-    </div>
-</md-card>
+</div>

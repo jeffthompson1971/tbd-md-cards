@@ -13,23 +13,12 @@
     i.plain {
         text-decoration: none;
     }
-    .contact-method {
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
-    #showingDetails {
-        max-width: 90%;
-        width: 500px;
-
-    }
-
-
 </style>
 
-<md-dialog id="showingDetails"" class="" aria-label="Showing Details">
-    <form>
-        <md-toolbar>
-            <div class="md-toolbar-tools md-primary">
+<md-dialog aria-label="Showing Details" flex="95">
+    <form ng-repeat="showing in showings">
+       <!-- <md-toolbar>
+            <div class="md-toolbar-tools md- primary">
                 <h2>
                     <md-icon  md-svg-src="assets/icons/ic_chat_white_24px.svg">
 
@@ -37,23 +26,21 @@
                 </h2>
                 <h3 style="padding-left: 10px; color: #fff;"> {{showing.contact.name}}</h3>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="cancel()">
+                <md-button class="md-icon-button" ng-if="$index == 0 "ng-click="cancel()">
                     <md-icon md-svg-src="assets/icons/ic_close_white_24px.svg" aria-label="Close dialog"></md-icon>
                 </md-button>
             </div>
-        </md-toolbar>
-
-        <md-dialog-content style="max-height:80%; padding: 15px">
+      <!--  </md-toolbar>-->
+        <md-dialog-content style="max-width:95%;max-height:95%; padding: 20px">
             <div>
-                <h5 class="order-address">{{showing.startTime | date: "short" }} - {{showing.startTime | timeago }}</h5>
-                <div class='date-row'>
-
-                    </div>
-                <span class="feedback">
+               <h3> {{showing.contact.name}}</h3>
+                <h5 class="order-address">{{showing.startTime | date: "medium" }} - {{showing.startTime | timeago }}</h5>
+                 
+                <h4>
                     {{showing.feedback}}
-                </span>
+                </h4>
                 <hr>
-              
+                <!-- contact":{"phone":{"office":"815-385-6990","mobile":"815-861-0099"} -->
                 <div ng-click="dial(showing.contact.phone.mobile)" ng-show='showing.contact.phone && showing.contact.phone.mobile' class="contact-method">
                     <a class='plain' ng-href="">
 

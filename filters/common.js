@@ -18,6 +18,27 @@
             };
         })
 
+        .filter('agentEmail', function() {
+
+            return function(item) {
+                var emails = item.split(';')
+                var all = [];
+
+                _.each(emails, function(el, index, list) {
+
+                    if (all.indexOf(el) === -1) {
+                        var str = '<a href="mailto:'+ el + ' target="_top">' + el + '</a>'
+                        all.push(el);
+                    }
+
+                });
+                     
+                return all.shift();
+
+            };
+        })
+        
+
         // for days on market when item is time in epoch (looks like)
         .filter('makeDaysOn', function() {
             return function(item) {

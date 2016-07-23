@@ -1,56 +1,57 @@
 <md-card class="site-summary-card">
+
     <div class="site-header">
         <div class="logo">
-         <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com"/>         
- 
+            <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com" />
+
         </div>
     </div>
-    <div class="feedback-div">
-        <div ng-repeat="showing in vm.showings | orderBy:'-startTime' | maxRecords:5" ng-click="show($event, showing)">
 
+    <div class="feedback-div">
+
+        <div ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)">
 
             <label><b> {{showing.contact.name}}</b></label>
             <span>{{showing.startTime | timeago }}</span>
-            <span>{{showing.startTime | date:'short' : 'UTC'}}</span>
+            <span>{{showing.startTime | date:'short'}}</span>
+            <p class="feedback">"{{showing.feedback}}"</p>
 
-
-
-            <p>{{showing.feedback}}</p>
         </div>
-        <div ng-hide="vm.showings.length <= 4" ng-click="showMoreFeedback()" >
 
-            <label ui-sref="app.feedback({ listingId: theListing.listing_id})" ><b>Show More </b></label>
-            <span> ... </span>
-            <p>{{showing.feedback}}</p>
+        <div ng-if="vm.limit != -1 && vm.showings.length > vm.limit" ng-click="showMoreFeedback()">
+            <span style="width: 100%">
+            <md-button style="float: left;" class="md-icon-button" ui-sref="app.feedback({card:'showings'})">
+                <md-icon md-svg-src="assets/icons/ic_more_horiz_black_48px.svg" aria-label="more"></md-icon>
+            </md-button>
 
+          <span class="nofm">{{vm.limit}} of {{vm.showings.length}}</span>
+          </span>
 
         </div>
         <!--
             "feedback":"1 feedback requests have been sent.",
-"startTime":"2015-11-28T09:30:00-06:00",
-"sentiment":0,
-"potentialOffer":false,
-"time":"9:30 AM - 10:30 AM",
-"intShowingId":"5e41609e-f7af-4c5a-93bd-eca04af14971",
-"listing_id":"4F134C97-4E33-45AC-AB89-8A36CB072DDC",
-"date":"11-28-2015",
-"type":{
-"result":"Setup",
-"name":"Showing",
-"msg":""
-},
-"contact":{
-"phone":{
-"office":"847-395-3000",
-"mobile":"847-878-7653"
-},
-"name":"DIANE KELLY",
-"emails":"DIANEKELLY42@YAHOO.COM"
-}
-},
-{
-
--->
-
+                "startTime":"2015-11-28T09:30:00-06:00",
+                "sentiment":0,
+                "potentialOffer":false,
+                "time":"9:30 AM - 10:30 AM",
+                "intShowingId":"5e41609e-f7af-4c5a-93bd-eca04af14971",
+                "listing_id":"4F134C97-4E33-45AC-AB89-8A36CB072DDC",
+                "date":"11-28-2015",
+                "type":{
+                "result":"Setup",
+                "name":"Showing",
+                "msg":""
+                },
+                "contact":{
+                "phone":{
+                "office":"847-395-3000",
+                "mobile":"847-878-7653"
+                },
+                "name":"DIANE KELLY",
+                "emails":"DIANEKELLY42@YAHOO.COM"
+                }
+                },
+            
+        -->
     </div>
 </md-card>
