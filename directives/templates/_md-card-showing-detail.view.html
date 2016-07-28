@@ -20,8 +20,10 @@
     #showingDetails {
         max-width: 90%;
         width: 500px;
+        
 
     }
+    
 
 
 </style>
@@ -43,14 +45,17 @@
             </div>
         </md-toolbar>
 
-        <md-dialog-content style="max-height:80%; padding: 15px">
+        <md-dialog-content>
             <div>
                 <h5 class="order-address">{{showing.startTime | date: "short" }} - {{showing.startTime | timeago }}</h5>
-                <div class='date-row'>
+               <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts">
+            <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
+        </md-button>
+                <div class='date-row' >
 
                     </div>
                 <span class="feedback">
-                    {{showing.feedback}}
+                    "{{showing.feedback}}"
                 </span>
                 <hr>
               
@@ -66,23 +71,26 @@
                     </span>
                 </div>
                 </a>
-                <div ng-click="dial(showing.contact.phone.office)" ng-show='showing.contact.phone && showing.contact.phone.office' class="contact-method">
+                <div ng-click="dial(showing.contact.phone.office)" ng-if='showing.contact.phone && showing.contact.phone.office' class="contact-method">
                     <!--<a class='plain' ng-href="tel:+1-{{showing.contact.phone.office}} ">-->
                        <a class='plain'  ng-href="">
  
 
-                        <span class="contact-label">  <md-icon md-svg-src="assets/icons/ic_local_phone_black_48px.svg" aria-label="Office"></md-icon> </span>
+                        <span class="contact-label"> 
+                             <md-icon md-svg-src="assets/icons/ic_local_phone_black_48px.svg" aria-label="Office"></md-icon> 
+                        </span>
                         <span class="contact-value">
                     {{showing.contact.phone.office}} (Office)
                     </span>
                     </a>
                 </div>
 
-                <div ng-show='showing.contact.emails.length > 0' class="md-3-line" ng-repeat="email in showing.contact.emails">
+                <div ng-if='showing.contact.emails.length > 0' class="md-3-line" ng-repeat="email in showing.contact.emails">
                     <div class="contact-method">
                         <span class="contact-label">  <md-icon md-svg-src="assets/icons/ic_mail_outline_black_48px.svg" aria-label="Email"></md-icon> </span>
                         <span class="contact-value">
-                   {{email}}
+                            <a href="mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing..." target="_top">{{email}}</a>
+                  
                     </span>
                     </div>
                 </div>

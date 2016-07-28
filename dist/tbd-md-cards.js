@@ -780,10 +780,10 @@ angular.module('tbd', []);
         };
     }
 
-    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$cordovaContacts'];
+    MdCardSentriController.$inject = ['$scope','$mdDialog'];
 
 
-    function DialogController($scope, $mdDialog, $cordovaContacts, sentri) {
+    function DialogController($scope, $rootScope, $mdDialog, sentri) {
 
         $scope.sentri = sentri;
 
@@ -804,14 +804,15 @@ angular.module('tbd', []);
         };
 
         $scope.saveContact = function (name, phone) {
-            console.log(phone);
-            $scope.hide()
-            $cordovaContacts.save({
-                nickname: name,
-                phoneNumbers: [phone]
-            }).then(function (result) {
-                console.log("Saved contact", result);
-            });
+
+            // console.log(phone);
+            // $scope.hide()
+            // $cordovaContacts.save({
+            //     nickname: name,
+            //     phoneNumbers: [phone]
+            // }).then(function (result) {
+            //     console.log("Saved contact", result);
+            // });
         }
     };
 
@@ -825,11 +826,8 @@ angular.module('tbd', []);
 
         }
 
-        // $scope.theListing = ListingSvc.getSelectedListing();
-        // $scope.sentrilock = vm.sentrilock;
-        console.log("sentri controller");
-
         vm.mdDialog = $mdDialog;
+
         vm.show = function (ev, selSentri) {
             console.log('selsentri', selSentri);
             // var parentEl = angular.element($scope.$$watchers.find('md-list-item'));
@@ -850,6 +848,7 @@ angular.module('tbd', []);
 
         // // watch for changes in the listing to update the new photo
         $scope.show = $scope.vm.show;
+
         $scope.$watch('vm.sentrilock', function (data) {
 
             if (_.isUndefined(data))
@@ -857,6 +856,7 @@ angular.module('tbd', []);
             if (vm.limit && vm.limit != -1) {
 
                 $scope.entries = data.entries.slice(0, vm.limit);
+
             } else {
                 $scope.entries = data.entries
 
@@ -1527,9 +1527,11 @@ angular.module('tbd', []);
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $mdDialog, showing) {
+    function DialogController($scope, $mdDialog, IS_MOBILE_APP, showing) {
 
         $scope.showing = showing;
+
+        $scope.showActions =  true; //IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -1601,8 +1603,6 @@ angular.module('tbd', []);
         });
 
         vm.mdDialog = $mdDialog;
-
-
 
         vm.show = function (ev, selShowing) {
             console.log(selShowing);
@@ -1957,7 +1957,7 @@ angular.module('tbd', []);
     }
 
 })();
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -1967,40 +1967,58 @@ angular.module('tbd', []);
 
     angular
         .module(appName)
+        .filter('toProperCase', function () {
+            return function (item) {
 
-        .filter('toProperCase', function() {
-            return function(item) {
-
-
-                return item.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+                return item.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 
             };
         })
 
-        .filter('agentEmail', function() {
+        .filter('agentEmail', function () {
 
-            return function(item) {
+            return function (item) {
                 var emails = item.split(';')
                 var all = [];
 
-                _.each(emails, function(el, index, list) {
+                _.each(emails, function (el, index, list) {
 
                     if (all.indexOf(el) === -1) {
-                        var str = '<a href="mailto:'+ el + ' target="_top">' + el + '</a>'
+                        var str = '<a href="mailto:' + el + ' target="_top">' + el + '</a>'
                         all.push(el);
                     }
-
                 });
-                     
-                return all.shift();
 
+                return all.shift();
             };
         })
-        
+
+        .filter('normalizePhoneNumber', function () {
+            return function (item) {
+                if (item) {
+                    //normalize string and remove all unnecessary characters
+                    var phone = item.replace(/[^\d]/g, "");
+
+                    // iff 11 and first is a 1 just strip it...
+                    if (phone.length == 11 && phone[0] == 1) {
+                        phone = phone.slice(1);
+                    }
+                    // should have 10 digits if not we return null
+                    if (phone.length == 10) {
+                        //reformat and return phone number
+                        return phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                    }
+                }
+                return item;
+                //return null;
+            };
+        })
+
 
         // for days on market when item is time in epoch (looks like)
-        .filter('makeDaysOn', function() {
-            return function(item) {
+        .filter('makeDaysOn', function () {
+
+            return function (item) {
                 var nowInMs = (new Date).getTime();
                 var diff = nowInMs - item;
 
@@ -2012,9 +2030,9 @@ angular.module('tbd', []);
             };
         })
 
-        .filter('percentChange', function() {
+        .filter('percentChange', function () {
             // will be passed the current site data
-            return function(newValue, baseline) {
+            return function (newValue, baseline) {
 
                 if (newValue == undefined)
                     return "";
@@ -2026,11 +2044,12 @@ angular.module('tbd', []);
 
             };
         })
-        .filter('noFractionCurrency', ['$filter', '$locale', function($filter, $locale) {
+
+        .filter('noFractionCurrency', ['$filter', '$locale', function ($filter, $locale) {
 
             var currencyFilter = $filter('currency');
             var formats = $locale.NUMBER_FORMATS;
-            return function(amount, currencySymbol) {
+            return function (amount, currencySymbol) {
                 var value = currencyFilter(amount, currencySymbol);
                 if (value === undefined)
                     return amount;
@@ -2043,38 +2062,38 @@ angular.module('tbd', []);
             };
         }])
 
-        .filter('percentOf', ['$filter', function($filter) {
-            return function(count, total) {
+        .filter('percentOf', ['$filter', function ($filter) {
+            return function (count, total) {
                 return count / total;
             };
         }])
 
-        .filter('maxRecords', ['$filter', function($filter) {
+        .filter('maxRecords', ['$filter', function ($filter) {
             var MAX = 4;
-            return function(recs) {
+            return function (recs) {
                 return recs.slice(0, MAX);
             };
         }])
 
         // This filter makes the assumption that the input will be in decimal form (i.e. 17% is 0.17).
-        .filter('percentage', ['$filter', function($filter) {
-            return function(input, decimals) {
+        .filter('percentage', ['$filter', function ($filter) {
+            return function (input, decimals) {
                 return Math.round($filter('number')(input * 100, decimals)) + '%';
             };
         }])
 
         // This
-        .filter('name', ['$filter', function($filter) {
-            return function(input, decimals) {
+        .filter('name', ['$filter', function ($filter) {
+            return function (input, decimals) {
 
             };
         }])
 
-        .filter("timeago", function() {
+        .filter("timeago", function () {
             //time: the time
             //local: compared to what time? default: now
             //raw: whether you want in a format of "5 minutes ago", or "5 minutes"
-            return function(time, local, raw) {
+            return function (time, local, raw) {
                 if (!time) return "never";
 
                 if (!local) {
@@ -2134,8 +2153,8 @@ angular.module('tbd', []);
         })
 
 
-        .filter('groupBy', ['$parse', function($parse) {
-            return function(list, group_by) {
+        .filter('groupBy', ['$parse', function ($parse) {
+            return function (list, group_by) {
 
                 var filtered = [];
                 var prev_item = null;
@@ -2146,7 +2165,7 @@ angular.module('tbd', []);
                 var new_field = 'group_by_CHANGED';
 
                 // loop through each item in the list
-                angular.forEach(list, function(item) {
+                angular.forEach(list, function (item) {
 
                     group_changed = false;
 
@@ -2933,7 +2952,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"showingDetails\" aria-label=\"Showing Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
@@ -2949,7 +2968,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </md-button>\n" +
     "            </div>\n" +
     "        </md-toolbar>\n" +
-    "        <md-dialog-content style=\"padding: 20px\">\n" +
+    "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{sentri.Created | date: \"short\" }} - {{sentri.Created | timeago }}</h5>\n" +
     "\n" +
@@ -2962,7 +2981,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    <a class='plain' ng-href=\"\">\n" +
     "\n" +
     "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon>\n" +
+    "                        </span>\n" +
     "\n" +
     "                        <span class=\"contact-value\">\n" +
     "                    {{sentri.ContactNumber}} (Mobile)\n" +
@@ -3000,7 +3020,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
-    "                <button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>\n" +
+    "                <!--<button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>-->\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
@@ -3443,8 +3463,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    #showingDetails {\n" +
     "        max-width: 90%;\n" +
     "        width: 500px;\n" +
+    "        \n" +
     "\n" +
     "    }\n" +
+    "    \n" +
     "\n" +
     "\n" +
     "</style>\n" +
@@ -3466,14 +3488,17 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </md-toolbar>\n" +
     "\n" +
-    "        <md-dialog-content style=\"max-height:80%; padding: 15px\">\n" +
+    "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "                <div class='date-row'>\n" +
+    "               <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\">\n" +
+    "            <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "        </md-button>\n" +
+    "                <div class='date-row' >\n" +
     "\n" +
     "                    </div>\n" +
     "                <span class=\"feedback\">\n" +
-    "                    {{showing.feedback}}\n" +
+    "                    \"{{showing.feedback}}\"\n" +
     "                </span>\n" +
     "                <hr>\n" +
     "              \n" +
@@ -3489,23 +3514,26 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    </span>\n" +
     "                </div>\n" +
     "                </a>\n" +
-    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
+    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-if='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
     "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
     "                       <a class='plain'  ng-href=\"\">\n" +
     " \n" +
     "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> \n" +
+    "                        </span>\n" +
     "                        <span class=\"contact-value\">\n" +
     "                    {{showing.contact.phone.office}} (Office)\n" +
     "                    </span>\n" +
     "                    </a>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                <div ng-if='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
     "                        <span class=\"contact-value\">\n" +
-    "                   {{email}}\n" +
+    "                            <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">{{email}}</a>\n" +
+    "                  \n" +
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -4617,7 +4645,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
+    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content\">\n" +
     "\n" +
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +

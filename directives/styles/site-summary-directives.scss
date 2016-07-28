@@ -1,3 +1,5 @@
+@import "../../assets/scss/snaplistingstheme";
+
 b {
     font-weight: 700;
 }
@@ -5,6 +7,11 @@ h5 {
     font-size: 14px;
 }
 
+a:link {
+  text-decoration:  none;
+  color: $light;
+  font-weight: 700;
+}
 
 #showingDetails {
 
@@ -255,7 +262,7 @@ input .share-url-dialog {
     
 }
 
-//md-card{
+
     label {
        white-space: nowrap;
        font-weight: 400;
@@ -281,18 +288,6 @@ input .share-url-dialog {
         border-color: aquamarine;
         border-width: 2px;
     }
-//}
-
-// .logo {
-//     height: inherit;
-//     width: 200px;
-//     height: 40px;
-// }
-
-
-
-
-
 
 
 md-card {

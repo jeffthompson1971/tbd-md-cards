@@ -14,7 +14,7 @@
     }
 </style>
 
-<md-dialog aria-label="Showing Details">
+<md-dialog id="showingDetails" aria-label="Showing Details">
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools md-primary">
@@ -30,7 +30,7 @@
                 </md-button>
             </div>
         </md-toolbar>
-        <md-dialog-content style="padding: 20px">
+        <md-dialog-content>
             <div>
                 <h5 class="order-address">{{sentri.Created | date: "short" }} - {{sentri.Created | timeago }}</h5>
 
@@ -43,7 +43,8 @@
                     <a class='plain' ng-href="">
 
                         <span class="contact-label"> 
-                             <md-icon md-svg-src="assets/icons/ic_phone_iphone_black_48px.svg" aria-label="Mobile"></md-icon> </span>
+                             <md-icon md-svg-src="assets/icons/ic_phone_iphone_black_48px.svg" aria-label="Mobile"></md-icon>
+                        </span>
 
                         <span class="contact-value">
                     {{sentri.ContactNumber}} (Mobile)
@@ -81,7 +82,7 @@
                     </span>
                     </div>
                 </div>
-                <button ng-click="saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)">Save</button>
+                <!--<button ng-click="saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)">Save</button>-->
             </div>
 
 

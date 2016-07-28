@@ -491,7 +491,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"showingDetails\" aria-label=\"Showing Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
@@ -507,7 +507,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </md-button>\n" +
     "            </div>\n" +
     "        </md-toolbar>\n" +
-    "        <md-dialog-content style=\"padding: 20px\">\n" +
+    "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{sentri.Created | date: \"short\" }} - {{sentri.Created | timeago }}</h5>\n" +
     "\n" +
@@ -520,7 +520,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    <a class='plain' ng-href=\"\">\n" +
     "\n" +
     "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon>\n" +
+    "                        </span>\n" +
     "\n" +
     "                        <span class=\"contact-value\">\n" +
     "                    {{sentri.ContactNumber}} (Mobile)\n" +
@@ -558,7 +559,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
-    "                <button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>\n" +
+    "                <!--<button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>-->\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
@@ -1001,8 +1002,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    #showingDetails {\n" +
     "        max-width: 90%;\n" +
     "        width: 500px;\n" +
+    "        \n" +
     "\n" +
     "    }\n" +
+    "    \n" +
     "\n" +
     "\n" +
     "</style>\n" +
@@ -1024,14 +1027,17 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </md-toolbar>\n" +
     "\n" +
-    "        <md-dialog-content style=\"max-height:80%; padding: 15px\">\n" +
+    "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "                <div class='date-row'>\n" +
+    "               <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\">\n" +
+    "            <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "        </md-button>\n" +
+    "                <div class='date-row' >\n" +
     "\n" +
     "                    </div>\n" +
     "                <span class=\"feedback\">\n" +
-    "                    {{showing.feedback}}\n" +
+    "                    \"{{showing.feedback}}\"\n" +
     "                </span>\n" +
     "                <hr>\n" +
     "              \n" +
@@ -1047,23 +1053,26 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    </span>\n" +
     "                </div>\n" +
     "                </a>\n" +
-    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
+    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-if='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
     "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
     "                       <a class='plain'  ng-href=\"\">\n" +
     " \n" +
     "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> \n" +
+    "                        </span>\n" +
     "                        <span class=\"contact-value\">\n" +
     "                    {{showing.contact.phone.office}} (Office)\n" +
     "                    </span>\n" +
     "                    </a>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                <div ng-if='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
     "                        <span class=\"contact-value\">\n" +
-    "                   {{email}}\n" +
+    "                            <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">{{email}}</a>\n" +
+    "                  \n" +
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -2175,7 +2184,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
+    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content\">\n" +
     "\n" +
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +

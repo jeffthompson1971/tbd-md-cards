@@ -1,0 +1,56 @@
+
+md-dialog {
+    max-width: 80%;
+    width: auto;
+    max-height: 80%;
+
+    .md-fab {
+        background-color: #afafaf !important;
+        width: 42px !important;
+        height: 42px !important;
+       
+    
+    }
+     .md-fab-bottom-right {
+            right: 6px !important;
+            bottom: 6px !important;
+   
+        }
+
+}
+
+md-dialog-content  {
+
+    padding: 20px;
+}
+  .contact-method {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+
+@media screen and (max-width: 500px) {
+
+md-dialog {
+      max-width: 95%;
+        width: 500px;
+
+}
+
+md-dialog-content  {
+
+    padding: 10px;
+}
+ md-card {
+  label {
+    font-size: 12px !important;
+  }
+ }
+
+  md-content {
+   font-size: .8em !important;
+ }
+ .feedback {
+   font-size: .9em;
+ }
+}

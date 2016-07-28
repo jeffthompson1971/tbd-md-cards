@@ -37,10 +37,10 @@
         };
     }
 
-    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$cordovaContacts'];
+    MdCardSentriController.$inject = ['$scope','$mdDialog'];
 
 
-    function DialogController($scope, $mdDialog, $cordovaContacts, sentri) {
+    function DialogController($scope, $rootScope, $mdDialog, sentri) {
 
         $scope.sentri = sentri;
 
@@ -61,14 +61,15 @@
         };
 
         $scope.saveContact = function (name, phone) {
-            console.log(phone);
-            $scope.hide()
-            $cordovaContacts.save({
-                nickname: name,
-                phoneNumbers: [phone]
-            }).then(function (result) {
-                console.log("Saved contact", result);
-            });
+
+            // console.log(phone);
+            // $scope.hide()
+            // $cordovaContacts.save({
+            //     nickname: name,
+            //     phoneNumbers: [phone]
+            // }).then(function (result) {
+            //     console.log("Saved contact", result);
+            // });
         }
     };
 

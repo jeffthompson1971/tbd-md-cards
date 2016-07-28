@@ -61,9 +61,11 @@
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $mdDialog, showing) {
+    function DialogController($scope, $mdDialog, IS_MOBILE_APP, showing) {
 
         $scope.showing = showing;
+
+        $scope.showActions =  true; //IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -135,8 +137,6 @@
         });
 
         vm.mdDialog = $mdDialog;
-
-
 
         vm.show = function (ev, selShowing) {
             console.log(selShowing);
