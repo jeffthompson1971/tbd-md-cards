@@ -5,7 +5,6 @@
         </div>
       
 
-
         <div class="card-icons-wrapper">
             <md-button class="md-icon-button" ng-click="vm.openInBrowser(listing.subjectUrl)">
                 <md-icon md-svg-src="assets/icons/ic_open_in_browser_black_48px.svg" aria-label="Launch in browser"></md-icon>
@@ -16,7 +15,9 @@
     </div>
 
     <div layout="row">
+
         <div flex class="left">
+
             <div>
                 <label>Days listed</label>
                 <span><b>{{listing.listing_daysOn}}</b></span>
@@ -28,8 +29,8 @@
 
                 <span ng-if="listing.listing_views_todayCnt == undefined"><b>*</b></span>
             </div>
-            <div>
 
+            <div>
                 <label>7-day views</label>
 
                 <span ng-if="listing.listing_views_sevenDayCnt != undefined"><b>{{listing.listing_views_sevenDayCnt}}</b></span>
@@ -45,7 +46,6 @@
 
                 <span ng-if="listing.listing_views_thirtyDayCnt == undefined"><b>*</b></span>
 
-
             </div>
 
 
@@ -59,8 +59,8 @@
                 <span ng-if="listing.listing_favoritesCnt">
                      <md-icon  class="favs" md-svg-src="assets/icons/ic_favorite_black_24px.svg"></md-icon>
                   <b>{{listing.listing_favoritesCnt}}</b>
-              </span>
-                  </div>
+                </span>
+            </div>
         </div>
         <div flex class="right ">
             <div>
