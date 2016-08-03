@@ -61,7 +61,7 @@
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $mdDialog, IS_MOBILE_APP, showing) {
+    function DialogController($scope, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
 
         $scope.showing = showing;
 
@@ -82,6 +82,20 @@
             }
 
         };
+        $scope.addToContacts = function (showing) {
+
+             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, showing.contact);
+
+
+            // console.log(phone);
+            // $scope.hide()
+            // $cordovaContacts.save({
+            //     nickname: name,
+            //     phoneNumbers: [phone]
+            // }).then(function (result) {
+            //     console.log("Saved contact", result);
+            // });
+        }
     };
 
     function MdShowingSummaryController($scope, $mdDialog, ListingSvc) {

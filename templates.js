@@ -1030,7 +1030,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "               <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\">\n" +
+    "               <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
     "            <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
     "        </md-button>\n" +
     "                <div class='date-row' >\n" +
@@ -1598,7 +1598,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "      \n" +
     "\n" +
-    "\n" +
     "        <div class=\"card-icons-wrapper\">\n" +
     "            <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
     "                <md-icon md-svg-src=\"assets/icons/ic_open_in_browser_black_48px.svg\" aria-label=\"Launch in browser\"></md-icon>\n" +
@@ -1609,7 +1608,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <div layout=\"row\">\n" +
+    "\n" +
     "        <div flex class=\"left\">\n" +
+    "\n" +
     "            <div>\n" +
     "                <label>Days listed</label>\n" +
     "                <span><b>{{listing.listing_daysOn}}</b></span>\n" +
@@ -1621,8 +1622,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <span ng-if=\"listing.listing_views_todayCnt == undefined\"><b>*</b></span>\n" +
     "            </div>\n" +
-    "            <div>\n" +
     "\n" +
+    "            <div>\n" +
     "                <label>7-day views</label>\n" +
     "\n" +
     "                <span ng-if=\"listing.listing_views_sevenDayCnt != undefined\"><b>{{listing.listing_views_sevenDayCnt}}</b></span>\n" +
@@ -1638,7 +1639,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <span ng-if=\"listing.listing_views_thirtyDayCnt == undefined\"><b>*</b></span>\n" +
     "\n" +
-    "\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
@@ -1652,8 +1652,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <span ng-if=\"listing.listing_favoritesCnt\">\n" +
     "                     <md-icon  class=\"favs\" md-svg-src=\"assets/icons/ic_favorite_black_24px.svg\"></md-icon>\n" +
     "                  <b>{{listing.listing_favoritesCnt}}</b>\n" +
-    "              </span>\n" +
-    "                  </div>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <div flex class=\"right \">\n" +
     "            <div>\n" +
