@@ -65,7 +65,7 @@
 
         $scope.showing = showing;
 
-        $scope.showActions =  true; //IS_MOBILE_APP;
+        $scope.showActions = true; //IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -83,9 +83,31 @@
 
         };
         $scope.addToContacts = function (showing) {
+            if (showing.contact == undefined)
+                return;
+            var contact = showing.contact;
+            var normalizedContact = {};
+            var nameBits = contact.name.split(" ");
+          
+            // ignore any middle initial or name
+            if (nameBits.length < 2) {
+                // only have one name so assume it's last
+                familyName = nameBits[0];
+                normalizedContact.familyName =  nameBits[0];
+            } else {
+                normalizedContact.givenName = nameBits[0];
+                normalizedContact.familyName = nameBits[nameBits.length - 1];
 
-             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, showing.contact);
+            }
+            if (contact.phone) {
+                normalizedContact.phoneNumbers = contact.phone;
+            }
+            if (contact.emails) {
+                normalizedContact.emails = contact.emails;
+            }
 
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
+            // 
 
             // console.log(phone);
             // $scope.hide()

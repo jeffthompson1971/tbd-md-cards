@@ -1531,7 +1531,7 @@ angular.module('tbd', []);
 
         $scope.showing = showing;
 
-        $scope.showActions =  true; //IS_MOBILE_APP;
+        $scope.showActions = true; //IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -1549,9 +1549,31 @@ angular.module('tbd', []);
 
         };
         $scope.addToContacts = function (showing) {
+            if (showing.contact == undefined)
+                return;
+            var contact = showing.contact;
+            var normalizedContact = {};
+            var nameBits = contact.name.split(" ");
+          
+            // ignore any middle initial or name
+            if (nameBits.length < 2) {
+                // only have one name so assume it's last
+                familyName = nameBits[0];
+                normalizedContact.familyName =  nameBits[0];
+            } else {
+                normalizedContact.givenName = nameBits[0];
+                normalizedContact.familyName = nameBits[nameBits.length - 1];
 
-             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, showing.contact);
+            }
+            if (contact.phone) {
+                normalizedContact.phoneNumbers = contact.phone;
+            }
+            if (contact.emails) {
+                normalizedContact.emails = contact.emails;
+            }
 
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
+            // 
 
             // console.log(phone);
             // $scope.hide()
@@ -1630,7 +1652,7 @@ angular.module('tbd', []);
                     templateUrl: 'templates/_md-card-showing-detail.view.html',
                     parent: parentEl,
                     targetEvent: ev,
-                    clickOutsideToClose: false
+                    clickOutsideToClose: true
                 })
                 .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
@@ -4629,7 +4651,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.feedback.view.html',
-    "<div style=\"margin-top:35px\">\n" +
+    "\n" +
     "<div ng-if=\"card === 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
     "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your sentrilock\"\n" +
     "    sysId=\"2\" limit=\"-1\" >\n" +
@@ -4644,7 +4666,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "\n" +
     "\n" +
-    "</div>\n"
+    "\n"
   );
 
 

@@ -2154,7 +2154,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.feedback.view.html',
-    "<div style=\"margin-top:35px\">\n" +
+    "\n" +
     "<div ng-if=\"card === 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
     "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your sentrilock\"\n" +
     "    sysId=\"2\" limit=\"-1\" >\n" +
@@ -2169,7 +2169,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "\n" +
     "\n" +
-    "</div>\n"
+    "\n"
   );
 
 
