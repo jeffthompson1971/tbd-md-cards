@@ -61,7 +61,7 @@
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
 
         $scope.showing = showing;
 
@@ -88,19 +88,41 @@
             var contact = showing.contact;
             var normalizedContact = {};
             var nameBits = contact.name.split(" ");
-          
+
             // ignore any middle initial or name
             if (nameBits.length < 2) {
                 // only have one name so assume it's last
                 familyName = nameBits[0];
-                normalizedContact.familyName =  nameBits[0];
+                normalizedContact.familyName = nameBits[0];
             } else {
                 normalizedContact.givenName = nameBits[0];
                 normalizedContact.familyName = nameBits[nameBits.length - 1];
 
             }
             if (contact.phone) {
-                normalizedContact.phoneNumbers = contact.phone;
+                normalizedContact.phoneNumbers = [];
+                if (contact.phone.mobile) {
+                    
+                    normalizedContact.phoneNumbers.push({
+                        type: "mobile",
+                        value:  $filter('normalizePhoneNumber')(contact.phone.mobile)
+                    })
+                }
+                if (contact.phone.office) {
+
+                    //var tmp = $filter('normalizePhoneNumber')(contact.phone.office);
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: $filter('normalizePhoneNumber')(contact.phone.office)
+                    })
+                }
+                if (contact.phone.home) {
+                    normalizedContact.phoneNumbers.push({
+                        type: "home",
+                        value: $filter('normalizePhoneNumber')(contact.phone.home)
+                    })
+                }
+                
             }
             if (contact.emails) {
                 normalizedContact.emails = contact.emails;
@@ -225,3 +247,26 @@
     }
 
 })();
+/* feedback structure
+
+"startTime":"2016-07-26T18:00:00+00:00",
+"feedback":"",
+"potentialOffer":false,
+"sentiment":0,
+"time":"6:00 PM - 7:00 PM",
+"intShowingId":"fe7a48cd-0f65-4617-a188-a7eb94109cd1",
+"listing_id":"6D5DE6BD-FF92-4030-8A8A-3F302F8C05F9",
+"type":{
+"result":"Cancelled by Agent",
+"name":"Showing",
+"msg":""
+},
+"date":"07-26-2016",
+"contact":{
+"phone":{
+"office":"847-634-1000",
+"mobile":""
+},
+"name":"Justin Mcandrews"
+}
+*/

@@ -37,21 +37,51 @@
         .filter('normalizePhoneNumber', function () {
             return function (item) {
                 if (item) {
-                    //normalize string and remove all unnecessary characters
-                    var phone = item.replace(/[^\d]/g, "");
+                    var finalNum = ""
+                    // ^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\/]?){0,})(?:[\-\.\ \\/]?(?:#|ext\.?|extension|x)[\-\.\ \\/]?(\d+))?$
 
-                    // iff 11 and first is a 1 just strip it...
-                    if (phone.length == 11 && phone[0] == 1) {
-                        phone = phone.slice(1);
+                    // replace multiple spaces, newlines etc. with single space
+                    var str = item.replace(/\s\s+/g, ' ');
+
+                    var re = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?\s*(\d+))?$/im;
+                    // var str = phone;
+                    var m;
+                    var rawNum = "";
+                    var ext = "";
+
+                    if ((m = re.exec(str)) !== null) {
+                        if (m.index === re.lastIndex) {
+                            re.lastIndex++;
+                        }
+                        // View your result using the m-variable.
+                        if (m[2] != undefined)
+                            rawNum = m[2];
+                        if (m[3] != undefined)
+                            ext = m[3];
+                        // next pull apart number and any extention
+
+                        //normalize string and remove all unnecessary characters
+                        var phone = rawNum.replace(/[^\d]/g, "");
+
+                        // iff 11 and first is a 1 just strip it...
+                        if (phone.length == 11 && phone[0] == 1) {
+                            phone = phone.slice(1);
+                        }
+                        // should have 10 digits if not we return null
+                        if (phone.length == 10) {
+                            //reformat and return phone number
+                            finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                        }
+                        if (ext != "") {
+                            finalNum += " ext. " + ext;
+                        }
+                        return finalNum;
+
                     }
-                    // should have 10 digits if not we return null
-                    if (phone.length == 10) {
-                        //reformat and return phone number
-                        return phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
-                    }
+
                 }
                 return item;
-                //return null;
+              
             };
         })
 

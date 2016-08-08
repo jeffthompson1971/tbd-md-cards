@@ -1527,7 +1527,7 @@ angular.module('tbd', []);
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
 
         $scope.showing = showing;
 
@@ -1554,19 +1554,41 @@ angular.module('tbd', []);
             var contact = showing.contact;
             var normalizedContact = {};
             var nameBits = contact.name.split(" ");
-          
+
             // ignore any middle initial or name
             if (nameBits.length < 2) {
                 // only have one name so assume it's last
                 familyName = nameBits[0];
-                normalizedContact.familyName =  nameBits[0];
+                normalizedContact.familyName = nameBits[0];
             } else {
                 normalizedContact.givenName = nameBits[0];
                 normalizedContact.familyName = nameBits[nameBits.length - 1];
 
             }
             if (contact.phone) {
-                normalizedContact.phoneNumbers = contact.phone;
+                normalizedContact.phoneNumbers = [];
+                if (contact.phone.mobile) {
+                    
+                    normalizedContact.phoneNumbers.push({
+                        type: "mobile",
+                        value:  $filter('normalizePhoneNumber')(contact.phone.mobile)
+                    })
+                }
+                if (contact.phone.office) {
+
+                    //var tmp = $filter('normalizePhoneNumber')(contact.phone.office);
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: $filter('normalizePhoneNumber')(contact.phone.office)
+                    })
+                }
+                if (contact.phone.home) {
+                    normalizedContact.phoneNumbers.push({
+                        type: "home",
+                        value: $filter('normalizePhoneNumber')(contact.phone.home)
+                    })
+                }
+                
             }
             if (contact.emails) {
                 normalizedContact.emails = contact.emails;
@@ -1691,6 +1713,29 @@ angular.module('tbd', []);
     }
 
 })();
+/* feedback structure
+
+"startTime":"2016-07-26T18:00:00+00:00",
+"feedback":"",
+"potentialOffer":false,
+"sentiment":0,
+"time":"6:00 PM - 7:00 PM",
+"intShowingId":"fe7a48cd-0f65-4617-a188-a7eb94109cd1",
+"listing_id":"6D5DE6BD-FF92-4030-8A8A-3F302F8C05F9",
+"type":{
+"result":"Cancelled by Agent",
+"name":"Showing",
+"msg":""
+},
+"date":"07-26-2016",
+"contact":{
+"phone":{
+"office":"847-634-1000",
+"mobile":""
+},
+"name":"Justin Mcandrews"
+}
+*/
 (function () {
  var appName = "app";
     try {
@@ -2032,21 +2077,51 @@ angular.module('tbd', []);
         .filter('normalizePhoneNumber', function () {
             return function (item) {
                 if (item) {
-                    //normalize string and remove all unnecessary characters
-                    var phone = item.replace(/[^\d]/g, "");
+                    var finalNum = ""
+                    // ^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\/]?){0,})(?:[\-\.\ \\/]?(?:#|ext\.?|extension|x)[\-\.\ \\/]?(\d+))?$
 
-                    // iff 11 and first is a 1 just strip it...
-                    if (phone.length == 11 && phone[0] == 1) {
-                        phone = phone.slice(1);
+                    // replace multiple spaces, newlines etc. with single space
+                    var str = item.replace(/\s\s+/g, ' ');
+
+                    var re = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?\s*(\d+))?$/im;
+                    // var str = phone;
+                    var m;
+                    var rawNum = "";
+                    var ext = "";
+
+                    if ((m = re.exec(str)) !== null) {
+                        if (m.index === re.lastIndex) {
+                            re.lastIndex++;
+                        }
+                        // View your result using the m-variable.
+                        if (m[2] != undefined)
+                            rawNum = m[2];
+                        if (m[3] != undefined)
+                            ext = m[3];
+                        // next pull apart number and any extention
+
+                        //normalize string and remove all unnecessary characters
+                        var phone = rawNum.replace(/[^\d]/g, "");
+
+                        // iff 11 and first is a 1 just strip it...
+                        if (phone.length == 11 && phone[0] == 1) {
+                            phone = phone.slice(1);
+                        }
+                        // should have 10 digits if not we return null
+                        if (phone.length == 10) {
+                            //reformat and return phone number
+                            finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                        }
+                        if (ext != "") {
+                            finalNum += " ext. " + ext;
+                        }
+                        return finalNum;
+
                     }
-                    // should have 10 digits if not we return null
-                    if (phone.length == 10) {
-                        //reformat and return phone number
-                        return phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
-                    }
+
                 }
                 return item;
-                //return null;
+              
             };
         })
 
