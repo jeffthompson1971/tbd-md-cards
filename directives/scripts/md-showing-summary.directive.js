@@ -131,7 +131,7 @@
                 for (var i = 0; i < contact.emails.length; i++) {
                     normalizedContact.emails.push({
                         type: "work",
-                        value: conact.emails[i]
+                        value: contact.emails[i]
                     })
                 }
                // normalizedContact.emails = contact.emails;
