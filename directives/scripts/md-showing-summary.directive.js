@@ -86,17 +86,19 @@
             if (showing.contact == undefined)
                 return;
             var contact = showing.contact;
-            var normalizedContact = {};
+            var normalizedContact = {
+                name: {}
+            };
             var nameBits = contact.name.split(" ");
 
             // ignore any middle initial or name
             if (nameBits.length < 2) {
                 // only have one name so assume it's last
-                familyName = nameBits[0];
-                normalizedContact.familyName = nameBits[0];
+                
+                normalizedContact.name.familyName = nameBits[0];
             } else {
-                normalizedContact.givenName = nameBits[0];
-                normalizedContact.familyName = nameBits[nameBits.length - 1];
+                normalizedContact.name.givenName = nameBits[0];
+                normalizedContact.name.familyName = nameBits[nameBits.length - 1];
 
             }
             if (contact.phone) {
