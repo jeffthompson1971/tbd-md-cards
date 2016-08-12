@@ -780,12 +780,14 @@ angular.module('tbd', []);
         };
     }
 
-    MdCardSentriController.$inject = ['$scope','$mdDialog'];
+    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$filter'];
 
 
-    function DialogController($scope, $rootScope, $mdDialog, sentri) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, sentri) {
 
         $scope.sentri = sentri;
+
+        $scope.showActions = true; //IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -797,13 +799,89 @@ angular.module('tbd', []);
             $mdDialog.hide(answer);
         };
         $scope.dial = function (number) {
-            if (window.cordova) {
+            if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
 
         };
 
-        $scope.saveContact = function (name, phone) {
+        $scope.addToContacts = function (entry) {
+
+
+            var normalizedContact = {
+                name: {}
+            };
+            // first get the first and last name 
+            if (entry.AgentFirstName && entry.AgentLastName) {
+                normalizedContact.name.familyName = entry.AgentLastName;
+                normalizedContact.name.givenName = entry.AgentFirstName;
+
+            } else if (entry.ContactName) {
+                var nameBits = contact.name.split(" ");
+                if (nameBits.length < 2) {
+                    // only have one name so assume it's first
+
+                    normalizedContact.name.givenName = nameBits[0];
+                } else {
+                    normalizedContact.name.givenName = nameBits[0];
+                    normalizedContact.name.familyName = nameBits[nameBits.length - 1];
+
+                }
+
+
+            } else {
+                alert("need a friggen name");
+                return;
+            }
+
+            // now grab phone number(s)
+            if (entry.ContactNumber || entry.PhoneNumber) {
+                var normCtNum = undefined;
+                var normPhnNum = undefined;
+                normalizedContact.phoneNumbers = [];
+                if (entry.ContactNumber) {
+                    normCtNum = $filter('normalizePhoneNumber')(entry.ContactNumber);
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: normCtNum
+                    })
+
+                }
+                if (entry.PhoneNumber) {
+                    normPhnNum = $filter('normalizePhoneNumber')(entry.PhoneNumber);
+
+                    if (normCtNum !== normPhnNum) {
+                        normalizedContact.phoneNumbers.push({
+                            type: "work",
+                            value: normPhnNum
+                        })
+                    }
+
+                }
+            }
+            // finally grab any emails...
+
+
+            if (entry.emailAddy || entry.emailAddy2) {
+                normalizedContact.emails = [];
+                if (entry.emailAddy) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: entry.emailAddy
+                    });
+                }
+                if (entry.emailAddy2 && (entry.emailAddy !== entry.emailAddy2)) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: entry.emailAddy2
+                    });
+
+                }
+                // normalizedContact.emails = contact.emails;
+            }
+
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
+            // 
 
             // console.log(phone);
             // $scope.hide()
@@ -816,13 +894,17 @@ angular.module('tbd', []);
         }
     };
 
-    function MdCardSentriController($scope, $mdDialog) {
+    function MdCardSentriController($scope, $mdDialog, $filter) {
         var vm = this;
-        if (vm.limit && vm.limit != -1) {
 
-            $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+        var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+
+        if (vm.limit && vm.limit != -1) {
+            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+          //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
         } else {
-            $scope.entries = vm.sentrilock.entries;
+           // $scope.entries = vm.sentrilock.entries;
+            $scope.entries = entriesNoOneDay
 
         }
 
@@ -853,17 +935,127 @@ angular.module('tbd', []);
 
             if (_.isUndefined(data))
                 return;
-            if (vm.limit && vm.limit != -1) {
+            // if (vm.limit && vm.limit != -1) {
 
-                $scope.entries = data.entries.slice(0, vm.limit);
+            //     $scope.entries = data.entries.slice(0, vm.limit);
 
-            } else {
-                $scope.entries = data.entries
+            // } else {
+            //     $scope.entries = data.entries
 
-            }
+            // }
+               var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+
+        if (vm.limit && vm.limit != -1) {
+            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+          //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+        } else {
+           // $scope.entries = vm.sentrilock.entries;
+            $scope.entries = entriesNoOneDay
+
+        }
         });
     }
 })();
+
+/*
+"object:150"
+AccessLogID
+:
+"AL00002J1U5O"
+AccessType
+:
+"SmartMACGen"
+AccessedBy
+:
+"AG0000008F2M"
+AccessedByContact
+:
+"(847) 222-5000 <a href='mailto:stephanie.szigetvari@cbexchange.com?subject=425+Grand+Meadow+Lane+MCHENRY+IL+60051'>stephanie.szigetvari@cbexchange.com</a>"
+AccessedByName
+:
+"Stephanie Szigetvari - Coldwell Banker Residential<br>(847) 222-5000 <a href='mailto:stephanie.szigetvari@cbexchange.com?subject=425+Grand+Meadow+Lane+MCHENRY+IL+60051'>stephanie.szigetvari@cbexchange.com</a>"
+AgentFirstName
+:
+"Stephanie"
+AgentID
+:
+"AG0000008F2M"
+AgentLastName
+:
+"Szigetvari"
+Association
+:
+"MainStreet Organization of REALTORS"
+CompanyName
+:
+"Coldwell Banker Residential"
+ContactName
+:
+"Stephanie Szigetvari"
+ContactNumber
+:
+"(847) 222-5000"
+Created
+:
+"2016-07-31 14:23:05"
+Date
+:
+"Sunday, Jul 31 2016"
+EmailAddress
+:
+"<a href='mailto:stephanie.szigetvari@cbexchange.com?subject=425+Grand+Meadow+Lane+MCHENRY+IL+60051'>stephanie.szigetvari@cbexchange.com</a>"
+FromOneDayCode
+:
+false
+LBID
+:
+"LB00000090BI"
+LBSerialNumber
+:
+"00450831"
+LoanNumber
+:
+"None"
+Location
+:
+"425 Grand Meadow Lane MCHENRY IL 60051"
+Origin
+:
+""
+OwnerAgentID
+:
+"AG000000766B"
+PhoneNumber
+:
+"(847) 222-5000"
+RoleCode
+:
+""
+Time
+:
+"13:23:05"
+UTCAccessedDT
+:
+"Sunday, Jul 31 2016 - 01:23 PM"
+UserFirstName
+:
+"Stephanie"
+UserID
+:
+"US0000008SBD"
+UserLastName
+:
+"Szigetvari"
+emailAddy
+:
+"stephanie.szigetvari@cbexchange.com"
+emailAddy2
+:
+"stephanie.szigetvari@cbexchange.com"
+rowcolor
+:
+"#FF9"
+*/
 !(function() {
     var appName = "app";
     try {
@@ -1543,7 +1735,7 @@ angular.module('tbd', []);
             $mdDialog.hide(answer);
         };
         $scope.dial = function (number) {
-            if (window.cordova) {
+            if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
 
@@ -1552,17 +1744,19 @@ angular.module('tbd', []);
             if (showing.contact == undefined)
                 return;
             var contact = showing.contact;
-            var normalizedContact = {};
+            var normalizedContact = {
+                name: {}
+            };
             var nameBits = contact.name.split(" ");
 
             // ignore any middle initial or name
             if (nameBits.length < 2) {
                 // only have one name so assume it's last
-                familyName = nameBits[0];
-                normalizedContact.familyName = nameBits[0];
+                
+                normalizedContact.name.familyName = nameBits[0];
             } else {
-                normalizedContact.givenName = nameBits[0];
-                normalizedContact.familyName = nameBits[nameBits.length - 1];
+                normalizedContact.name.givenName = nameBits[0];
+                normalizedContact.name.familyName = nameBits[nameBits.length - 1];
 
             }
             if (contact.phone) {
@@ -1591,7 +1785,14 @@ angular.module('tbd', []);
                 
             }
             if (contact.emails) {
-                normalizedContact.emails = contact.emails;
+                normalizedContact.emails = [];
+                for (var i = 0; i < contact.emails.length; i++) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: contact.emails[i]
+                    })
+                }
+               // normalizedContact.emails = contact.emails;
             }
 
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
@@ -2078,8 +2279,7 @@ angular.module('tbd', []);
             return function (item) {
                 if (item) {
                     var finalNum = ""
-                    // ^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\/]?){0,})(?:[\-\.\ \\/]?(?:#|ext\.?|extension|x)[\-\.\ \\/]?(\d+))?$
-
+  
                     // replace multiple spaces, newlines etc. with single space
                     var str = item.replace(/\s\s+/g, ' ');
 
@@ -3069,7 +3269,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
     "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
-    "<h1>Sentri Details</h1>\n" +
+    "<h1>Sentrilock Details</h1>\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
     "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}}  {{ sentri.AgentLastName }}</h3>\n" +
@@ -3081,11 +3281,18 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </md-toolbar>\n" +
     "        <md-dialog-content>\n" +
     "            <div>\n" +
-    "                <h5 class=\"order-address\">{{sentri.Created | date: \"short\" }} - {{sentri.Created | timeago }}</h5>\n" +
+    "                <h5 class=\"order-address\">{{sentri.UTCAccessedDT | date: \"short\" }} - {{sentri.UTCAccessedDT | timeago }}</h5>\n" +
     "\n" +
-    "                <!-- <h4>\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </h4> -->\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                 <span ng-if=\"sentri.Association && sentri.Association !== 'null'\">\n" +
+    "                    {{sentri.Association}}\n" +
+    "                </span> \n" +
+    "                <h5 ng-if=\"sentri.CompanyName\">\n" +
+    "                    {{sentri.CompanyName}}\n" +
+    "                </h5> \n" +
     "                <hr>\n" +
     "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
     "                <div ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber' class=\"contact-method\">\n" +
@@ -3118,7 +3325,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
     "                        <span class=\"contact-value\">\n" +
-    "                            {{ sentri.emailAddy }}\n" +
+    "                            <a href=\"mailto:{{ sentri.emailAddy }}?Subject=Re%20your%20Sentrilock%20entry%20on%20my%20listing...\" target=\"_top\"> {{ sentri.emailAddy }}</a>\n" +
+    "                  \n" +
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -3126,8 +3334,12 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <div ng-show='sentri.emailAddy2 && sentri.emailAddy2 != sentri.emailAddy' class=\"md-3-line\">\n" +
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
+    "                        <!--<span class=\"contact-value\">\n" +
     "                            {{ sentri.emailAddy2 }}\n" +
+    "                    </span>-->\n" +
+    "                    <span class=\"contact-value\">\n" +
+    "                            <a href=\"mailto:{{ sentri.emailAddy2 }}?Subject=Re%20your%20Sentrilock%20entry%20on%20my%20listing...\" target=\"_top\"> {{ sentri.emailAddy2 }}</a>\n" +
+    "                  \n" +
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -3322,13 +3534,16 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <div class=\"feedback-div\">\n" +
     "\n" +
     "\n" +
-    "        <div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  <!--| maxRecords: 5-->\n" +
-    "           \n" +
+    "        <!--<div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  | maxRecords: 5-->\n" +
+    "        <div ng-repeat=\"entry in entries\" ng-click=\"show($event, entry)\">  \n" +
     "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
     "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "            <span>{{entry.UTCAccessedDT | date: 'short'}} {{entry.UTCAccessedDT | timeago}}</span>\n" +
     "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "            <p>Access type: <span class=\"card-value\">{{entry.AccessType}}</span> \n" +
+    "\n" +
+    "\n" +
+    "            </p>\n" +
     "           \n" +
     "            \n" +
     "        </div>\n" +
@@ -3602,12 +3817,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "               <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
-    "            <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
-    "        </md-button>\n" +
-    "                <div class='date-row' >\n" +
-    "\n" +
-    "                    </div>\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "                <div class='date-row' > </div>\n" +
     "                <span class=\"feedback\">\n" +
     "                    \"{{showing.feedback}}\"\n" +
     "                </span>\n" +

@@ -12,13 +12,16 @@
     <div class="feedback-div">
 
 
-        <div ng-repeat="entry in entries | filterOutOneDayCodeGen" ng-click="show($event, entry)">  <!--| maxRecords: 5-->
-           
+        <!--<div ng-repeat="entry in entries | filterOutOneDayCodeGen" ng-click="show($event, entry)">  | maxRecords: 5-->
+        <div ng-repeat="entry in entries" ng-click="show($event, entry)">  
             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
 
-            <span>{{entry.UTCAccessedDT}} </span>
+            <span>{{entry.UTCAccessedDT | date: 'short'}} {{entry.UTCAccessedDT | timeago}}</span>
 
-            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>
+            <p>Access type: <span class="card-value">{{entry.AccessType}}</span> 
+
+
+            </p>
            
             
         </div>

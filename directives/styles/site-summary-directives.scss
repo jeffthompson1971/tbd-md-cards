@@ -1,5 +1,10 @@
 @import "../../assets/scss/snaplistingstheme";
 
+.card-value {
+  color: #636075;
+  font-weight: 700;
+}
+
 b {
     font-weight: 700;
 }
@@ -194,7 +199,7 @@ md-card-image-overlay {
 
 
 .site-summary-card {
-    
+  margin: inherit;  
   img {
       
       max-width: 100%;
@@ -373,6 +378,8 @@ md-card-trulia .md-card-image {
  
   .md-icon-button {
    margin: 0 0; 
+  //  width: 32px;
+  //  height: 32px;
 
   }
   .md-button {
@@ -382,7 +389,7 @@ md-card-trulia .md-card-image {
     height: inherit;
     width: inherit;
     position: relative;
-    bottom: 4px;
+  /*  bottom: 4px; */
     
     
   /*  font-size: 24px;*/
@@ -636,6 +643,8 @@ md-card-zillow .md-card-image {
       font-size: 20px;
       color: #908FA0;
       font-weight: 700;
+      width: 32px;
+      height: 32px;
     }
 
 

@@ -48,12 +48,10 @@
         <md-dialog-content>
             <div>
                 <h5 class="order-address">{{showing.startTime | date: "short" }} - {{showing.startTime | timeago }}</h5>
-               <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(showing)">
-            <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
-        </md-button>
-                <div class='date-row' >
-
-                    </div>
+                <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(showing)">
+                    <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
+                </md-button>
+                <div class='date-row' > </div>
                 <span class="feedback">
                     "{{showing.feedback}}"
                 </span>

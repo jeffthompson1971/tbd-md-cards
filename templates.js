@@ -497,7 +497,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
     "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
-    "<h1>Sentri Details</h1>\n" +
+    "<h1>Sentrilock Details</h1>\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
     "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}}  {{ sentri.AgentLastName }}</h3>\n" +
@@ -509,11 +509,18 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </md-toolbar>\n" +
     "        <md-dialog-content>\n" +
     "            <div>\n" +
-    "                <h5 class=\"order-address\">{{sentri.Created | date: \"short\" }} - {{sentri.Created | timeago }}</h5>\n" +
+    "                <h5 class=\"order-address\">{{sentri.UTCAccessedDT | date: \"short\" }} - {{sentri.UTCAccessedDT | timeago }}</h5>\n" +
     "\n" +
-    "                <!-- <h4>\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </h4> -->\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                 <span ng-if=\"sentri.Association && sentri.Association !== 'null'\">\n" +
+    "                    {{sentri.Association}}\n" +
+    "                </span> \n" +
+    "                <h5 ng-if=\"sentri.CompanyName\">\n" +
+    "                    {{sentri.CompanyName}}\n" +
+    "                </h5> \n" +
     "                <hr>\n" +
     "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
     "                <div ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber' class=\"contact-method\">\n" +
@@ -546,7 +553,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
     "                        <span class=\"contact-value\">\n" +
-    "                            {{ sentri.emailAddy }}\n" +
+    "                            <a href=\"mailto:{{ sentri.emailAddy }}?Subject=Re%20your%20Sentrilock%20entry%20on%20my%20listing...\" target=\"_top\"> {{ sentri.emailAddy }}</a>\n" +
+    "                  \n" +
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -554,8 +562,12 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <div ng-show='sentri.emailAddy2 && sentri.emailAddy2 != sentri.emailAddy' class=\"md-3-line\">\n" +
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
+    "                        <!--<span class=\"contact-value\">\n" +
     "                            {{ sentri.emailAddy2 }}\n" +
+    "                    </span>-->\n" +
+    "                    <span class=\"contact-value\">\n" +
+    "                            <a href=\"mailto:{{ sentri.emailAddy2 }}?Subject=Re%20your%20Sentrilock%20entry%20on%20my%20listing...\" target=\"_top\"> {{ sentri.emailAddy2 }}</a>\n" +
+    "                  \n" +
     "                    </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -750,13 +762,16 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <div class=\"feedback-div\">\n" +
     "\n" +
     "\n" +
-    "        <div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  <!--| maxRecords: 5-->\n" +
-    "           \n" +
+    "        <!--<div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  | maxRecords: 5-->\n" +
+    "        <div ng-repeat=\"entry in entries\" ng-click=\"show($event, entry)\">  \n" +
     "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
     "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
+    "            <span>{{entry.UTCAccessedDT | date: 'short'}} {{entry.UTCAccessedDT | timeago}}</span>\n" +
     "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
+    "            <p>Access type: <span class=\"card-value\">{{entry.AccessType}}</span> \n" +
+    "\n" +
+    "\n" +
+    "            </p>\n" +
     "           \n" +
     "            \n" +
     "        </div>\n" +
@@ -1030,12 +1045,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <md-dialog-content>\n" +
     "            <div>\n" +
     "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "               <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
-    "            <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
-    "        </md-button>\n" +
-    "                <div class='date-row' >\n" +
-    "\n" +
-    "                    </div>\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "                <div class='date-row' > </div>\n" +
     "                <span class=\"feedback\">\n" +
     "                    \"{{showing.feedback}}\"\n" +
     "                </span>\n" +

@@ -77,7 +77,7 @@
             $mdDialog.hide(answer);
         };
         $scope.dial = function (number) {
-            if (window.cordova) {
+            if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
 
@@ -138,16 +138,7 @@
             }
 
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
-            // 
-
-            // console.log(phone);
-            // $scope.hide()
-            // $cordovaContacts.save({
-            //     nickname: name,
-            //     phoneNumbers: [phone]
-            // }).then(function (result) {
-            //     console.log("Saved contact", result);
-            // });
+ 
         }
     };
 
