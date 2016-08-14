@@ -137,7 +137,7 @@
                // normalizedContact.emails = contact.emails;
             }
             
-            normalizedContact.notes = "from showings.com feedback";
+            normalizedContact.note = "From showings.com feedback";
 
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
  

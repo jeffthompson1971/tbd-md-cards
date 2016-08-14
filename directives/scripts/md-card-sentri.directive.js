@@ -156,7 +156,7 @@
             if (organizations.length > 0) {
                 normalizedContact.organizations = organizations;
             }
-            normalizedContact.notes = "from Sentrilock entry log";
+            normalizedContact.note = "From SentriLock entry log.";
             // fire it off to our contacts module to do the heavy lifting
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
         }
