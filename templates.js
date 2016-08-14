@@ -1022,7 +1022,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "    \n" +
     "\n" +
-    "\n" +
     "</style>\n" +
     "\n" +
     "<md-dialog id=\"showingDetails\"\" class=\"\" aria-label=\"Showing Details\">\n" +
@@ -1048,7 +1047,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
     "                </md-button>\n" +
-    "                <div class='date-row' > </div>\n" +
+    "                <div class='date-row'> </div>\n" +
     "                <span class=\"feedback\">\n" +
     "                    \"{{showing.feedback}}\"\n" +
     "                </span>\n" +
@@ -1261,7 +1260,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div> <md-card-stat title=\"X-OUTs\" stat-model=\"listing.activitySummary[0].listing_prefs_xOutCnt\"></md-card-stat></div>\n" +
     "\n" +
     "            <div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title=\"TOTAL\" value=\"{{listing.activitySummary[0].listing_views_totalCnt}}\"></md-card-stat></div>\n" +
-    "\n" +
     "\n" +
     "            <div ng-show='listing.summary.listing_views_sevenDayCnt' class=\"summary-item seven-count\">\n" +
     "                {{listing.summary.listing_views_sevenDayCnt}} in last 7 days\n" +

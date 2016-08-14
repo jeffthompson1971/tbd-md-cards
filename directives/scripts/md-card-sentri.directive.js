@@ -37,10 +37,7 @@
         };
     }
 
-    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$filter'];
-
-
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, sentri) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, sentri) {
 
         $scope.sentri = sentri;
 
@@ -68,23 +65,21 @@
             var normalizedContact = {
                 name: {}
             };
-            // first get the first and last name 
+            // first try using AgentFirstName and last...
             if (entry.AgentFirstName && entry.AgentLastName) {
                 normalizedContact.name.familyName = entry.AgentLastName;
                 normalizedContact.name.givenName = entry.AgentFirstName;
 
             } else if (entry.ContactName) {
+                // if that's not there try ContactName
                 var nameBits = contact.name.split(" ");
                 if (nameBits.length < 2) {
                     // only have one name so assume it's first
-
                     normalizedContact.name.givenName = nameBits[0];
                 } else {
                     normalizedContact.name.givenName = nameBits[0];
                     normalizedContact.name.familyName = nameBits[nameBits.length - 1];
-
                 }
-
 
             } else {
                 alert("need a friggen name");
@@ -102,7 +97,6 @@
                         type: "work",
                         value: normCtNum
                     })
-
                 }
                 if (entry.PhoneNumber) {
                     normPhnNum = $filter('normalizePhoneNumber')(entry.PhoneNumber);
@@ -113,7 +107,6 @@
                             value: normPhnNum
                         })
                     }
-
                 }
             }
             // finally grab any emails...
@@ -136,33 +129,54 @@
                 }
                 // normalizedContact.emails = contact.emails;
             }
+            /*
+                alert("Pref: "      + contacts[i].organizations[j].pref       + "\n" +
+                "Type: "        + contacts[i].organizations[j].type       + "\n" +
+                "Name: "        + contacts[i].organizations[j].name       + "\n" +
+                "Department: "  + contacts[i].organizations[j].department + "\n" +
+                "Title: "       + contacts[i].organizations[j].title);
+            */
 
+            var organizations = [];
+            // add Association or CompanyName
+            if (entry.Association && entry.Association.length > 1) {
+                organizations.push({
+                    type: "Association",
+                    name: entry.Association
+
+                })
+            }
+            if (entry.CompanyName && entry.CompanyName.length > 1) {
+                organizations.push({
+                    type: "Company",
+                    name: entry.CompanyName
+                })
+            }
+            // if we have any organizations add them ...
+            if (organizations.length > 0) {
+                normalizedContact.organizations = organizations;
+            }
+            normalizedContact.notes = "from Sentrilock entry log";
+            // fire it off to our contacts module to do the heavy lifting
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
-            // 
-
-            // console.log(phone);
-            // $scope.hide()
-            // $cordovaContacts.save({
-            //     nickname: name,
-            //     phoneNumbers: [phone]
-            // }).then(function (result) {
-            //     console.log("Saved contact", result);
-            // });
         }
     };
 
+    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$filter'];
+
     function MdCardSentriController($scope, $mdDialog, $filter) {
+
         var vm = this;
 
         var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
         if (vm.limit && vm.limit != -1) {
-            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
-          //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
-        } else {
-           // $scope.entries = vm.sentrilock.entries;
-            $scope.entries = entriesNoOneDay
 
+            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+
+        } else {
+            // $scope.entries = vm.sentrilock.entries;
+            $scope.entries = entriesNoOneDay;
         }
 
         vm.mdDialog = $mdDialog;
@@ -200,16 +214,15 @@
             //     $scope.entries = data.entries
 
             // }
-               var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+            var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
-        if (vm.limit && vm.limit != -1) {
-            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
-          //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
-        } else {
-           // $scope.entries = vm.sentrilock.entries;
-            $scope.entries = entriesNoOneDay
-
-        }
+            if (vm.limit && vm.limit != -1) {
+                $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+                //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+            } else {
+                // $scope.entries = vm.sentrilock.entries;
+                $scope.entries = entriesNoOneDay
+            }
         });
     }
 })();

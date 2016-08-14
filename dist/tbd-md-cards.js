@@ -780,10 +780,7 @@ angular.module('tbd', []);
         };
     }
 
-    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$filter'];
-
-
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, sentri) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, sentri) {
 
         $scope.sentri = sentri;
 
@@ -811,12 +808,13 @@ angular.module('tbd', []);
             var normalizedContact = {
                 name: {}
             };
-            // first get the first and last name 
+            // first try using AgentFirstName and last...
             if (entry.AgentFirstName && entry.AgentLastName) {
                 normalizedContact.name.familyName = entry.AgentLastName;
                 normalizedContact.name.givenName = entry.AgentFirstName;
 
             } else if (entry.ContactName) {
+                // if that's not there try ContactName
                 var nameBits = contact.name.split(" ");
                 if (nameBits.length < 2) {
                     // only have one name so assume it's first
@@ -825,7 +823,6 @@ angular.module('tbd', []);
                 } else {
                     normalizedContact.name.givenName = nameBits[0];
                     normalizedContact.name.familyName = nameBits[nameBits.length - 1];
-
                 }
 
 
@@ -879,33 +876,55 @@ angular.module('tbd', []);
                 }
                 // normalizedContact.emails = contact.emails;
             }
+            /*
+                alert("Pref: "      + contacts[i].organizations[j].pref       + "\n" +
+                "Type: "        + contacts[i].organizations[j].type       + "\n" +
+                "Name: "        + contacts[i].organizations[j].name       + "\n" +
+                "Department: "  + contacts[i].organizations[j].department + "\n" +
+                "Title: "       + contacts[i].organizations[j].title);
+            */
 
+            var organizations = [];
+            // add Association or CompanyName
+            if (entry.Association && entry.Association.length > 1) {
+                organizations.push({
+                    type: "Association",
+                    name: entry.Association
+
+                })
+            }
+            if (entry.CompanyName && entry.CompanyName.length > 1) {
+                organizations.push({
+                    type: "Company",
+                    name: entry.CompanyName
+                })
+
+            }
+            // if we have any organizations add them ...
+            if (organizations.length > 0) {
+                normalizedContact.organizations = organizations;
+            }
+            // fire it off to our contacts module to do the heavy lifting
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
-            // 
-
-            // console.log(phone);
-            // $scope.hide()
-            // $cordovaContacts.save({
-            //     nickname: name,
-            //     phoneNumbers: [phone]
-            // }).then(function (result) {
-            //     console.log("Saved contact", result);
-            // });
+ 
         }
     };
 
+    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$filter'];
+
     function MdCardSentriController($scope, $mdDialog, $filter) {
+
         var vm = this;
 
         var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
         if (vm.limit && vm.limit != -1) {
-            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
-          //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
-        } else {
-           // $scope.entries = vm.sentrilock.entries;
-            $scope.entries = entriesNoOneDay
 
+            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+
+        } else {
+            // $scope.entries = vm.sentrilock.entries;
+            $scope.entries = entriesNoOneDay;
         }
 
         vm.mdDialog = $mdDialog;
@@ -943,16 +962,15 @@ angular.module('tbd', []);
             //     $scope.entries = data.entries
 
             // }
-               var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+            var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
-        if (vm.limit && vm.limit != -1) {
-            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
-          //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
-        } else {
-           // $scope.entries = vm.sentrilock.entries;
-            $scope.entries = entriesNoOneDay
-
-        }
+            if (vm.limit && vm.limit != -1) {
+                $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+                //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+            } else {
+                // $scope.entries = vm.sentrilock.entries;
+                $scope.entries = entriesNoOneDay
+            }
         });
     }
 })();
@@ -1796,16 +1814,7 @@ rowcolor
             }
 
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
-            // 
-
-            // console.log(phone);
-            // $scope.hide()
-            // $cordovaContacts.save({
-            //     nickname: name,
-            //     phoneNumbers: [phone]
-            // }).then(function (result) {
-            //     console.log("Saved contact", result);
-            // });
+ 
         }
     };
 
@@ -3794,7 +3803,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "    \n" +
     "\n" +
-    "\n" +
     "</style>\n" +
     "\n" +
     "<md-dialog id=\"showingDetails\"\" class=\"\" aria-label=\"Showing Details\">\n" +
@@ -3820,7 +3828,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
     "                </md-button>\n" +
-    "                <div class='date-row' > </div>\n" +
+    "                <div class='date-row'> </div>\n" +
     "                <span class=\"feedback\">\n" +
     "                    \"{{showing.feedback}}\"\n" +
     "                </span>\n" +
@@ -4033,7 +4041,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div> <md-card-stat title=\"X-OUTs\" stat-model=\"listing.activitySummary[0].listing_prefs_xOutCnt\"></md-card-stat></div>\n" +
     "\n" +
     "            <div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title=\"TOTAL\" value=\"{{listing.activitySummary[0].listing_views_totalCnt}}\"></md-card-stat></div>\n" +
-    "\n" +
     "\n" +
     "            <div ng-show='listing.summary.listing_views_sevenDayCnt' class=\"summary-item seven-count\">\n" +
     "                {{listing.summary.listing_views_sevenDayCnt}} in last 7 days\n" +
