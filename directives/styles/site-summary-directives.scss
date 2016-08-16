@@ -35,8 +35,11 @@ a:link {
 
  md-card {
   label {
-    font-size: 20px !important;
+    font-size: 12px !important;
   }
+ }
+ #stats-table label {
+   font-size: 20px !important;
  }
 
  #showingDetails md-content {

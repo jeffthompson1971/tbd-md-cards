@@ -3,6 +3,10 @@
         display: table;
         width: 100%;
         table-layout: fixed;
+
+        label {
+            font-size: 20px !important;
+        }
    
     
     .row {
@@ -173,7 +177,7 @@
 // /*  stuff for small screens  */
 @media screen and (max-width: 400px) {
     label { 
-        font-size: 20px !important; 
+        font-size: 12px !important; 
     }
    .clicks-div, .positive-div, .showings-div .stat-icon {
       font-size: 10px;
