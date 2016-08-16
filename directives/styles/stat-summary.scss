@@ -177,10 +177,16 @@
 // /*  stuff for small screens  */
 @media screen and (max-width: 400px) {
     label { 
-        font-size: 12px !important; 
+        font-size: 20px !important; 
     }
    .clicks-div, .positive-div, .showings-div .stat-icon {
       font-size: 10px;
+      /*width: 12px;*/
+
+   }
+
+   .clicks-div, .positive-div, .showings-div label {
+      font-size: 20px !important;
       /*width: 12px;*/
 
    }
