@@ -41,7 +41,7 @@
 
         $scope.sentri = sentri;
 
-        $scope.showActions = true; //IS_MOBILE_APP;
+        $scope.showActions = IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
