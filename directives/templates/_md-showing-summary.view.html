@@ -12,20 +12,31 @@
         <div ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)">
 
             <label><b> {{showing.contact.name}}</b></label>
-            <span>{{showing.startTime | timeago }}</span>
-            <span>{{showing.startTime | date:'short'}}</span>
-            <p class="feedback">"{{showing.feedback}}"</p>
+            <div class="time-wrapper">
+                <span class=datetime>{{showing.startTime | timeago }}</span>
+                <span class=datetime>{{showing.startTime | date:'short'}}</span><br>
+                 <span class=datetime>{{showing.type.name}} 
+                 &middot;
+                {{showing.type.result}}
+                <div ng-if="showing.type.message && showing.type.message.length>0"> &middot;</div>
+                 {{showing.type.message}} 
+                </span>
+            </div>
+           
+            <p style="clear: both;" ng-if="showing.feedback" class="feedback">"{{showing.feedback}}"</p>
+            <p style="clear: both;" ng-if="!showing.feedback" class="feedback"><i>"No feedback was provided by agent."</i></p>
+             <md-divider ng-if="!$last"></md-divider>
 
         </div>
 
-        <div ng-if="vm.limit != -1 && vm.showings.length > vm.limit" ng-click="showMoreFeedback()">
+        <div class="footer" ng-if="vm.limit != -1 && vm.showings.length > vm.limit" ng-click="showMoreFeedback()">
             <span style="width: 100%">
-            <md-button style="float: left;" class="md-icon-button" ui-sref="app.feedback({card:'showings'})">
-                <md-icon md-svg-src="assets/icons/ic_more_horiz_black_48px.svg" aria-label="more"></md-icon>
-            </md-button>
+                <md-button style="float: left;" class="md-icon-button" ui-sref="app.feedback({card:'showings'})">
+                    <md-icon md-svg-src="assets/icons/ic_more_horiz_black_48px.svg" aria-label="more"></md-icon>
+                </md-button>
 
-          <span class="nofm">{{vm.limit}} of {{vm.showings.length}}</span>
-          </span>
+                 <span class="nofm">{{vm.limit}} of {{vm.showings.length}}</span>
+            </span>
 
         </div>
         <!--

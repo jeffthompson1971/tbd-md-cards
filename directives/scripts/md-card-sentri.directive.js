@@ -109,9 +109,8 @@
                     }
                 }
             }
-            // finally grab any emails...
 
-
+            // now grab any emails...
             if (entry.emailAddy || entry.emailAddy2) {
                 normalizedContact.emails = [];
                 if (entry.emailAddy) {
@@ -127,7 +126,7 @@
                     });
 
                 }
-                // normalizedContact.emails = contact.emails;
+
             }
             /*
                 alert("Pref: "      + contacts[i].organizations[j].pref       + "\n" +
@@ -206,21 +205,13 @@
 
             if (_.isUndefined(data))
                 return;
-            // if (vm.limit && vm.limit != -1) {
-
-            //     $scope.entries = data.entries.slice(0, vm.limit);
-
-            // } else {
-            //     $scope.entries = data.entries
-
-            // }
+ 
             var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
             if (vm.limit && vm.limit != -1) {
                 $scope.entries = entriesNoOneDay.slice(0, vm.limit);
-                //  $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+ 
             } else {
-                // $scope.entries = vm.sentrilock.entries;
                 $scope.entries = entriesNoOneDay
             }
         });

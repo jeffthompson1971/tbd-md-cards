@@ -69,7 +69,7 @@
                 </div>
                 </a>
                 <div ng-click="dial(showing.contact.phone.office)" ng-if='showing.contact.phone && showing.contact.phone.office' class="contact-method">
-                    <!--<a class='plain' ng-href="tel:+1-{{showing.contact.phone.office}} ">-->
+                  
                        <a class='plain'  ng-href="">
  
 
@@ -92,20 +92,11 @@
                     </div>
                 </div>
 
-
+            <div ng-if="showActions" style="width: 100%; height: 30px"></div>
             </div>
 
 
         </md-dialog-content>
-        <!--<div class="md-actions" layout="row">-->
-
-        <!--<span flex></span>-->
-        <!--<md-button ng-show="supersonic != undefined" ng-click="answer('not useful')" >-->
-        <!--PHONE-->
-        <!--</md-button>-->
-        <!--<md-button ng-click="answer('useful')" style="margin-right:20px;" >-->
-        <!--EMAIL-->
-        <!--</md-button>-->
-        <!--</div>-->
+       
     </form>
 </md-dialog>

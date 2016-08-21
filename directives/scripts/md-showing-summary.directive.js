@@ -65,8 +65,7 @@
 
         $scope.showing = showing;
 
-        $scope.showActions = true; //IS_MOBILE_APP;
-
+        $scope.showActions = IS_MOBILE_APP;
         $scope.hide = function () {
             $mdDialog.hide();
         };
@@ -112,7 +111,6 @@
                 }
                 if (contact.phone.office) {
 
-                    //var tmp = $filter('normalizePhoneNumber')(contact.phone.office);
                     normalizedContact.phoneNumbers.push({
                         type: "work",
                         value: $filter('normalizePhoneNumber')(contact.phone.office)
@@ -271,4 +269,19 @@
 },
 "name":"Justin Mcandrews"
 }
+
+OR type is :
+"9:45 AM - 11:30 AM"
+type: {
+    msg: ""
+    name: "Showing"
+    result:"Setup"
+
+msg:""
+name:"Inspection"
+result:"Setup"
+
+msg:""
+name :"Showing"
+result :"In Process" or "Declined By Seller"
 */

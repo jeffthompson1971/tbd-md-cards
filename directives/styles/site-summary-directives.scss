@@ -1,5 +1,30 @@
 @import "../../assets/scss/snaplistingstheme";
 
+
+$font-size: 14px;
+$line-height: 1.4;
+$lines-to-show: 2;
+
+md-card {
+  min-width: 320px !important;
+}
+
+.site-summary-card p.feedback {
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  
+  height: $font-size*$line-height*$lines-to-show; /* Fallback for non-webkit */
+  margin: 0 auto;
+  font-size: $font-size;
+  line-height: $line-height;
+  -webkit-line-clamp: $lines-to-show;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
 .card-value {
   color: #636075;
   font-weight: 700;
@@ -20,15 +45,21 @@ a:link {
 
 #showingDetails {
 
+   
+
   .nofm {
     float: right;
     font-size: .8em;
   }
 
+
   .feedback {
     font-size: 16px;
     font-weight: 800;
   }
+
+
+
 }
 
 @media screen and (max-width: 400px) {
@@ -44,6 +75,8 @@ a:link {
 
  #showingDetails md-content {
    font-size: .8em !important;
+
+  
  }
  .feedback {
    font-size: .9em;
@@ -328,7 +361,7 @@ md-card-redfin .md-card-image {
 }
 
 .left {
-  padding: 4px;
+  /*padding: 4px;*/
   max-width: 40%
 }
 
@@ -436,12 +469,32 @@ md-card-zillow .md-card-image {
   font-size: 18px;
 }
 
-.feedback-div div {
-  padding: 8px;
+.feedback-div  {
+
+  .footer {
+    padding-right: 10px;
+    width: 100%;
+    font-size: 12px;
+  }
+  
+  .time-wrapper {
+      white-space: nowrap;
+    /*  display: inline-block;*/
+      padding: 2px;
+      float: right;
+      line-height: .8em;
+      
+
+    }
+    div {
+    padding: 1%;
+
+  
+  }
 }
 
 .feedback-div div label {
-  font-size: 12px;
+  font-size: 14px  !important;
   color: #636075;
 }
 
@@ -536,12 +589,13 @@ md-card-zillow .md-card-image {
   margin-top: 2%
 }
 
-.feedback-div div span {
-  font-size: 12px;
-  float: right;
-  margin-right: 10px;
-  margin-top: 2px;
-  color: #636075;
+.feedback-div div span.datetime {
+      font-size: 12px;
+    float: right;
+    margin-left: 5px;
+    /* margin-top: 2px; */
+    color: #636075;
+    font-weight: 800;
 }
 
 .feedback-div div p {
