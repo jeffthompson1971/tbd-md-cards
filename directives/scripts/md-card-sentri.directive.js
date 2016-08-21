@@ -317,3 +317,43 @@ rowcolor
 :
 "#FF9"
 */
+/*
+
+// STRANGE CASE
+{
+"AccessedByContact":"",
+"RoleCode":"",
+"Association":null,
+"OwnerAgentID":"AG000000766B",
+"LBID":"LB0000009AEV",
+"FromOneDayCode":false,
+"UserID":"US000000824J",
+"Origin":"",
+"emailAddy":null,
+"Time":"19:17:04",
+"Created":"2016-08-15 20:19:09",
+"Date":"Monday, Aug 01 2016",
+"UserLastName":"Tabick",
+"EmailAddress":"",
+"LoanNumber":"None",
+"ContactNumber":null,
+"emailAddy2":null,
+"AccessedByName":"ROB WILDER 847-951-3033",
+"ContactName":"ROB WILDER 847-951-3033",
+"AgentFirstName":null,
+"Location":"9617 Richardson Road SPRING GROVE IL 60081",
+"PhoneNumber":"",
+"CompanyName":"",
+"AgentID":null,
+"AccessLogID":"AL00002JSBSK",
+"rowcolor":"#FF9",
+"AccessType":"1DayCode",
+"AgentLastName":null,
+"UserFirstName":"Nicholas",
+"LBSerialNumber":"00470838",
+"AccessedBy":"LBSNCNTCODE1",
+"UTCAccessedDT":"Monday, Aug 01 2016 - 07:17 PM"
+},
+
+
+*/

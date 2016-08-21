@@ -753,10 +753,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
-    "       \n" +
+    "\n" +
     "\n" +
     "        <div class=\"logo\">\n" +
-    "             <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
+    "            <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -765,45 +765,38 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "\n" +
     "        <!--<div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  | maxRecords: 5-->\n" +
-    "        <div ng-repeat=\"entry in entries\" ng-click=\"show($event, entry)\">  \n" +
+    "        <div ng-repeat=\"entry in entries\" ng-click=\"show($event, entry)\">\n" +
     "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "            <div class=\"time-wrapper\">\n" +
+    "                <span class=datetime> {{entry.UTCAccessedDT | timeago}}</span>\n" +
+    "                <span class=datetime>&middot;</span>\n" +
+    "                <span class=datetime>{{entry.UTCAccessedDT | date: 'short'}}</span>\n" +
     "\n" +
-    "            <span>{{entry.UTCAccessedDT | date: 'short'}} {{entry.UTCAccessedDT | timeago}}</span>\n" +
     "\n" +
-    "            <p>Access type: <span class=\"card-value\">{{entry.AccessType}}</span> \n" +
+    "                <br>\n" +
+    "                <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>\n" +
+    "            </div>\n" +
     "\n" +
+    "            <p style=\"clear: both;\" class=\"feedback\">\n" +
+    "                Access type: <span class=\"card-value\">{{entry.AccessType}}</span>\n" +
+    "                <br> Location: <span class=\"card-value\">{{entry.Location}} </span>\n" +
     "\n" +
     "            </p>\n" +
-    "           \n" +
-    "            \n" +
+    "\n" +
+    "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "        </div>\n" +
     "\n" +
-    "        \n" +
-    "<!--\n" +
-    " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\" ng-click=\"show($event, entry)\">\n" +
-    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
-    "            \n" +
-    "        </div>-->\n" +
-    "\n" +
-    "         <div ng-if=\"vm.limit != -1 && vm.sentrilock.entries.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.sentrilock.entries.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
     "            <span style=\"width: 100%\">\n" +
     "            <md-button style=\"float: left\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'sentri'})\">\n" +
     "                <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
     "            </md-button>\n" +
     "\n" +
     "          <span class=\"nofm\">{{vm.limit}} of {{vm.sentrilock.entries.length}}</span>\n" +
-    "          </span>\n" +
+    "            </span>\n" +
     "\n" +
     "        </div>\n" +
-    "        <!--<div ng-hide=\"data.entries <=5\" ng-click=\"showMoreFeedback()\" >\n" +
-    "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +
-    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
     "\n" +
-    "        </div>-->\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
@@ -1766,6 +1759,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <div class=\"time-wrapper\">\n" +
     "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                <span class=datetime>&middot;</span> \n" +
     "                <span class=datetime>{{showing.startTime | date:'short'}}</span><br>\n" +
     "                 <span class=datetime>{{showing.type.name}} \n" +
     "                 &middot;\n" +
