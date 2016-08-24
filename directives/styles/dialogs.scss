@@ -1,59 +1,81 @@
-
 md-dialog {
     max-width: 80%;
-    width: auto;
+   
     max-height: 80%;
-   // padding-bottom: 30px;
+    // padding-bottom: 30px;
     min-width: 300px;
-
-
+    width: 600px;
+    font-size: 16px;
     .md-fab {
-        background-color: #afafaf !important;
+        background-color: #fff !important;
         width: 42px !important;
         height: 42px !important;
-       
+    }
+    .md-fab-bottom-right {
+        right: 6px !important;
+        bottom: 6px !important;
+    }
+    .orgs {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+md-dialog-content {
     
-    }
-     .md-fab-bottom-right {
-            right: 6px !important;
-            bottom: 6px !important;
-   
-        }
-
-}
-
-md-dialog-content  {
-
     padding: 20px;
+
+     table, th, td {
+        padding: 4px;
+        .label {
+             white-space: nowrap;
+        font-weight: 600;
+
+        }
+        .value {
+             color: #636075;
+        font-weight: 800;
+        }
+    border: none;
 }
-  .contact-method {
-        padding-top: 4px;
-        padding-bottom: 4px;
+}
+.contact-method {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+@media screen and (max-width: 767px) {
+
+    md-dialog {
+        max-width: 95%;
+        //width: 500px;
+        max-height: 95%;
+        font-size: 14px;
     }
 
+    md-dialog-content {
 
-@media screen and (max-width: 500px) {
+        padding: 6px;
 
-md-dialog {
-      max-width: 95%;
-        width: 500px;
+        .orgs {
+            margin-top: 4px;
+        }
+         table, th, td {
+             padding: 2px 4px 2px 4px;
+         }
 
-}
 
-md-dialog-content  {
+    }
+    md-card {
+        label {
+            font-size: 12px !important;
+        }
+    }
 
-    padding: 10px;
-}
- md-card {
-  label {
-    font-size: 12px !important;
-  }
- }
+    md-content {
+        font-size: .8em !important;
+    }
 
-  md-content {
-   font-size: .8em !important;
- }
- .feedback {
-   font-size: .9em;
- }
+    .feedback {
+        font-size: .9em;
+    }
 }

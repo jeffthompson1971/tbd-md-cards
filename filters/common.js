@@ -35,7 +35,7 @@
         })
 
         .filter('normalizePhoneNumber', function () {
-            return function (item) {
+            return function (item, forDialer) {
                 if (item) {
                     var finalNum = ""
   
@@ -72,7 +72,12 @@
                             finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
                         }
                         if (ext != "") {
-                            finalNum += " ext. " + ext;
+                            if  (forDialer != undefined && forDialer === true) {
+                                finalNum += ";" + ext;
+                            } else {
+                                finalNum += " ext. " + ext;
+                            }
+                        
                         }
                         return finalNum;
 
