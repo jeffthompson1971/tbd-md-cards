@@ -70,6 +70,7 @@ a:link {
     .feedback {
         font-size: 16px;
         font-weight: 800;
+      
     }
 }
 @media screen and (max-width: 400px) {
@@ -504,8 +505,9 @@ md-card-image-overlay {
     .feedback-div div p {
         margin-bottom: 0px;
         margin-top: 5px;
-        font-size: 14px;
+        font-size: 16px;
         color: #636075;
+        padding: 0px
     }
     // contains all the colored summary boxes
     // at the top of the detail view.

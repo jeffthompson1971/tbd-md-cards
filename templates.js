@@ -491,7 +491,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog id=\"showingDetails\" aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"sentrilockDetails\" aria-label=\"Sentrilock Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
@@ -667,36 +667,36 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
     "\n" +
     "\n" +
-    "    <form ng-repeat=\"entry in sentrilock.entries\">\n" +
+    "    <div ng-repeat=\"entry in sentrilock.entries\">\n" +
+    "       \n" +
     "        <md-toolbar ng-if=\"$index == 0\">\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
-    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
-    "<md-button class=\"md-icon-button\" ng-if=\"$index == 0\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                        <md-button class=\"md-icon-button\" ng-if=\"$index == 0\">\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
-    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
-    "                <!--<h3>{{entry.CompanyName}}</h3>-->\n" +
+    " \n" +
     "                <span flex></span>\n" +
-    "                \n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\"  ng-click=\"cancel()\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "\n" +
+    "                <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" ng-click=\"cancel()\" aria-label=\"Close dialog\"></md-icon>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
     "        </md-toolbar>\n" +
-    "        \n" +
+    "\n" +
     "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
     "            <div>\n" +
-    "                  \n" +
+    "\n" +
     "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
-    "                \n" +
+    "\n" +
     "                <h3>{{entry.CompanyName}}</h3>\n" +
-    "                \n" +
+    "\n" +
     "                <h3>{{entry.City}}</h3>\n" +
     "                <h4>{{entry.State}}</h4>\n" +
     "                <h5 class=\"order-address\">{{entry.Time | date: \"medium\" }} - {{entry.UTCAccessedDT | timeago }}</h5>\n" +
     "                <hr>\n" +
     "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
-    "                <div ng-click=\"dial(entry.ContactNumber)\"  class=\"contact-method\">\n" +
+    "                <div ng-click=\"dial(entry.ContactNumber)\" class=\"contact-method\">\n" +
     "                    <a class='plain' ng-href=\"\">\n" +
     "\n" +
     "                        <span class=\"contact-label\"> \n" +
@@ -709,8 +709,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </a>\n" +
     "                <div ng-click=\"dial(entry.PhoneNumber)\" class=\"contact-method\">\n" +
     "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
-    "                       <a class='plain'  ng-href=\"\">\n" +
-    " \n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
     "\n" +
     "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
     "                        <span class=\"contact-value\">\n" +
@@ -728,22 +728,12 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
-    "\n" +
     "            </div>\n" +
     "\n" +
-    "\n" +
     "        </md-dialog-content>\n" +
-    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
+    "  \n" +
+    "    </div>\n" +
     "\n" +
-    "        <!--<span flex></span>-->\n" +
-    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
-    "        <!--PHONE-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
-    "        <!--EMAIL-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--</div>-->\n" +
-    "    </form>\n" +
     "</md-dialog>"
   );
 
@@ -891,103 +881,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('templates/_md-card-showing-detail-all.view.html',
-    "<!--template for the little popo up. -->\n" +
-    "<style>\n" +
-    "    .dialogdemoBasicUsage #popupContainer {\n" +
-    "        position: relative;\n" +
-    "    }\n" +
-    "    \n" +
-    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
-    "        font-weight: bold;\n" +
-    "        /*color: blue;*/\n" +
-    "        text-decoration: underline;\n" +
-    "    }\n" +
-    "    \n" +
-    "    i.plain {\n" +
-    "        text-decoration: none;\n" +
-    "    }\n" +
-    "</style>\n" +
-    "\n" +
-    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
-    "    <form ng-repeat=\"showing in showings\">\n" +
-    "       <!-- <md-toolbar>\n" +
-    "            <div class=\"md-toolbar-tools md- primary\">\n" +
-    "                <h2>\n" +
-    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
-    "\n" +
-    "                    </md-icon>\n" +
-    "                </h2>\n" +
-    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{showing.contact.name}}</h3>\n" +
-    "                <span flex></span>\n" +
-    "                <md-button class=\"md-icon-button\" ng-if=\"$index == 0 \"ng-click=\"cancel()\">\n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" aria-label=\"Close dialog\"></md-icon>\n" +
-    "                </md-button>\n" +
-    "            </div>\n" +
-    "      <!--  </md-toolbar>-->\n" +
-    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
-    "            <div>\n" +
-    "               <h3> {{showing.contact.name}}</h3>\n" +
-    "                <h5 class=\"order-address\">{{showing.startTime | date: \"medium\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "                 \n" +
-    "                <h4>\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </h4>\n" +
-    "                <hr>\n" +
-    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
-    "                <div ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile' class=\"contact-method\">\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
-    "\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
-    "\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
-    "              \n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "                </a>\n" +
-    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
-    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
-    "                       <a class='plain'  ng-href=\"\">\n" +
-    " \n" +
-    "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                    </span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                   {{email}}\n" +
-    "                    </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "\n" +
-    "            </div>\n" +
-    "\n" +
-    "\n" +
-    "        </md-dialog-content>\n" +
-    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
-    "\n" +
-    "        <!--<span flex></span>-->\n" +
-    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
-    "        <!--PHONE-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
-    "        <!--EMAIL-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--</div>-->\n" +
-    "    </form>\n" +
-    "</md-dialog>"
-  );
-
-
   $templateCache.put('templates/_md-card-showing-detail.view.html',
     "<!--template for the little popo up. -->\n" +
     "<style>\n" +
@@ -1009,11 +902,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        padding-top: 4px;\n" +
     "        padding-bottom: 4px;\n" +
     "    }\n" +
-    "    \n" +
-    "    #showingDetails {\n" +
+    "    /*#showingDetails {\n" +
     "        max-width: 90%;\n" +
     "        width: 500px;\n" +
-    "    }\n" +
+    "    }*/\n" +
     "</style>\n" +
     "\n" +
     "<md-dialog id=\"showingDetails\" aria-label=\"Showing Details\">\n" +
@@ -1034,32 +926,70 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </md-toolbar>\n" +
     "\n" +
     "        <md-dialog-content>\n" +
+    "\n" +
     "            <div class=feedback-div>\n" +
     "                <!--<h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
     "                -->\n" +
+    "\n" +
     "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
     "                </md-button>\n" +
-    "                <div class=\"time-wrapper\">\n" +
+    "\n" +
+    "                <!--<div class=\"time-wrapper\">\n" +
     "                    <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
     "                    <span class=datetime>&middot;</span>\n" +
     "                    <span class=datetime>{{showing.startTime | date:'short'}}</span><br>\n" +
-    "                    <span class=datetime>{{showing.type.name}} \n" +
-    "                    &middot;\n" +
-    "                    {{showing.type.result}}\n" +
-    "                <div ng-if=\"showing.type.message && showing.type.message.length>0\"> &middot;</div>\n" +
-    "                 {{showing.type.message}} \n" +
-    "                </span>\n" +
-    "                </div>\n" +
-    "                <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
-    "                <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "\n" +
+    "\n" +
+    "                </div>-->\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "                <table>\n" +
+    "\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Showing time</td>\n" +
+    "\n" +
+    "                        <td class=card-value>\n" +
+    "\n" +
+    "                        \n" +
+    "                            <span class=datetime>{{showing.startTime | date:'short'}}</span>\n" +
+    "                                <span class=datetime>&middot;</span>\n" +
+    "                            <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                          \n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Showing type</td>\n" +
+    "\n" +
+    "                        <td> <span class=\"card-value\">{{showing.type.name}} </span>\n" +
+    "\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Result</td>\n" +
+    "                        <td> <span class=\"card-value\"> {{showing.type.result}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr ng-if=\"showing.type.message && showing.type.message.length>0\">\n" +
+    "                        <td class=\"label\">Message</td>\n" +
+    "                        <td>\n" +
+    "                            <span class=\"card-value\">{{showing.type.message}}</span>\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "\n" +
+    "\n" +
+    "                </table>\n" +
+    "\n" +
+    "\n" +
+    "                <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback card-value\">\"{{showing.feedback}}\"</p>\n" +
+    "                <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback card-value\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
     "\n" +
     "                <!--<span class=\"feedback\">\n" +
     "                    \"{{showing.feedback}}\"\n" +
     "                </span>-->\n" +
-    "                <md-divider ng-if=\"!$last\"></md-divider>\n" +
+    "                <!--<md-divider ng-if=\"!$last\"></md-divider>-->\n" +
     "\n" +
-    "                <!--<hr>-->\n" +
+    "                <hr>\n" +
     "\n" +
     "                <div ng-if=\"! showActions\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'\n" +
     "                    class=\"contact-method\">\n" +
@@ -1101,7 +1031,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    {{showing.contact.phone.office}} (Office)\n" +
     "                </md-button>\n" +
     "\n" +
-    "<!--\n" +
+    "                <!--\n" +
     "                <div ng-if='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
     "                    <div class=\"contact-method\">\n" +
     "                        <span class=\"contact-label\">  \n" +
@@ -1114,10 +1044,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </div>-->\n" +
     "\n" +
     "\n" +
-    "                <md-button ng-if='showing.contact.emails.length > 0'  class=\"md-raised\"  ng-repeat=\"email in showing.contact.emails\">\n" +
-    "                   <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">\n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> \n" +
-    "                     {{email}}</a>    \n" +
+    "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
+    "                        {{email}}</a>\n" +
     "                </md-button>\n" +
     "\n" +
     "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
@@ -1861,24 +1791,25 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/showings.svg\"></md-icon>\n" +
     "                    <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>\n" +
     "                </div>\n" +
-    "                <div>\n" +
-    "                    <span class=\"title\">showings</span>\n" +
+    "                <div class=\"box-label\">\n" +
+    "                    <span class=\"title no-wrap\"\">showings</span>\n" +
     "\n" +
-    "    </div>\n" +
+    "                </div>\n" +
     "    </span>\n" +
     "\n" +
     "\n" +
     "    <span class=\"cell clicks-div\">\n" +
-    "           <div>\n" +
-    "                       \n" +
-    "                            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
-    "                             <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
-    "                             <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
-    "                            <change-indicator data=\"vm.listing_views_todayCnt\" rate-decimals=\"0\" pct-decimals=\"0\" color=\"light\"></change-indicator>\n" +
-    "                        </div>\n" +
-    "                        <div>\n" +
-    "                            <span class=\"title\">clicks</span>\n" +
-    "</div>\n" +
+    "        \n" +
+    "        <div>                      \n" +
+    "            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
+    "                <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
+    "                <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
+    "            <change-indicator data=\"vm.listing_views_todayCnt\" rate-decimals=\"0\" pct-decimals=\"0\" color=\"light\"></change-indicator>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"box-label\">\n" +
+    "            <span class=\"title no-wrap\">clicks</span>\n" +
+    "        </div>\n" +
     "\n" +
     "\n" +
     "</span>\n" +
@@ -1891,8 +1822,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                      <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/feedback.svg\"></md-icon>\n" +
     "                <label>{{vm.sentimentCounter.notNegative | percentOf:vm.showings.length | percentage}}</label>\n" +
     "                        </div>\n" +
-    "                        <div>\n" +
-    "                            <span class=\"title\">non-negative</span>\n" +
+    "                        <div class=\"box-label\">\n" +
+    "                            <span class=\"title no-wrap\">non-negative</span>\n" +
     "\n" +
     "</div>\n" +
     "\n" +

@@ -19,6 +19,22 @@ md-dialog {
         margin-top: 10px;
         margin-bottom: 10px;
     }
+     .feedback {
+        font-size: .9em;
+        padding: 10px;
+    }
+
+    @media screen and (max-width: 400px) {
+    
+        .md-button {
+            font-size: 12px;
+               
+    margin: 3px 2px;
+    padding: 0 2px;
+        }
+    }
+
+
 }
 md-dialog-content {
     
@@ -77,5 +93,6 @@ md-dialog-content {
 
     .feedback {
         font-size: .9em;
+        padding: 10px;
     }
 }

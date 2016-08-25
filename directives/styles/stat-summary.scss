@@ -9,6 +9,10 @@
          display: table-row;
          height: auto;
      }
+     .box-label {
+         position: absolute;
+         bottom: 3px;
+     }
      .cell {
          display: table-cell;
          width: auto;

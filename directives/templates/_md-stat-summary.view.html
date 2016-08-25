@@ -7,24 +7,25 @@
                     <md-icon class="stat-icon" md-svg-src="assets/icons/showings.svg"></md-icon>
                     <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>
                 </div>
-                <div>
-                    <span class="title">showings</span>
+                <div class="box-label">
+                    <span class="title no-wrap"">showings</span>
 
-    </div>
+                </div>
     </span>
 
 
     <span class="cell clicks-div">
-           <div>
-                       
-                            <!--<img src="assets/icons/arrow.png">  -->
-                             <md-icon class="stat-icon" md-svg-src="assets/icons/clicks.svg"></md-icon>
-                             <label>{{vm.listing_views_todayCnt.current}}</label> 
-                            <change-indicator data="vm.listing_views_todayCnt" rate-decimals="0" pct-decimals="0" color="light"></change-indicator>
-                        </div>
-                        <div>
-                            <span class="title">clicks</span>
-</div>
+        
+        <div>                      
+            <!--<img src="assets/icons/arrow.png">  -->
+                <md-icon class="stat-icon" md-svg-src="assets/icons/clicks.svg"></md-icon>
+                <label>{{vm.listing_views_todayCnt.current}}</label> 
+            <change-indicator data="vm.listing_views_todayCnt" rate-decimals="0" pct-decimals="0" color="light"></change-indicator>
+        </div>
+
+        <div class="box-label">
+            <span class="title no-wrap">clicks</span>
+        </div>
 
 
 </span>
@@ -37,8 +38,8 @@
                       <md-icon class="stat-icon" md-svg-src="assets/icons/feedback.svg"></md-icon>
                 <label>{{vm.sentimentCounter.notNegative | percentOf:vm.showings.length | percentage}}</label>
                         </div>
-                        <div>
-                            <span class="title">non-negative</span>
+                        <div class="box-label">
+                            <span class="title no-wrap">non-negative</span>
 
 </div>
 
