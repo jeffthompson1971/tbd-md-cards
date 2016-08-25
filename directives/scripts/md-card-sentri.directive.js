@@ -46,12 +46,22 @@
         $scope.hide = function () {
             $mdDialog.hide();
         };
+
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
+
+        $scope.sendMail = function (addy, wholeRec) {
+
+            var subject = encodeURI("Regarding your Sentrilock entry at " + wholeRec.Location);
+            var link = "mailto:" + addy + "?subject=" + subject;
+            window.location.href = link;
+
+        };
+
         $scope.dial = function (number) {
             if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
@@ -60,7 +70,6 @@
         };
 
         $scope.addToContacts = function (entry) {
-
 
             var normalizedContact = {
                 name: {}
@@ -172,15 +181,15 @@
         if (vm.limit && vm.limit != -1) {
 
             $scope.entries = entriesNoOneDay.slice(0, vm.limit);
-
         } else {
-            // $scope.entries = vm.sentrilock.entries;
+
             $scope.entries = entriesNoOneDay;
         }
 
         vm.mdDialog = $mdDialog;
 
         vm.show = function (ev, selSentri) {
+
             console.log('selsentri', selSentri);
             // var parentEl = angular.element($scope.$$watchers.find('md-list-item'));
             $scope.vm.mdDialog.show({
@@ -205,12 +214,12 @@
 
             if (_.isUndefined(data))
                 return;
- 
+
             var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
             if (vm.limit && vm.limit != -1) {
                 $scope.entries = entriesNoOneDay.slice(0, vm.limit);
- 
+
             } else {
                 $scope.entries = entriesNoOneDay
             }

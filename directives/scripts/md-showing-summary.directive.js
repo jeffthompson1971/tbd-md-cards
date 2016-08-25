@@ -65,7 +65,7 @@
 
         $scope.showing = showing;
 
-        $scope.showActions = IS_MOBILE_APP;
+        $scope.showActions = true; //IS_MOBILE_APP;
         $scope.hide = function () {
             $mdDialog.hide();
         };
@@ -76,11 +76,13 @@
             $mdDialog.hide(answer);
         };
         $scope.dial = function (number) {
+            var dialable =  $filter('normalizePhoneNumber')(number, true);
             if (IS_MOBILE_APP && window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
 
         };
+       
         $scope.addToContacts = function (showing) {
             if (showing.contact == undefined)
                 return;

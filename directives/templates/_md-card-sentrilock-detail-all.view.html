@@ -18,36 +18,36 @@
 <md-dialog aria-label="Showing Details" flex="95">
 
 
-    <form ng-repeat="entry in sentrilock.entries">
+    <div ng-repeat="entry in sentrilock.entries">
+       
         <md-toolbar ng-if="$index == 0">
             <div class="md-toolbar-tools md-primary">
                 <h2>
-                    <md-icon  md-svg-src="assets/icons/ic_chat_white_24px.svg">
-<md-button class="md-icon-button" ng-if="$index == 0">
+                    <md-icon md-svg-src="assets/icons/ic_chat_white_24px.svg">
+                        <md-button class="md-icon-button" ng-if="$index == 0">
                     </md-icon>
                 </h2>
-                <!--<h3> {{ entry.ContactName }} </h3>-->
-                <!--<h3>{{entry.CompanyName}}</h3>-->
+ 
                 <span flex></span>
-                
-                    <md-icon md-svg-src="assets/icons/ic_close_white_24px.svg"  ng-click="cancel()" aria-label="Close dialog"></md-icon>
+
+                <md-icon md-svg-src="assets/icons/ic_close_white_24px.svg" ng-click="cancel()" aria-label="Close dialog"></md-icon>
                 </md-button>
             </div>
         </md-toolbar>
-        
+
         <md-dialog-content style="max-width:95%;max-height:95%; padding: 20px">
             <div>
-                  
+
                 <!--<h3> {{ entry.ContactName }} </h3>-->
-                
+
                 <h3>{{entry.CompanyName}}</h3>
-                
+
                 <h3>{{entry.City}}</h3>
                 <h4>{{entry.State}}</h4>
                 <h5 class="order-address">{{entry.Time | date: "medium" }} - {{entry.UTCAccessedDT | timeago }}</h5>
                 <hr>
                 <!-- contact":{"phone":{"office":"815-385-6990","mobile":"815-861-0099"} -->
-                <div ng-click="dial(entry.ContactNumber)"  class="contact-method">
+                <div ng-click="dial(entry.ContactNumber)" class="contact-method">
                     <a class='plain' ng-href="">
 
                         <span class="contact-label"> 
@@ -60,8 +60,8 @@
                 </a>
                 <div ng-click="dial(entry.PhoneNumber)" class="contact-method">
                     <!--<a class='plain' ng-href="tel:+1-{{showing.contact.phone.office}} ">-->
-                       <a class='plain'  ng-href="">
- 
+                    <a class='plain' ng-href="">
+
 
                         <span class="contact-label">  <md-icon md-svg-src="assets/icons/ic_local_phone_black_48px.svg" aria-label="Office"></md-icon> </span>
                         <span class="contact-value">
@@ -79,20 +79,10 @@
                     </div>
                 </div>
 
-
             </div>
 
-
         </md-dialog-content>
-        <!--<div class="md-actions" layout="row">-->
+  
+    </div>
 
-        <!--<span flex></span>-->
-        <!--<md-button ng-show="supersonic != undefined" ng-click="answer('not useful')" >-->
-        <!--PHONE-->
-        <!--</md-button>-->
-        <!--<md-button ng-click="answer('useful')" style="margin-right:20px;" >-->
-        <!--EMAIL-->
-        <!--</md-button>-->
-        <!--</div>-->
-    </form>
 </md-dialog>
