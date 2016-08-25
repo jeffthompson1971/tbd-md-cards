@@ -91,7 +91,7 @@
                 }
 
             } else {
-                alert("need a friggen name");
+                alert("Need at least a name");
                 return;
             }
 

@@ -984,66 +984,21 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback card-value\">\"{{showing.feedback}}\"</p>\n" +
     "                <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback card-value\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
     "\n" +
-    "                <!--<span class=\"feedback\">\n" +
-    "                    \"{{showing.feedback}}\"\n" +
-    "                </span>-->\n" +
-    "                <!--<md-divider ng-if=\"!$last\"></md-divider>-->\n" +
-    "\n" +
     "                <hr>\n" +
     "\n" +
-    "                <div ng-if=\"! showActions\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'\n" +
-    "                    class=\"contact-method\">\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
-    "\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> \n" +
-    "                        </span>\n" +
-    "\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                            {{showing.contact.phone.mobile}} (Mobile)\n" +
-    "              \n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <md-button ng-if=\"showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'>\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'>\n" +
     "\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
     "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
     "                </md-button>\n" +
     "\n" +
-    "\n" +
-    "                <div ng-if=\"! showActions\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'\n" +
-    "                    class=\"contact-method\">\n" +
-    "\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> \n" +
-    "                        </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                    </span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
-    "                <md-button ng-if=\"showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'>\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'>\n" +
     "\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
     "                    {{showing.contact.phone.office}} (Office)\n" +
     "                </md-button>\n" +
     "\n" +
-    "                <!--\n" +
-    "                <div ng-if='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  \n" +
-    "                            <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> \n" +
-    "                        </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                            <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">{{email}}</a>    \n" +
-    "                        </span>\n" +
-    "                    </div>\n" +
-    "                </div>-->\n" +
-    "\n" +
-    "\n" +
+    "            \n" +
     "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\">\n" +
     "                    <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">\n" +
     "                        <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
@@ -1787,20 +1742,20 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <span class=\"cell showings-div\">\n" +
     "           \n" +
-    "                <div>\n" +
+    "             <div style=\"min-height: 50px;\">\n" +
     "                    <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/showings.svg\"></md-icon>\n" +
     "                    <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>\n" +
     "                </div>\n" +
     "                <div class=\"box-label\">\n" +
     "                    <span class=\"title no-wrap\"\">showings</span>\n" +
     "\n" +
-    "                </div>\n" +
+    "    </div>\n" +
     "    </span>\n" +
     "\n" +
     "\n" +
     "    <span class=\"cell clicks-div\">\n" +
     "        \n" +
-    "        <div>                      \n" +
+    "       <div style=\"min-height: 50px;\">                  \n" +
     "            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
     "                <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
     "                <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
@@ -1809,14 +1764,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"box-label\">\n" +
     "            <span class=\"title no-wrap\">clicks</span>\n" +
-    "        </div>\n" +
+    "</div>\n" +
     "\n" +
     "\n" +
     "</span>\n" +
     "\n" +
     "<span ng-if=\"showings != undefined\" class=\"cell positive-div\">\n" +
     "        \n" +
-    "        <div>\n" +
+    "        <div style=\"min-height: 50px;\">\n" +
     "           \n" +
     "                <!--<img src=\"assets/icons/chat.png\"/>-->\n" +
     "                      <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/feedback.svg\"></md-icon>\n" +

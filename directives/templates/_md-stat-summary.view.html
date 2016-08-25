@@ -3,20 +3,20 @@
 
         <span class="cell showings-div">
            
-                <div>
+             <div style="min-height: 50px;">
                     <md-icon class="stat-icon" md-svg-src="assets/icons/showings.svg"></md-icon>
                     <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>
                 </div>
                 <div class="box-label">
                     <span class="title no-wrap"">showings</span>
 
-                </div>
+    </div>
     </span>
 
 
     <span class="cell clicks-div">
         
-        <div>                      
+       <div style="min-height: 50px;">                  
             <!--<img src="assets/icons/arrow.png">  -->
                 <md-icon class="stat-icon" md-svg-src="assets/icons/clicks.svg"></md-icon>
                 <label>{{vm.listing_views_todayCnt.current}}</label> 
@@ -25,14 +25,14 @@
 
         <div class="box-label">
             <span class="title no-wrap">clicks</span>
-        </div>
+</div>
 
 
 </span>
 
 <span ng-if="showings != undefined" class="cell positive-div">
         
-        <div>
+        <div style="min-height: 50px;">
            
                 <!--<img src="assets/icons/chat.png"/>-->
                       <md-icon class="stat-icon" md-svg-src="assets/icons/feedback.svg"></md-icon>
