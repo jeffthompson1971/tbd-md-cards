@@ -1109,7 +1109,7 @@ rowcolor
 
 
 */
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -1123,18 +1123,20 @@ rowcolor
     function MdCardShowingAssist() {
         return {
             restrict: 'E',
-            templateUrl: function(elem, attrs) {
+            templateUrl: function (elem, attrs) {
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-card-showing-assist.view.html" : 'templates/_md-card-showing-assist.view.html';
             },
             scope: {
                 showings: '=',
+                listing: '=',
+                limit: "@",
                 ngClass: "=",
             },
             controller: MdCardShowingAssistController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function(scope, element, attrs) {
-                scope.$watch("ngClass", function(value) {
+            link: function (scope, element, attrs) {
+                scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
                 scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showingassist-logo.png";
@@ -1159,71 +1161,147 @@ rowcolor
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
 
-                // watch for changes in the listing to update the new photo
-                scope.$watch('vm.showings', function(showings) {
-
-                    // ng-class failed in a directive - so i use this approach
-                    // to color the feedback based on sentiment
-                    for (var i = 0; i < showings.length; ++i) {
-
-                        var myEl = angular.element(element.find('md-list-item')[i]);
-
-                        if (showings.potentialOffer) {
-
-
-                        }
-                        if (showings[i].sentiment < -2) {
-                            scope.negativeFB.push(showings[i]);
-                            scope.negCnt += 1;
-                            myEl.addClass('negative-color');
-
-                        } else if (showings[i].sentiment > 2) {
-                            scope.posCnt += 1;
-                            scope.positiveFB.push(showings[i]);
-                            myEl.addClass('positive-color');
-                        }
-                        scope.totalCnt += 1;
-                    }
-
-                });
-
             }
         };
     }
 
-    MdCardShowingAssistController.$inject = ['$scope', '$mdDialog'];
+    MdCardShowingAssistController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $mdDialog, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
 
         $scope.showing = showing;
 
-        $scope.hide = function() {
+        $scope.showActions = IS_MOBILE_APP;
+        $scope.hide = function () {
             $mdDialog.hide();
         };
-        $scope.cancel = function() {
+        $scope.cancel = function () {
             $mdDialog.cancel();
         };
-        $scope.answer = function(answer) {
+        $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
-        $scope.dial = function(number) {
-            if (window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+        $scope.dial = function (number) {
+            var dialable = $filter('normalizePhoneNumber')(number, true);
+            if (IS_MOBILE_APP && window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
 
         };
+
+        $scope.addToContacts = function (showing) {
+            if (showing.contact == undefined)
+                return;
+            var contact = showing.contact;
+            var normalizedContact = {
+                name: {}
+            };
+            var nameBits = contact.name.split(" ");
+
+            // ignore any middle initial or name
+            if (nameBits.length < 2) {
+                // only have one name so assume it's last
+
+                normalizedContact.name.familyName = nameBits[0];
+            } else {
+                normalizedContact.name.givenName = nameBits[0];
+                normalizedContact.name.familyName = nameBits[nameBits.length - 1];
+
+            }
+            if (contact.phone) {
+                normalizedContact.phoneNumbers = [];
+                if (contact.phone.mobile) {
+
+                    normalizedContact.phoneNumbers.push({
+                        type: "mobile",
+                        value: $filter('normalizePhoneNumber')(contact.phone.mobile)
+                    })
+                }
+                if (contact.phone.office) {
+
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: $filter('normalizePhoneNumber')(contact.phone.office)
+                    })
+                }
+                if (contact.phone.home) {
+                    normalizedContact.phoneNumbers.push({
+                        type: "home",
+                        value: $filter('normalizePhoneNumber')(contact.phone.home)
+                    })
+                }
+
+            }
+            if (contact.emails) {
+                normalizedContact.emails = [];
+                for (var i = 0; i < contact.emails.length; i++) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: contact.emails[i]
+                    })
+                }
+                // normalizedContact.emails = contact.emails;
+            }
+
+            normalizedContact.note = "From showings.com feedback.";
+
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
+
+        }
     };
 
     function MdCardShowingAssistController($scope, $mdDialog) {
         var vm = this;
-        $scope.showings = vm.showings;
-        // activate();
+
+        if (vm.limit && vm.limit != -1) {
+            $scope.showings = vm.showings.slice(0, vm.limit);
+        } else {
+            $scope.showings = vm.showings;
+        }
+
+        $scope.theListing = ListingSvc.getSelectedListing();
+        $scope.$watch('vm.showings', function (showings, previousShowings) {
+
+            // ng-class failed in a directive - so i use this approach
+            // to color the feedback based on sentiment
+
+            // trim to 'limit'
+            if (vm.limit && vm.limit != -1) {
+
+                $scope.showings = showings.slice(0, vm.limit);
+            } else {
+                $scope.showings = showings;
+            }
+
+
+            for (var i = 0; i < showings.length; ++i) {
+
+                // var myEl = angular.element(element.find('md-list-item')[i]);
+
+                // if (showings.potentialOffer) {
+
+
+                // }
+                // if (showings[i].sentiment < -2) {
+                //     scope.negativeFB.push(showings[i]);
+                //     scope.negCnt += 1;
+                //     myEl.addClass('negative-color');
+
+                // } else if (showings[i].sentiment > 2) {
+                //     scope.posCnt += 1;
+                //     scope.positiveFB.push(showings[i]);
+                //     myEl.addClass('positive-color');
+                // }
+                // scope.totalCnt += 1;
+            }
+
+        });
 
         vm.mdDialog = $mdDialog;
-        vm.show = function(ev, selShowing) {
 
+        vm.show = function (ev, selShowing) {
+            console.log(selShowing);
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
-
             $scope.vm.mdDialog.show(
                 {
                     locals: {
@@ -1235,18 +1313,38 @@ rowcolor
                     targetEvent: ev,
                     clickOutsideToClose: true
                 })
-                .then(function(answer) {
+                .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+        }
+
+        vm.showAll = function (ev, showings) {
+            console.log("show all called");
+            var parentEl = angular.element($scope.meElement.find('md-list-item'));
+            $scope.vm.mdDialog.show(
+                {
+                    locals: {
+                        showings: showings
+                    },
+                    controller: DialogControllerAll,
+                    templateUrl: 'templates/_md-card-showing-detail-all.view.html',
+                    parent: parentEl,
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                .then(function (answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function () {
                     $scope.status = 'You cancelled the dialog.';
                 });
         }
 
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
+
         function activate() {
-
-
 
         }
     }
@@ -1736,7 +1834,6 @@ rowcolor
             controllerAs: 'vm',
             bindToController: true,
             link: function (scope, element, attrs) {
-
                 scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
@@ -1749,8 +1846,6 @@ rowcolor
                 scope.positiveFB = [];
                 scope.negativeFB = [];
                 scope.meElement = element;
-
-
 
                 // the following used for the aggregate showing stats
                 scope.posCnt = 0;
@@ -1765,14 +1860,13 @@ rowcolor
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
 
-
             }
         };
     }
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
 
@@ -1786,6 +1880,16 @@ rowcolor
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
+        
+        $scope.sendMail = function (addy, wholeRec) {
+
+            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var link = "mailto:" + addy + "?subject=" + subject;
+            window.location.href = link;
+
+        };
+
+
         $scope.dial = function (number) {
             var dialable =  $filter('normalizePhoneNumber')(number, true);
             if (IS_MOBILE_APP && window.cordova) {
@@ -1856,20 +1960,19 @@ rowcolor
     };
 
     function MdShowingSummaryController($scope, $mdDialog, ListingSvc) {
-
-
         var vm = this;
 
         if (vm.limit && vm.limit != -1) {
-
             $scope.showings = vm.showings.slice(0, vm.limit);
         } else {
             $scope.showings = vm.showings;
-
         }
 
-        $scope.theListing = ListingSvc.getSelectedListing();
-
+       // $scope.theListing = ListingSvc.getSelectedListing();
+        
+        // need this so detail dialog can access info like address
+      //  vm.listing = $scope.theListing;
+        
         $scope.$watch('vm.showings', function (showings, previousShowings) {
 
             // ng-class failed in a directive - so i use this approach
@@ -1911,11 +2014,13 @@ rowcolor
 
         vm.show = function (ev, selShowing) {
             console.log(selShowing);
+            
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showing: selShowing
+                        showing: selShowing,
+                        listing: vm.listing
                     },
                     controller: DialogController,
                     templateUrl: 'templates/_md-card-showing-detail.view.html',
@@ -1930,13 +2035,14 @@ rowcolor
                 });
         }
 
-        vm.showAll = function (ev, showings) {
+        vm.showAll = function (ev, showings, listing) {
             console.log("show all called");
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showings: showings
+                        showings: showings,
+                        listing: vm.listing
                     },
                     controller: DialogControllerAll,
                     templateUrl: 'templates/_md-card-showing-detail-all.view.html',
@@ -1958,7 +2064,6 @@ rowcolor
 
         }
     }
-
 })();
 /* feedback structure
 
@@ -3837,11 +3942,17 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </md-button>\n" +
     "\n" +
     "            \n" +
-    "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\">\n" +
-    "                    <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\">\n" +
+    "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\" ng-click=\"sendMail(email, showing)\">\n" +
+    "                    <!-- <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\"> -->\n" +
     "                        <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
-    "                        {{email}}</a>\n" +
+    "                        {{email}}\n" +
+    "                        <!--</a>-->\n" +
     "                </md-button>\n" +
+    "\n" +
+    "                <!--<md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click=\"sendMail(sentri.emailAddy2, sentri)\"\n" +
+    "                    class=\"md-raised\">\n" +
+    "\n" +
+    "                </md-button>-->\n" +
     "\n" +
     "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
     "            </div>\n" +
