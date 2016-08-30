@@ -25,7 +25,6 @@
             controllerAs: 'vm',
             bindToController: true,
             link: function (scope, element, attrs) {
-
                 scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
@@ -39,8 +38,6 @@
                 scope.negativeFB = [];
                 scope.meElement = element;
 
-
-
                 // the following used for the aggregate showing stats
                 scope.posCnt = 0;
                 scope.negCnt = 0;
@@ -53,7 +50,6 @@
                 el.css({
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
-
 
             }
         };
@@ -145,20 +141,15 @@
     };
 
     function MdShowingSummaryController($scope, $mdDialog, ListingSvc) {
-
-
         var vm = this;
 
         if (vm.limit && vm.limit != -1) {
-
             $scope.showings = vm.showings.slice(0, vm.limit);
         } else {
             $scope.showings = vm.showings;
-
         }
 
         $scope.theListing = ListingSvc.getSelectedListing();
-
         $scope.$watch('vm.showings', function (showings, previousShowings) {
 
             // ng-class failed in a directive - so i use this approach
@@ -247,7 +238,6 @@
 
         }
     }
-
 })();
 /* feedback structure
 
