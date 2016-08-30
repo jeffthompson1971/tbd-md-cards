@@ -8,7 +8,7 @@
     }
 </style>
 
-<div id="listing-detail" style="text-align: left;" class="content has-header">
+<div id="listing-detail" style="text-align: left;" class="content">
 
     <div id="three-columns" class="grid-container" style="display:block;">
 
@@ -69,7 +69,7 @@
             <li ng-if="vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0">
                 <md-showing-summary ng-if="vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0"
                 imgurl="/assets/logos/ShowingsCom_243.png" listing='vm.theListing' showings='vm.theListing.activityAggregate.snapshots[8].data' title="Summary - Feedback on your showings" 
-                sysId="8" limit="5">
+                sysId="8" limit="4">
                 </md-showing-summary>
                 <!---->
             </li>
@@ -86,8 +86,8 @@
                 </md-showing-summary>
             </li>-->
             <li ng-if="vm.sentrilock.entries.length>0">
-                <md-card-sentri ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Summary - Feedback on your showings"
-                sysId="2" limit="5">
+                <md-card-sentri ng-if="vm.sentrilock.entries.length>0" sentrilock='vm.sentrilock' title="Sentilock Entry Logs"
+                sysId="2" limit="4">
                 </md-card-sentri>
             </li>
         </ul>

@@ -774,63 +774,165 @@ angular.module('tbd', []);
             link: function (scope, element, attrs) {
                 scope.title = attrs.title;
                 scope.pass = attrs.pass;
+                scope.meElement = element;
                 scope.limit = attrs.limit;
             }
         };
     }
 
-    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$cordovaContacts'];
-
-
-    function DialogController($scope, $mdDialog, $cordovaContacts, sentri) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, sentri) {
 
         $scope.sentri = sentri;
+
+        $scope.showActions = IS_MOBILE_APP;
 
         $scope.hide = function () {
             $mdDialog.hide();
         };
+
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
+
+        $scope.sendMail = function (addy, wholeRec) {
+
+            var subject = encodeURI("Regarding your Sentrilock entry at " + wholeRec.Location);
+            var link = "mailto:" + addy + "?subject=" + subject;
+            window.location.href = link;
+
+        };
+
         $scope.dial = function (number) {
-            if (window.cordova) {
+            if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
 
         };
 
-        $scope.saveContact = function (name, phone) {
-            console.log(phone);
-            $scope.hide()
-            $cordovaContacts.save({
-                nickname: name,
-                phoneNumbers: [phone]
-            }).then(function (result) {
-                console.log("Saved contact", result);
-            });
+        $scope.addToContacts = function (entry) {
+
+            var normalizedContact = {
+                name: {}
+            };
+            // first try using AgentFirstName and last...
+            if (entry.AgentFirstName && entry.AgentLastName) {
+                normalizedContact.name.familyName = entry.AgentLastName;
+                normalizedContact.name.givenName = entry.AgentFirstName;
+
+            } else if (entry.ContactName) {
+                // if that's not there try ContactName
+                var nameBits = contact.name.split(" ");
+                if (nameBits.length < 2) {
+                    // only have one name so assume it's first
+                    normalizedContact.name.givenName = nameBits[0];
+                } else {
+                    normalizedContact.name.givenName = nameBits[0];
+                    normalizedContact.name.familyName = nameBits[nameBits.length - 1];
+                }
+
+            } else {
+                alert("Need at least a name");
+                return;
+            }
+
+            // now grab phone number(s)
+            if (entry.ContactNumber || entry.PhoneNumber) {
+                var normCtNum = undefined;
+                var normPhnNum = undefined;
+                normalizedContact.phoneNumbers = [];
+                if (entry.ContactNumber) {
+                    normCtNum = $filter('normalizePhoneNumber')(entry.ContactNumber);
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: normCtNum
+                    })
+                }
+                if (entry.PhoneNumber) {
+                    normPhnNum = $filter('normalizePhoneNumber')(entry.PhoneNumber);
+
+                    if (normCtNum !== normPhnNum) {
+                        normalizedContact.phoneNumbers.push({
+                            type: "work",
+                            value: normPhnNum
+                        })
+                    }
+                }
+            }
+
+            // now grab any emails...
+            if (entry.emailAddy || entry.emailAddy2) {
+                normalizedContact.emails = [];
+                if (entry.emailAddy) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: entry.emailAddy
+                    });
+                }
+                if (entry.emailAddy2 && (entry.emailAddy !== entry.emailAddy2)) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: entry.emailAddy2
+                    });
+
+                }
+
+            }
+            /*
+                alert("Pref: "      + contacts[i].organizations[j].pref       + "\n" +
+                "Type: "        + contacts[i].organizations[j].type       + "\n" +
+                "Name: "        + contacts[i].organizations[j].name       + "\n" +
+                "Department: "  + contacts[i].organizations[j].department + "\n" +
+                "Title: "       + contacts[i].organizations[j].title);
+            */
+
+            var organizations = [];
+            // add Association or CompanyName
+            if (entry.Association && entry.Association.length > 1) {
+                organizations.push({
+                    type: "Association",
+                    name: entry.Association
+
+                })
+            }
+            if (entry.CompanyName && entry.CompanyName.length > 1) {
+                organizations.push({
+                    type: "Company",
+                    name: entry.CompanyName
+                })
+            }
+            // if we have any organizations add them ...
+            if (organizations.length > 0) {
+                normalizedContact.organizations = organizations;
+            }
+            normalizedContact.note = "From SentriLock entry log.";
+            // fire it off to our contacts module to do the heavy lifting
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
         }
     };
 
-    function MdCardSentriController($scope, $mdDialog) {
+    MdCardSentriController.$inject = ['$scope', '$mdDialog', '$filter'];
+
+    function MdCardSentriController($scope, $mdDialog, $filter) {
+
         var vm = this;
+
+        var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
         if (vm.limit && vm.limit != -1) {
 
-            $scope.entries = vm.sentrilock.entries.slice(0, vm.limit);
+            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
         } else {
-            $scope.entries = vm.sentrilock.entries;
 
+            $scope.entries = entriesNoOneDay;
         }
 
-        // $scope.theListing = ListingSvc.getSelectedListing();
-        // $scope.sentrilock = vm.sentrilock;
-        console.log("sentri controller");
-
         vm.mdDialog = $mdDialog;
+
         vm.show = function (ev, selSentri) {
+
             console.log('selsentri', selSentri);
             // var parentEl = angular.element($scope.$$watchers.find('md-list-item'));
             $scope.vm.mdDialog.show({
@@ -850,21 +952,164 @@ angular.module('tbd', []);
 
         // // watch for changes in the listing to update the new photo
         $scope.show = $scope.vm.show;
+
         $scope.$watch('vm.sentrilock', function (data) {
 
             if (_.isUndefined(data))
                 return;
+
+            var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+
             if (vm.limit && vm.limit != -1) {
+                $scope.entries = entriesNoOneDay.slice(0, vm.limit);
 
-                $scope.entries = data.entries.slice(0, vm.limit);
             } else {
-                $scope.entries = data.entries
-
+                $scope.entries = entriesNoOneDay
             }
         });
     }
 })();
-!(function() {
+
+/*
+"object:150"
+AccessLogID
+:
+"AL00002J1U5O"
+AccessType
+:
+"SmartMACGen"
+AccessedBy
+:
+"AG0000008F2M"
+AccessedByContact
+:
+"(847) 222-5000 <a href='mailto:stephanie.szigetvari@cbexchange.com?subject=425+Grand+Meadow+Lane+MCHENRY+IL+60051'>stephanie.szigetvari@cbexchange.com</a>"
+AccessedByName
+:
+"Stephanie Szigetvari - Coldwell Banker Residential<br>(847) 222-5000 <a href='mailto:stephanie.szigetvari@cbexchange.com?subject=425+Grand+Meadow+Lane+MCHENRY+IL+60051'>stephanie.szigetvari@cbexchange.com</a>"
+AgentFirstName
+:
+"Stephanie"
+AgentID
+:
+"AG0000008F2M"
+AgentLastName
+:
+"Szigetvari"
+Association
+:
+"MainStreet Organization of REALTORS"
+CompanyName
+:
+"Coldwell Banker Residential"
+ContactName
+:
+"Stephanie Szigetvari"
+ContactNumber
+:
+"(847) 222-5000"
+Created
+:
+"2016-07-31 14:23:05"
+Date
+:
+"Sunday, Jul 31 2016"
+EmailAddress
+:
+"<a href='mailto:stephanie.szigetvari@cbexchange.com?subject=425+Grand+Meadow+Lane+MCHENRY+IL+60051'>stephanie.szigetvari@cbexchange.com</a>"
+FromOneDayCode
+:
+false
+LBID
+:
+"LB00000090BI"
+LBSerialNumber
+:
+"00450831"
+LoanNumber
+:
+"None"
+Location
+:
+"425 Grand Meadow Lane MCHENRY IL 60051"
+Origin
+:
+""
+OwnerAgentID
+:
+"AG000000766B"
+PhoneNumber
+:
+"(847) 222-5000"
+RoleCode
+:
+""
+Time
+:
+"13:23:05"
+UTCAccessedDT
+:
+"Sunday, Jul 31 2016 - 01:23 PM"
+UserFirstName
+:
+"Stephanie"
+UserID
+:
+"US0000008SBD"
+UserLastName
+:
+"Szigetvari"
+emailAddy
+:
+"stephanie.szigetvari@cbexchange.com"
+emailAddy2
+:
+"stephanie.szigetvari@cbexchange.com"
+rowcolor
+:
+"#FF9"
+*/
+/*
+
+// STRANGE CASE
+{
+"AccessedByContact":"",
+"RoleCode":"",
+"Association":null,
+"OwnerAgentID":"AG000000766B",
+"LBID":"LB0000009AEV",
+"FromOneDayCode":false,
+"UserID":"US000000824J",
+"Origin":"",
+"emailAddy":null,
+"Time":"19:17:04",
+"Created":"2016-08-15 20:19:09",
+"Date":"Monday, Aug 01 2016",
+"UserLastName":"Tabick",
+"EmailAddress":"",
+"LoanNumber":"None",
+"ContactNumber":null,
+"emailAddy2":null,
+"AccessedByName":"ROB WILDER 847-951-3033",
+"ContactName":"ROB WILDER 847-951-3033",
+"AgentFirstName":null,
+"Location":"9617 Richardson Road SPRING GROVE IL 60081",
+"PhoneNumber":"",
+"CompanyName":"",
+"AgentID":null,
+"AccessLogID":"AL00002JSBSK",
+"rowcolor":"#FF9",
+"AccessType":"1DayCode",
+"AgentLastName":null,
+"UserFirstName":"Nicholas",
+"LBSerialNumber":"00470838",
+"AccessedBy":"LBSNCNTCODE1",
+"UTCAccessedDT":"Monday, Aug 01 2016 - 07:17 PM"
+},
+
+
+*/
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -878,18 +1123,20 @@ angular.module('tbd', []);
     function MdCardShowingAssist() {
         return {
             restrict: 'E',
-            templateUrl: function(elem, attrs) {
+            templateUrl: function (elem, attrs) {
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-card-showing-assist.view.html" : 'templates/_md-card-showing-assist.view.html';
             },
             scope: {
                 showings: '=',
+                listing: '=',
+                limit: "@",
                 ngClass: "=",
             },
             controller: MdCardShowingAssistController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function(scope, element, attrs) {
-                scope.$watch("ngClass", function(value) {
+            link: function (scope, element, attrs) {
+                scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
                 scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showingassist-logo.png";
@@ -914,71 +1161,147 @@ angular.module('tbd', []);
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
 
-                // watch for changes in the listing to update the new photo
-                scope.$watch('vm.showings', function(showings) {
-
-                    // ng-class failed in a directive - so i use this approach
-                    // to color the feedback based on sentiment
-                    for (var i = 0; i < showings.length; ++i) {
-
-                        var myEl = angular.element(element.find('md-list-item')[i]);
-
-                        if (showings.potentialOffer) {
-
-
-                        }
-                        if (showings[i].sentiment < -2) {
-                            scope.negativeFB.push(showings[i]);
-                            scope.negCnt += 1;
-                            myEl.addClass('negative-color');
-
-                        } else if (showings[i].sentiment > 2) {
-                            scope.posCnt += 1;
-                            scope.positiveFB.push(showings[i]);
-                            myEl.addClass('positive-color');
-                        }
-                        scope.totalCnt += 1;
-                    }
-
-                });
-
             }
         };
     }
 
-    MdCardShowingAssistController.$inject = ['$scope', '$mdDialog'];
+    MdCardShowingAssistController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $mdDialog, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
 
         $scope.showing = showing;
 
-        $scope.hide = function() {
+        $scope.showActions = IS_MOBILE_APP;
+        $scope.hide = function () {
             $mdDialog.hide();
         };
-        $scope.cancel = function() {
+        $scope.cancel = function () {
             $mdDialog.cancel();
         };
-        $scope.answer = function(answer) {
+        $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
-        $scope.dial = function(number) {
-            if (window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+        $scope.dial = function (number) {
+            var dialable = $filter('normalizePhoneNumber')(number, true);
+            if (IS_MOBILE_APP && window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
 
         };
+
+        $scope.addToContacts = function (showing) {
+            if (showing.contact == undefined)
+                return;
+            var contact = showing.contact;
+            var normalizedContact = {
+                name: {}
+            };
+            var nameBits = contact.name.split(" ");
+
+            // ignore any middle initial or name
+            if (nameBits.length < 2) {
+                // only have one name so assume it's last
+
+                normalizedContact.name.familyName = nameBits[0];
+            } else {
+                normalizedContact.name.givenName = nameBits[0];
+                normalizedContact.name.familyName = nameBits[nameBits.length - 1];
+
+            }
+            if (contact.phone) {
+                normalizedContact.phoneNumbers = [];
+                if (contact.phone.mobile) {
+
+                    normalizedContact.phoneNumbers.push({
+                        type: "mobile",
+                        value: $filter('normalizePhoneNumber')(contact.phone.mobile)
+                    })
+                }
+                if (contact.phone.office) {
+
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: $filter('normalizePhoneNumber')(contact.phone.office)
+                    })
+                }
+                if (contact.phone.home) {
+                    normalizedContact.phoneNumbers.push({
+                        type: "home",
+                        value: $filter('normalizePhoneNumber')(contact.phone.home)
+                    })
+                }
+
+            }
+            if (contact.emails) {
+                normalizedContact.emails = [];
+                for (var i = 0; i < contact.emails.length; i++) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: contact.emails[i]
+                    })
+                }
+                // normalizedContact.emails = contact.emails;
+            }
+
+            normalizedContact.note = "From showings.com feedback.";
+
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
+
+        }
     };
 
     function MdCardShowingAssistController($scope, $mdDialog) {
         var vm = this;
-        $scope.showings = vm.showings;
-        // activate();
+
+        if (vm.limit && vm.limit != -1) {
+            $scope.showings = vm.showings.slice(0, vm.limit);
+        } else {
+            $scope.showings = vm.showings;
+        }
+
+        $scope.theListing = ListingSvc.getSelectedListing();
+        $scope.$watch('vm.showings', function (showings, previousShowings) {
+
+            // ng-class failed in a directive - so i use this approach
+            // to color the feedback based on sentiment
+
+            // trim to 'limit'
+            if (vm.limit && vm.limit != -1) {
+
+                $scope.showings = showings.slice(0, vm.limit);
+            } else {
+                $scope.showings = showings;
+            }
+
+
+            for (var i = 0; i < showings.length; ++i) {
+
+                // var myEl = angular.element(element.find('md-list-item')[i]);
+
+                // if (showings.potentialOffer) {
+
+
+                // }
+                // if (showings[i].sentiment < -2) {
+                //     scope.negativeFB.push(showings[i]);
+                //     scope.negCnt += 1;
+                //     myEl.addClass('negative-color');
+
+                // } else if (showings[i].sentiment > 2) {
+                //     scope.posCnt += 1;
+                //     scope.positiveFB.push(showings[i]);
+                //     myEl.addClass('positive-color');
+                // }
+                // scope.totalCnt += 1;
+            }
+
+        });
 
         vm.mdDialog = $mdDialog;
-        vm.show = function(ev, selShowing) {
 
+        vm.show = function (ev, selShowing) {
+            console.log(selShowing);
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
-
             $scope.vm.mdDialog.show(
                 {
                     locals: {
@@ -990,18 +1313,38 @@ angular.module('tbd', []);
                     targetEvent: ev,
                     clickOutsideToClose: true
                 })
-                .then(function(answer) {
+                .then(function (answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+        }
+
+        vm.showAll = function (ev, showings) {
+            console.log("show all called");
+            var parentEl = angular.element($scope.meElement.find('md-list-item'));
+            $scope.vm.mdDialog.show(
+                {
+                    locals: {
+                        showings: showings
+                    },
+                    controller: DialogControllerAll,
+                    templateUrl: 'templates/_md-card-showing-detail-all.view.html',
+                    parent: parentEl,
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                .then(function (answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function () {
                     $scope.status = 'You cancelled the dialog.';
                 });
         }
 
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
+
         function activate() {
-
-
 
         }
     }
@@ -1491,7 +1834,6 @@ angular.module('tbd', []);
             controllerAs: 'vm',
             bindToController: true,
             link: function (scope, element, attrs) {
-
                 scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
@@ -1504,8 +1846,6 @@ angular.module('tbd', []);
                 scope.positiveFB = [];
                 scope.negativeFB = [];
                 scope.meElement = element;
-
-
 
                 // the following used for the aggregate showing stats
                 scope.posCnt = 0;
@@ -1520,17 +1860,17 @@ angular.module('tbd', []);
                     'background-image': 'url(' + scope.imgUrl + ')'
                 });
 
-
             }
         };
     }
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $mdDialog, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
 
+        $scope.showActions = IS_MOBILE_APP;
         $scope.hide = function () {
             $mdDialog.hide();
         };
@@ -1540,28 +1880,99 @@ angular.module('tbd', []);
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
+        
+        $scope.sendMail = function (addy, wholeRec) {
+
+            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var link = "mailto:" + addy + "?subject=" + subject;
+            window.location.href = link;
+
+        };
+
+
         $scope.dial = function (number) {
-            if (window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+            var dialable =  $filter('normalizePhoneNumber')(number, true);
+            if (IS_MOBILE_APP && window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
 
         };
+       
+        $scope.addToContacts = function (showing) {
+            if (showing.contact == undefined)
+                return;
+            var contact = showing.contact;
+            var normalizedContact = {
+                name: {}
+            };
+            var nameBits = contact.name.split(" ");
+
+            // ignore any middle initial or name
+            if (nameBits.length < 2) {
+                // only have one name so assume it's last
+                
+                normalizedContact.name.familyName = nameBits[0];
+            } else {
+                normalizedContact.name.givenName = nameBits[0];
+                normalizedContact.name.familyName = nameBits[nameBits.length - 1];
+
+            }
+            if (contact.phone) {
+                normalizedContact.phoneNumbers = [];
+                if (contact.phone.mobile) {
+                    
+                    normalizedContact.phoneNumbers.push({
+                        type: "mobile",
+                        value:  $filter('normalizePhoneNumber')(contact.phone.mobile)
+                    })
+                }
+                if (contact.phone.office) {
+
+                    normalizedContact.phoneNumbers.push({
+                        type: "work",
+                        value: $filter('normalizePhoneNumber')(contact.phone.office)
+                    })
+                }
+                if (contact.phone.home) {
+                    normalizedContact.phoneNumbers.push({
+                        type: "home",
+                        value: $filter('normalizePhoneNumber')(contact.phone.home)
+                    })
+                }
+                
+            }
+            if (contact.emails) {
+                normalizedContact.emails = [];
+                for (var i = 0; i < contact.emails.length; i++) {
+                    normalizedContact.emails.push({
+                        type: "work",
+                        value: contact.emails[i]
+                    })
+                }
+               // normalizedContact.emails = contact.emails;
+            }
+            
+            normalizedContact.note = "From showings.com feedback.";
+
+            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
+ 
+        }
     };
 
     function MdShowingSummaryController($scope, $mdDialog, ListingSvc) {
-
         var vm = this;
 
         if (vm.limit && vm.limit != -1) {
-
             $scope.showings = vm.showings.slice(0, vm.limit);
         } else {
             $scope.showings = vm.showings;
-
         }
 
-        $scope.theListing = ListingSvc.getSelectedListing();
-  
+       // $scope.theListing = ListingSvc.getSelectedListing();
+        
+        // need this so detail dialog can access info like address
+      //  vm.listing = $scope.theListing;
+        
         $scope.$watch('vm.showings', function (showings, previousShowings) {
 
             // ng-class failed in a directive - so i use this approach
@@ -1571,10 +1982,10 @@ angular.module('tbd', []);
             if (vm.limit && vm.limit != -1) {
 
                 $scope.showings = showings.slice(0, vm.limit);
-            }  else {
+            } else {
                 $scope.showings = showings;
             }
-  
+
 
             for (var i = 0; i < showings.length; ++i) {
 
@@ -1594,23 +2005,22 @@ angular.module('tbd', []);
                 //     scope.positiveFB.push(showings[i]);
                 //     myEl.addClass('positive-color');
                 // }
-               // scope.totalCnt += 1;
+                // scope.totalCnt += 1;
             }
 
         });
 
         vm.mdDialog = $mdDialog;
 
-
-
         vm.show = function (ev, selShowing) {
-
+            console.log(selShowing);
+            
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
-
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showing: selShowing
+                        showing: selShowing,
+                        listing: vm.listing
                     },
                     controller: DialogController,
                     templateUrl: 'templates/_md-card-showing-detail.view.html',
@@ -1625,17 +2035,74 @@ angular.module('tbd', []);
                 });
         }
 
+        vm.showAll = function (ev, showings, listing) {
+            console.log("show all called");
+            var parentEl = angular.element($scope.meElement.find('md-list-item'));
+            $scope.vm.mdDialog.show(
+                {
+                    locals: {
+                        showings: showings,
+                        listing: vm.listing
+                    },
+                    controller: DialogControllerAll,
+                    templateUrl: 'templates/_md-card-showing-detail-all.view.html',
+                    parent: parentEl,
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                .then(function (answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+        }
+
         //$scope.$watch('vm.data', activate);
         $scope.show = $scope.vm.show;
-        
+
         function activate() {
 
         }
     }
-
-
-
 })();
+/* feedback structure
+
+"startTime":"2016-07-26T18:00:00+00:00",
+"feedback":"",
+"potentialOffer":false,
+"sentiment":0,
+"time":"6:00 PM - 7:00 PM",
+"intShowingId":"fe7a48cd-0f65-4617-a188-a7eb94109cd1",
+"listing_id":"6D5DE6BD-FF92-4030-8A8A-3F302F8C05F9",
+"type":{
+"result":"Cancelled by Agent",
+"name":"Showing",
+"msg":""
+},
+"date":"07-26-2016",
+"contact":{
+"phone":{
+"office":"847-634-1000",
+"mobile":""
+},
+"name":"Justin Mcandrews"
+}
+
+OR type is :
+"9:45 AM - 11:30 AM"
+type: {
+    msg: ""
+    name: "Showing"
+    result:"Setup"
+
+msg:""
+name:"Inspection"
+result:"Setup"
+
+msg:""
+name :"Showing"
+result :"In Process" or "Declined By Seller"
+*/
 (function () {
  var appName = "app";
     try {
@@ -1938,7 +2405,7 @@ angular.module('tbd', []);
     }
 
 })();
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -1948,40 +2415,92 @@ angular.module('tbd', []);
 
     angular
         .module(appName)
+        .filter('toProperCase', function () {
+            return function (item) {
 
-        .filter('toProperCase', function() {
-            return function(item) {
-
-
-                return item.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+                return item.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 
             };
         })
 
-        .filter('agentEmail', function() {
+        .filter('agentEmail', function () {
 
-            return function(item) {
+            return function (item) {
                 var emails = item.split(';')
                 var all = [];
 
-                _.each(emails, function(el, index, list) {
+                _.each(emails, function (el, index, list) {
 
                     if (all.indexOf(el) === -1) {
-                        var str = '<a href="mailto:'+ el + ' target="_top">' + el + '</a>'
+                        var str = '<a href="mailto:' + el + ' target="_top">' + el + '</a>'
                         all.push(el);
                     }
-
                 });
-                     
-                return all.shift();
 
+                return all.shift();
             };
         })
-        
+
+        .filter('normalizePhoneNumber', function () {
+            return function (item, forDialer) {
+                if (item) {
+                    var finalNum = ""
+  
+                    // replace multiple spaces, newlines etc. with single space
+                    var str = item.replace(/\s\s+/g, ' ');
+
+                    var re = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?\s*(\d+))?$/im;
+                    // var str = phone;
+                    var m;
+                    var rawNum = "";
+                    var ext = "";
+
+                    if ((m = re.exec(str)) !== null) {
+                        if (m.index === re.lastIndex) {
+                            re.lastIndex++;
+                        }
+                        // View your result using the m-variable.
+                        if (m[2] != undefined)
+                            rawNum = m[2];
+                        if (m[3] != undefined)
+                            ext = m[3];
+                        // next pull apart number and any extention
+
+                        //normalize string and remove all unnecessary characters
+                        var phone = rawNum.replace(/[^\d]/g, "");
+
+                        // iff 11 and first is a 1 just strip it...
+                        if (phone.length == 11 && phone[0] == 1) {
+                            phone = phone.slice(1);
+                        }
+                        // should have 10 digits if not we return null
+                        if (phone.length == 10) {
+                            //reformat and return phone number
+                            finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                        }
+                        if (ext != "") {
+                            if  (forDialer != undefined && forDialer === true) {
+                                finalNum += ";" + ext;
+                            } else {
+                                finalNum += " ext. " + ext;
+                            }
+                        
+                        }
+                        return finalNum;
+
+                    }
+
+                }
+                return item;
+              
+            };
+        })
+
 
         // for days on market when item is time in epoch (looks like)
-        .filter('makeDaysOn', function() {
-            return function(item) {
+        .filter('makeDaysOn', function () {
+
+            return function (item) {
                 var nowInMs = (new Date).getTime();
                 var diff = nowInMs - item;
 
@@ -1993,9 +2512,9 @@ angular.module('tbd', []);
             };
         })
 
-        .filter('percentChange', function() {
+        .filter('percentChange', function () {
             // will be passed the current site data
-            return function(newValue, baseline) {
+            return function (newValue, baseline) {
 
                 if (newValue == undefined)
                     return "";
@@ -2007,11 +2526,12 @@ angular.module('tbd', []);
 
             };
         })
-        .filter('noFractionCurrency', ['$filter', '$locale', function($filter, $locale) {
+
+        .filter('noFractionCurrency', ['$filter', '$locale', function ($filter, $locale) {
 
             var currencyFilter = $filter('currency');
             var formats = $locale.NUMBER_FORMATS;
-            return function(amount, currencySymbol) {
+            return function (amount, currencySymbol) {
                 var value = currencyFilter(amount, currencySymbol);
                 if (value === undefined)
                     return amount;
@@ -2024,38 +2544,38 @@ angular.module('tbd', []);
             };
         }])
 
-        .filter('percentOf', ['$filter', function($filter) {
-            return function(count, total) {
+        .filter('percentOf', ['$filter', function ($filter) {
+            return function (count, total) {
                 return count / total;
             };
         }])
 
-        .filter('maxRecords', ['$filter', function($filter) {
+        .filter('maxRecords', ['$filter', function ($filter) {
             var MAX = 4;
-            return function(recs) {
+            return function (recs) {
                 return recs.slice(0, MAX);
             };
         }])
 
         // This filter makes the assumption that the input will be in decimal form (i.e. 17% is 0.17).
-        .filter('percentage', ['$filter', function($filter) {
-            return function(input, decimals) {
+        .filter('percentage', ['$filter', function ($filter) {
+            return function (input, decimals) {
                 return Math.round($filter('number')(input * 100, decimals)) + '%';
             };
         }])
 
         // This
-        .filter('name', ['$filter', function($filter) {
-            return function(input, decimals) {
+        .filter('name', ['$filter', function ($filter) {
+            return function (input, decimals) {
 
             };
         }])
 
-        .filter("timeago", function() {
+        .filter("timeago", function () {
             //time: the time
             //local: compared to what time? default: now
             //raw: whether you want in a format of "5 minutes ago", or "5 minutes"
-            return function(time, local, raw) {
+            return function (time, local, raw) {
                 if (!time) return "never";
 
                 if (!local) {
@@ -2115,8 +2635,8 @@ angular.module('tbd', []);
         })
 
 
-        .filter('groupBy', ['$parse', function($parse) {
-            return function(list, group_by) {
+        .filter('groupBy', ['$parse', function ($parse) {
+            return function (list, group_by) {
 
                 var filtered = [];
                 var prev_item = null;
@@ -2127,7 +2647,7 @@ angular.module('tbd', []);
                 var new_field = 'group_by_CHANGED';
 
                 // loop through each item in the list
-                angular.forEach(list, function(item) {
+                angular.forEach(list, function (item) {
 
                     group_changed = false;
 
@@ -2372,7 +2892,7 @@ angular.module('tbd', []);
 
 })();
 
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -2383,42 +2903,42 @@ angular.module('tbd', []);
     angular
         .module(appName)
 
-
-
         // filter out the fact that fuck-heads put one-day-code gen
         // shit in the system but we don't care about those...
-        .filter('filterOutOneDayCodeGen', function() {
-            return function(items) {
+        .filter('filterOutOneDayCodeGen', function () {
+
+            var pattern = /1DayCode/i;
+
+            return function (items) {
+
                 var filtered = [];
 
                 for (var i = 0; i < items.length; i++) {
-                    if (items[i].AccessType != "1DayCodeGen") {
+
+                    if (!pattern.test(items[i].AccessType)) {
                         filtered.push(items[i]);
                     }
                 }
-
                 return filtered;
-
             };
         })
 
         // filter out the fact that fuck-heads put one-day-code gen
         // shit in the system but we don't care about those...
-        .filter('accessorName', function() {
-            return function(entry) {
+        .filter('accessorName', function () {
+            return function (entry) {
                 //var filtered = [];
                 var name = entry;
-                try{
+                try {
                     name = entry.split("-")[0];
                 } catch (ex) {
-                    
+
                 }
-     
+
                 return name;
 
             };
         })
-
 })();
 
 angular.module('tbd').run(['$templateCache', function($templateCache) {
@@ -2530,7 +3050,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"trending-list-guard\">\n" +
     "\n" +
-    "            <div  ng-repeat=\"trend in listing.trends\" ng-click=\"\">\n" +
+    "            <div  ng-repeat=\"trend in listing.trends track by $index\" ng-click=\"\">\n" +
     "\n" +
     "                <span class=\"trend-box\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_whatshot_black_48px.svg\" tabindex=\"0\" aria-hidden=\"true\">\n" +
@@ -2914,88 +3434,102 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"sentrilockDetails\" aria-label=\"Sentrilock Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
-    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
-    "<h1>Sentri Details</h1>\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                        <h1>Sentrilock Details</h1>\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
-    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}}  {{ sentri.AgentLastName }}</h3>\n" +
+    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}} {{ sentri.AgentLastName }}</h3>\n" +
     "                <span flex></span>\n" +
     "                <md-button class=\"md-icon-button\" ng-click=\"cancel()\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" aria-label=\"Close dialog\"></md-icon>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
     "        </md-toolbar>\n" +
-    "        <md-dialog-content style=\"padding: 20px\">\n" +
+    "\n" +
+    "        <md-dialog-content>\n" +
+    "\n" +
     "            <div>\n" +
-    "                <h5 class=\"order-address\">{{sentri.Created | date: \"short\" }} - {{sentri.Created | timeago }}</h5>\n" +
     "\n" +
-    "                <!-- <h4>\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </h4> -->\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <table>\n" +
+    "                  \n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Access time</td>\n" +
+    "                        <td class=card-value>\n" +
+    "\n" +
+    "                            <span class=no-wrap>{{sentri.UTCAccessedDT | date: 'short'}}</span>\n" +
+    "                            <span>&middot;</span>\n" +
+    "\n" +
+    "                            <span class=no-wrap> {{sentri.UTCAccessedDT | timeago}}</span>\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Lockbox SN</td>\n" +
+    "                        <td> <span class=card-value> {{sentri.LBSerialNumber}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Access type</td>\n" +
+    "                        <td> <span class=\"card-value\">{{sentri.AccessType}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Location</td>\n" +
+    "                        <td><span class=\"card-value\" style=\"text-align: center\">{{sentri.Location}} </span></td>\n" +
+    "                    </tr>\n" +
+    "\n" +
+    "\n" +
+    "                </table>\n" +
+    "\n" +
     "                <hr>\n" +
-    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
-    "                <div ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber' class=\"contact-method\">\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
+    "             \n" +
     "\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "                <div class=\"orgs\" layout=\"row\" layout-xs=\"column\">\n" +
+    "                    <div flex class=\"card-value\" style=\"text-align: center\">\n" +
+    "                        {{sentri.Association}}\n" +
+    "                    </div>\n" +
+    "                    <div class=\"card-value\" style=\"text-align: center; font-size: 32px;\">\n" +
+    "                        &middot;\n" +
+    "                    </div>\n" +
     "\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{sentri.ContactNumber}} (Mobile)\n" +
-    "              \n" +
-    " \n" +
-    "\n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "                </a>\n" +
-    "                <!-- <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
-    "                       <a class='plain'  ng-href=\"\">\n" +
-    " \n" +
-    "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                    </span>\n" +
-    "                    </a>\n" +
-    "                </div> -->\n" +
-    "\n" +
-    "                <div ng-show='sentri.emailAddy' class=\"md-3-line\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                            {{ sentri.emailAddy }}\n" +
-    "                    </span>\n" +
+    "                    <div flex style=\"text-align: center\" class=\"card-value\">\n" +
+    "                        {{sentri.CompanyName}}\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div ng-show='sentri.emailAddy2 && sentri.emailAddy2 != sentri.emailAddy' class=\"md-3-line\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                            {{ sentri.emailAddy2 }}\n" +
-    "                    </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>\n" +
+    "             \n" +
+    "\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber'\n" +
+    "                    class=\"contact-method\">\n" +
+    "\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
+    "                    {{sentri.ContactNumber | normalizePhoneNumber}} (Mobile)\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <md-button ng-if='(sentri.emailAddy && sentri.emailAddy.length > 3)' ng-click=\"sendMail(sentri.emailAddy, sentri)\" class=\"md-raised\">\n" +
+    "\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
+    "                    {{ sentri.emailAddy }}\n" +
+    "\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click=\"sendMail(sentri.emailAddy2, sentri)\"\n" +
+    "                    class=\"md-raised\">\n" +
+    "\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
+    "\n" +
     "            </div>\n" +
     "\n" +
-    "\n" +
     "        </md-dialog-content>\n" +
-    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
     "\n" +
-    "        <!--<span flex></span>-->\n" +
-    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
-    "        <!--PHONE-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
-    "        <!--EMAIL-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--</div>-->\n" +
     "    </form>\n" +
     "</md-dialog>"
   );
@@ -3055,14 +3589,106 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-sentrilock-detail-all.view.html',
+    "<!--template for the little popo up. -->\n" +
+    "<style>\n" +
+    "    .dialogdemoBasicUsage #popupContainer {\n" +
+    "        position: relative;\n" +
+    "    }\n" +
+    "    \n" +
+    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
+    "        font-weight: bold;\n" +
+    "        /*color: blue;*/\n" +
+    "        text-decoration: underline;\n" +
+    "    }\n" +
+    "    \n" +
+    "    i.plain {\n" +
+    "        text-decoration: none;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
+    "\n" +
+    "\n" +
+    "    <div ng-repeat=\"entry in sentrilock.entries\">\n" +
+    "       \n" +
+    "        <md-toolbar ng-if=\"$index == 0\">\n" +
+    "            <div class=\"md-toolbar-tools md-primary\">\n" +
+    "                <h2>\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                        <md-button class=\"md-icon-button\" ng-if=\"$index == 0\">\n" +
+    "                    </md-icon>\n" +
+    "                </h2>\n" +
+    " \n" +
+    "                <span flex></span>\n" +
+    "\n" +
+    "                <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" ng-click=\"cancel()\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </md-toolbar>\n" +
+    "\n" +
+    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
+    "            <div>\n" +
+    "\n" +
+    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
+    "\n" +
+    "                <h3>{{entry.CompanyName}}</h3>\n" +
+    "\n" +
+    "                <h3>{{entry.City}}</h3>\n" +
+    "                <h4>{{entry.State}}</h4>\n" +
+    "                <h5 class=\"order-address\">{{entry.Time | date: \"medium\" }} - {{entry.UTCAccessedDT | timeago }}</h5>\n" +
+    "                <hr>\n" +
+    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
+    "                <div ng-click=\"dial(entry.ContactNumber)\" class=\"contact-method\">\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.ContactNumber }} (Mobile)\n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "                </a>\n" +
+    "                <div ng-click=\"dial(entry.PhoneNumber)\" class=\"contact-method\">\n" +
+    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.PhoneNumber }} (Phone Number)\n" +
+    "                    </span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <div class=\"contact-method\">\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                   {{entry.EmailAddress}}\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </md-dialog-content>\n" +
+    "  \n" +
+    "    </div>\n" +
+    "\n" +
+    "</md-dialog>"
+  );
+
+
   $templateCache.put('templates/_md-card-sentrilock.view.html',
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
-    "       \n" +
+    "\n" +
     "\n" +
     "        <div class=\"logo\">\n" +
-    "             <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
+    "            <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -3070,43 +3696,39 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <div class=\"feedback-div\">\n" +
     "\n" +
     "\n" +
-    "        <div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  <!--| maxRecords: 5-->\n" +
-    "           \n" +
+    "        <!--<div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  | maxRecords: 5-->\n" +
+    "        <div ng-repeat=\"entry in entries\" ng-click=\"show($event, entry)\">\n" +
     "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "            <div class=\"time-wrapper\">\n" +
+    "                <span class=datetime> {{entry.UTCAccessedDT | timeago}}</span>\n" +
+    "                <span class=datetime>&middot;</span>\n" +
+    "                <span class=datetime>{{entry.UTCAccessedDT | date: 'short'}}</span>\n" +
     "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
     "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
-    "           \n" +
-    "            \n" +
+    "                <br>\n" +
+    "                <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <p style=\"clear: both;\" class=\"feedback\">\n" +
+    "                Access type: <span class=\"card-value\">{{entry.AccessType}}</span>\n" +
+    "                <br> Location: <span class=\"card-value\">{{entry.Location}} </span>\n" +
+    "\n" +
+    "            </p>\n" +
+    "\n" +
+    "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "        </div>\n" +
     "\n" +
-    "        \n" +
-    "<!--\n" +
-    " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\" ng-click=\"show($event, entry)\">\n" +
-    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
-    "            \n" +
-    "        </div>-->\n" +
-    "\n" +
-    "         <div ng-if=\"vm.limit != -1 && vm.sentrilock.entries.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.sentrilock.entries.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
     "            <span style=\"width: 100%\">\n" +
     "            <md-button style=\"float: left\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'sentri'})\">\n" +
     "                <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
     "            </md-button>\n" +
     "\n" +
     "          <span class=\"nofm\">{{vm.limit}} of {{vm.sentrilock.entries.length}}</span>\n" +
-    "          </span>\n" +
+    "            </span>\n" +
     "\n" +
     "        </div>\n" +
-    "        <!--<div ng-hide=\"data.entries <=5\" ng-click=\"showMoreFeedback()\" >\n" +
-    "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +
-    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
     "\n" +
-    "        </div>-->\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
@@ -3203,6 +3825,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-showing-detail.view.html',
+    "<!--template for the little popo up. -->\n" +
     "<style>\n" +
     "    .dialogdemoBasicUsage #popupContainer {\n" +
     "        position: relative;\n" +
@@ -3217,25 +3840,23 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    i.plain {\n" +
     "        text-decoration: none;\n" +
     "    }\n" +
+    "    \n" +
     "    .contact-method {\n" +
     "        padding-top: 4px;\n" +
     "        padding-bottom: 4px;\n" +
     "    }\n" +
-    "    #showingDetails {\n" +
+    "    /*#showingDetails {\n" +
     "        max-width: 90%;\n" +
     "        width: 500px;\n" +
-    "\n" +
-    "    }\n" +
-    "\n" +
-    "\n" +
+    "    }*/\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog id=\"showingDetails\"\" class=\"\" aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"showingDetails\" aria-label=\"Showing Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
-    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
     "\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
@@ -3247,65 +3868,98 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </md-toolbar>\n" +
     "\n" +
-    "        <md-dialog-content style=\"max-height:80%; padding: 15px\">\n" +
-    "            <div>\n" +
-    "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "                <div class='date-row'>\n" +
+    "        <md-dialog-content>\n" +
     "\n" +
-    "                    </div>\n" +
-    "                <span class=\"feedback\">\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </span>\n" +
+    "            <div class=feedback-div>\n" +
+    "                <!--<h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
+    "                -->\n" +
+    "\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <!--<div class=\"time-wrapper\">\n" +
+    "                    <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                    <span class=datetime>&middot;</span>\n" +
+    "                    <span class=datetime>{{showing.startTime | date:'short'}}</span><br>\n" +
+    "\n" +
+    "\n" +
+    "                </div>-->\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "                <table>\n" +
+    "\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Showing time</td>\n" +
+    "\n" +
+    "                        <td class=card-value>\n" +
+    "\n" +
+    "                        \n" +
+    "                            <span class=datetime>{{showing.startTime | date:'short'}}</span>\n" +
+    "                                <span class=datetime>&middot;</span>\n" +
+    "                            <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                          \n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Showing type</td>\n" +
+    "\n" +
+    "                        <td> <span class=\"card-value\">{{showing.type.name}} </span>\n" +
+    "\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Result</td>\n" +
+    "                        <td> <span class=\"card-value\"> {{showing.type.result}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr ng-if=\"showing.type.message && showing.type.message.length>0\">\n" +
+    "                        <td class=\"label\">Message</td>\n" +
+    "                        <td>\n" +
+    "                            <span class=\"card-value\">{{showing.type.message}}</span>\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "\n" +
+    "\n" +
+    "                </table>\n" +
+    "\n" +
+    "\n" +
+    "                <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback card-value\">\"{{showing.feedback}}\"</p>\n" +
+    "                <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback card-value\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "\n" +
     "                <hr>\n" +
-    "              \n" +
-    "                <div ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile' class=\"contact-method\">\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
     "\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'>\n" +
     "\n" +
-    "                        <span class=\"contact-value\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
     "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
-    "              \n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "                </a>\n" +
-    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
-    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
-    "                       <a class='plain'  ng-href=\"\">\n" +
-    " \n" +
+    "                </md-button>\n" +
     "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'>\n" +
+    "\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
     "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                    </span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
+    "                </md-button>\n" +
     "\n" +
-    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                   {{email}}\n" +
-    "                    </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
+    "            \n" +
+    "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\" ng-click=\"sendMail(email, showing)\">\n" +
+    "                    <!-- <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\"> -->\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
+    "                        {{email}}\n" +
+    "                        <!--</a>-->\n" +
+    "                </md-button>\n" +
     "\n" +
+    "                <!--<md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click=\"sendMail(sentri.emailAddy2, sentri)\"\n" +
+    "                    class=\"md-raised\">\n" +
     "\n" +
+    "                </md-button>-->\n" +
+    "\n" +
+    "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
     "        </md-dialog-content>\n" +
-    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
     "\n" +
-    "        <!--<span flex></span>-->\n" +
-    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
-    "        <!--PHONE-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
-    "        <!--EMAIL-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--</div>-->\n" +
     "    </form>\n" +
     "</md-dialog>"
   );
@@ -3462,7 +4116,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div> <md-card-stat title=\"X-OUTs\" stat-model=\"listing.activitySummary[0].listing_prefs_xOutCnt\"></md-card-stat></div>\n" +
     "\n" +
     "            <div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title=\"TOTAL\" value=\"{{listing.activitySummary[0].listing_views_totalCnt}}\"></md-card-stat></div>\n" +
-    "\n" +
     "\n" +
     "            <div ng-show='listing.summary.listing_views_sevenDayCnt' class=\"summary-item seven-count\">\n" +
     "                {{listing.summary.listing_views_sevenDayCnt}} in last 7 days\n" +
@@ -3812,7 +4465,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "      \n" +
     "\n" +
-    "\n" +
     "        <div class=\"card-icons-wrapper\">\n" +
     "            <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
     "                <md-icon md-svg-src=\"assets/icons/ic_open_in_browser_black_48px.svg\" aria-label=\"Launch in browser\"></md-icon>\n" +
@@ -3823,7 +4475,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <div layout=\"row\">\n" +
+    "\n" +
     "        <div flex class=\"left\">\n" +
+    "\n" +
     "            <div>\n" +
     "                <label>Days listed</label>\n" +
     "                <span><b>{{listing.listing_daysOn}}</b></span>\n" +
@@ -3835,8 +4489,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <span ng-if=\"listing.listing_views_todayCnt == undefined\"><b>*</b></span>\n" +
     "            </div>\n" +
-    "            <div>\n" +
     "\n" +
+    "            <div>\n" +
     "                <label>7-day views</label>\n" +
     "\n" +
     "                <span ng-if=\"listing.listing_views_sevenDayCnt != undefined\"><b>{{listing.listing_views_sevenDayCnt}}</b></span>\n" +
@@ -3852,7 +4506,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <span ng-if=\"listing.listing_views_thirtyDayCnt == undefined\"><b>*</b></span>\n" +
     "\n" +
-    "\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
@@ -3866,8 +4519,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <span ng-if=\"listing.listing_favoritesCnt\">\n" +
     "                     <md-icon  class=\"favs\" md-svg-src=\"assets/icons/ic_favorite_black_24px.svg\"></md-icon>\n" +
     "                  <b>{{listing.listing_favoritesCnt}}</b>\n" +
-    "              </span>\n" +
-    "                  </div>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <div flex class=\"right \">\n" +
     "            <div>\n" +
@@ -3974,20 +4627,32 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <div ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short'}}</span>\n" +
-    "            <p class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
+    "            <div class=\"time-wrapper\">\n" +
+    "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                <span class=datetime>&middot;</span> \n" +
+    "                <span class=datetime>{{showing.startTime | date:'short'}}</span><br>\n" +
+    "                 <span class=datetime>{{showing.type.name}} \n" +
+    "                 &middot;\n" +
+    "                {{showing.type.result}}\n" +
+    "                <div ng-if=\"showing.type.message && showing.type.message.length>0\"> &middot;</div>\n" +
+    "                 {{showing.type.message}} \n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "           \n" +
+    "            <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
+    "            <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "             <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-if=\"vm.limit != -1 && vm.showings.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.showings.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
     "            <span style=\"width: 100%\">\n" +
-    "            <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'showings'})\">\n" +
-    "                <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
-    "            </md-button>\n" +
+    "                <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'showings'})\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
+    "                </md-button>\n" +
     "\n" +
-    "          <span class=\"nofm\">{{vm.limit}} of {{vm.showings.length}}</span>\n" +
-    "          </span>\n" +
+    "                 <span class=\"nofm\">{{vm.limit}} of {{vm.showings.length}}</span>\n" +
+    "            </span>\n" +
     "\n" +
     "        </div>\n" +
     "        <!--\n" +
@@ -4026,27 +4691,28 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <span class=\"cell showings-div\">\n" +
     "           \n" +
-    "                <div>\n" +
+    "             <div style=\"min-height: 50px;\">\n" +
     "                    <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/showings.svg\"></md-icon>\n" +
     "                    <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>\n" +
     "                </div>\n" +
-    "                <div>\n" +
-    "                    <span class=\"title\">showings</span>\n" +
+    "                <div class=\"box-label\">\n" +
+    "                    <span class=\"title no-wrap\"\">showings</span>\n" +
     "\n" +
     "    </div>\n" +
     "    </span>\n" +
     "\n" +
     "\n" +
     "    <span class=\"cell clicks-div\">\n" +
-    "           <div>\n" +
-    "                       \n" +
-    "                            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
-    "                             <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
-    "                             <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
-    "                            <change-indicator data=\"vm.listing_views_todayCnt\" rate-decimals=\"0\" pct-decimals=\"0\" color=\"light\"></change-indicator>\n" +
-    "                        </div>\n" +
-    "                        <div>\n" +
-    "                            <span class=\"title\">clicks</span>\n" +
+    "        \n" +
+    "       <div style=\"min-height: 50px;\">                  \n" +
+    "            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
+    "                <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
+    "                <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
+    "            <change-indicator data=\"vm.listing_views_todayCnt\" rate-decimals=\"0\" pct-decimals=\"0\" color=\"light\"></change-indicator>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"box-label\">\n" +
+    "            <span class=\"title no-wrap\">clicks</span>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
@@ -4054,14 +4720,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "<span ng-if=\"showings != undefined\" class=\"cell positive-div\">\n" +
     "        \n" +
-    "        <div>\n" +
+    "        <div style=\"min-height: 50px;\">\n" +
     "           \n" +
     "                <!--<img src=\"assets/icons/chat.png\"/>-->\n" +
     "                      <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/feedback.svg\"></md-icon>\n" +
     "                <label>{{vm.sentimentCounter.notNegative | percentOf:vm.showings.length | percentage}}</label>\n" +
     "                        </div>\n" +
-    "                        <div>\n" +
-    "                            <span class=\"title\">non-negative</span>\n" +
+    "                        <div class=\"box-label\">\n" +
+    "                            <span class=\"title no-wrap\">non-negative</span>\n" +
     "\n" +
     "</div>\n" +
     "\n" +
@@ -4368,7 +5034,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.feedback.view.html',
-    "<div style=\"margin-top:35px\">\n" +
+    "\n" +
     "<div ng-if=\"card === 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
     "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your sentrilock\"\n" +
     "    sysId=\"2\" limit=\"-1\" >\n" +
@@ -4383,7 +5049,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "\n" +
     "\n" +
-    "</div>\n"
+    "\n"
   );
 
 
@@ -4398,7 +5064,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
+    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content\">\n" +
     "\n" +
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
@@ -4459,7 +5125,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\">\n" +
     "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\"\n" +
     "                imgurl=\"/assets/logos/ShowingsCom_243.png\" listing='vm.theListing' showings='vm.theListing.activityAggregate.snapshots[8].data' title=\"Summary - Feedback on your showings\" \n" +
-    "                sysId=\"8\" limit=\"5\">\n" +
+    "                sysId=\"8\" limit=\"4\">\n" +
     "                </md-showing-summary>\n" +
     "                <!---->\n" +
     "            </li>\n" +
@@ -4476,8 +5142,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </md-showing-summary>\n" +
     "            </li>-->\n" +
     "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
-    "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
-    "                sysId=\"2\" limit=\"5\">\n" +
+    "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Sentilock Entry Logs\"\n" +
+    "                sysId=\"2\" limit=\"4\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
     "        </ul>\n" +

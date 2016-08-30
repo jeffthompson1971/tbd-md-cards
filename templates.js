@@ -107,7 +107,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <div class=\"trending-list-guard\">\n" +
     "\n" +
-    "            <div  ng-repeat=\"trend in listing.trends\" ng-click=\"\">\n" +
+    "            <div  ng-repeat=\"trend in listing.trends track by $index\" ng-click=\"\">\n" +
     "\n" +
     "                <span class=\"trend-box\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_whatshot_black_48px.svg\" tabindex=\"0\" aria-hidden=\"true\">\n" +
@@ -491,88 +491,102 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"sentrilockDetails\" aria-label=\"Sentrilock Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
-    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
-    "<h1>Sentri Details</h1>\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                        <h1>Sentrilock Details</h1>\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
-    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}}  {{ sentri.AgentLastName }}</h3>\n" +
+    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}} {{ sentri.AgentLastName }}</h3>\n" +
     "                <span flex></span>\n" +
     "                <md-button class=\"md-icon-button\" ng-click=\"cancel()\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" aria-label=\"Close dialog\"></md-icon>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
     "        </md-toolbar>\n" +
-    "        <md-dialog-content style=\"padding: 20px\">\n" +
+    "\n" +
+    "        <md-dialog-content>\n" +
+    "\n" +
     "            <div>\n" +
-    "                <h5 class=\"order-address\">{{sentri.Created | date: \"short\" }} - {{sentri.Created | timeago }}</h5>\n" +
     "\n" +
-    "                <!-- <h4>\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </h4> -->\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <table>\n" +
+    "                  \n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Access time</td>\n" +
+    "                        <td class=card-value>\n" +
+    "\n" +
+    "                            <span class=no-wrap>{{sentri.UTCAccessedDT | date: 'short'}}</span>\n" +
+    "                            <span>&middot;</span>\n" +
+    "\n" +
+    "                            <span class=no-wrap> {{sentri.UTCAccessedDT | timeago}}</span>\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Lockbox SN</td>\n" +
+    "                        <td> <span class=card-value> {{sentri.LBSerialNumber}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Access type</td>\n" +
+    "                        <td> <span class=\"card-value\">{{sentri.AccessType}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Location</td>\n" +
+    "                        <td><span class=\"card-value\" style=\"text-align: center\">{{sentri.Location}} </span></td>\n" +
+    "                    </tr>\n" +
+    "\n" +
+    "\n" +
+    "                </table>\n" +
+    "\n" +
     "                <hr>\n" +
-    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
-    "                <div ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber' class=\"contact-method\">\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
+    "             \n" +
     "\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "                <div class=\"orgs\" layout=\"row\" layout-xs=\"column\">\n" +
+    "                    <div flex class=\"card-value\" style=\"text-align: center\">\n" +
+    "                        {{sentri.Association}}\n" +
+    "                    </div>\n" +
+    "                    <div class=\"card-value\" style=\"text-align: center; font-size: 32px;\">\n" +
+    "                        &middot;\n" +
+    "                    </div>\n" +
     "\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{sentri.ContactNumber}} (Mobile)\n" +
-    "              \n" +
-    " \n" +
-    "\n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "                </a>\n" +
-    "                <!-- <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
-    "                       <a class='plain'  ng-href=\"\">\n" +
-    " \n" +
-    "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                    </span>\n" +
-    "                    </a>\n" +
-    "                </div> -->\n" +
-    "\n" +
-    "                <div ng-show='sentri.emailAddy' class=\"md-3-line\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                            {{ sentri.emailAddy }}\n" +
-    "                    </span>\n" +
+    "                    <div flex style=\"text-align: center\" class=\"card-value\">\n" +
+    "                        {{sentri.CompanyName}}\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
-    "                <div ng-show='sentri.emailAddy2 && sentri.emailAddy2 != sentri.emailAddy' class=\"md-3-line\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                            {{ sentri.emailAddy2 }}\n" +
-    "                    </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button ng-click=\"saveContact(sentri.AgentFirstName + ' ' + sentri.AgentLastName,  sentri.ContactNumber)\">Save</button>\n" +
+    "             \n" +
+    "\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber'\n" +
+    "                    class=\"contact-method\">\n" +
+    "\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
+    "                    {{sentri.ContactNumber | normalizePhoneNumber}} (Mobile)\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <md-button ng-if='(sentri.emailAddy && sentri.emailAddy.length > 3)' ng-click=\"sendMail(sentri.emailAddy, sentri)\" class=\"md-raised\">\n" +
+    "\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
+    "                    {{ sentri.emailAddy }}\n" +
+    "\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click=\"sendMail(sentri.emailAddy2, sentri)\"\n" +
+    "                    class=\"md-raised\">\n" +
+    "\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
+    "\n" +
     "            </div>\n" +
     "\n" +
-    "\n" +
     "        </md-dialog-content>\n" +
-    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
     "\n" +
-    "        <!--<span flex></span>-->\n" +
-    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
-    "        <!--PHONE-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
-    "        <!--EMAIL-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--</div>-->\n" +
     "    </form>\n" +
     "</md-dialog>"
   );
@@ -632,14 +646,106 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('templates/_md-card-sentrilock-detail-all.view.html',
+    "<!--template for the little popo up. -->\n" +
+    "<style>\n" +
+    "    .dialogdemoBasicUsage #popupContainer {\n" +
+    "        position: relative;\n" +
+    "    }\n" +
+    "    \n" +
+    "    .dialogdemoBasicUsage .debt-be-gone {\n" +
+    "        font-weight: bold;\n" +
+    "        /*color: blue;*/\n" +
+    "        text-decoration: underline;\n" +
+    "    }\n" +
+    "    \n" +
+    "    i.plain {\n" +
+    "        text-decoration: none;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<md-dialog aria-label=\"Showing Details\" flex=\"95\">\n" +
+    "\n" +
+    "\n" +
+    "    <div ng-repeat=\"entry in sentrilock.entries\">\n" +
+    "       \n" +
+    "        <md-toolbar ng-if=\"$index == 0\">\n" +
+    "            <div class=\"md-toolbar-tools md-primary\">\n" +
+    "                <h2>\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                        <md-button class=\"md-icon-button\" ng-if=\"$index == 0\">\n" +
+    "                    </md-icon>\n" +
+    "                </h2>\n" +
+    " \n" +
+    "                <span flex></span>\n" +
+    "\n" +
+    "                <md-icon md-svg-src=\"assets/icons/ic_close_white_24px.svg\" ng-click=\"cancel()\" aria-label=\"Close dialog\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </md-toolbar>\n" +
+    "\n" +
+    "        <md-dialog-content style=\"max-width:95%;max-height:95%; padding: 20px\">\n" +
+    "            <div>\n" +
+    "\n" +
+    "                <!--<h3> {{ entry.ContactName }} </h3>-->\n" +
+    "\n" +
+    "                <h3>{{entry.CompanyName}}</h3>\n" +
+    "\n" +
+    "                <h3>{{entry.City}}</h3>\n" +
+    "                <h4>{{entry.State}}</h4>\n" +
+    "                <h5 class=\"order-address\">{{entry.Time | date: \"medium\" }} - {{entry.UTCAccessedDT | timeago }}</h5>\n" +
+    "                <hr>\n" +
+    "                <!-- contact\":{\"phone\":{\"office\":\"815-385-6990\",\"mobile\":\"815-861-0099\"} -->\n" +
+    "                <div ng-click=\"dial(entry.ContactNumber)\" class=\"contact-method\">\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "                        <span class=\"contact-label\"> \n" +
+    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.ContactNumber }} (Mobile)\n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "                </a>\n" +
+    "                <div ng-click=\"dial(entry.PhoneNumber)\" class=\"contact-method\">\n" +
+    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
+    "                    <a class='plain' ng-href=\"\">\n" +
+    "\n" +
+    "\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                    {{ entry.PhoneNumber }} (Phone Number)\n" +
+    "                    </span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
+    "                    <div class=\"contact-method\">\n" +
+    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
+    "                        <span class=\"contact-value\">\n" +
+    "                   {{entry.EmailAddress}}\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </md-dialog-content>\n" +
+    "  \n" +
+    "    </div>\n" +
+    "\n" +
+    "</md-dialog>"
+  );
+
+
   $templateCache.put('templates/_md-card-sentrilock.view.html',
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
-    "       \n" +
+    "\n" +
     "\n" +
     "        <div class=\"logo\">\n" +
-    "             <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
+    "            <img src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -647,43 +753,39 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <div class=\"feedback-div\">\n" +
     "\n" +
     "\n" +
-    "        <div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  <!--| maxRecords: 5-->\n" +
-    "           \n" +
+    "        <!--<div ng-repeat=\"entry in entries | filterOutOneDayCodeGen\" ng-click=\"show($event, entry)\">  | maxRecords: 5-->\n" +
+    "        <div ng-repeat=\"entry in entries\" ng-click=\"show($event, entry)\">\n" +
     "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
+    "            <div class=\"time-wrapper\">\n" +
+    "                <span class=datetime> {{entry.UTCAccessedDT | timeago}}</span>\n" +
+    "                <span class=datetime>&middot;</span>\n" +
+    "                <span class=datetime>{{entry.UTCAccessedDT | date: 'short'}}</span>\n" +
     "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
     "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
-    "           \n" +
-    "            \n" +
+    "                <br>\n" +
+    "                <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <p style=\"clear: both;\" class=\"feedback\">\n" +
+    "                Access type: <span class=\"card-value\">{{entry.AccessType}}</span>\n" +
+    "                <br> Location: <span class=\"card-value\">{{entry.Location}} </span>\n" +
+    "\n" +
+    "            </p>\n" +
+    "\n" +
+    "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "        </div>\n" +
     "\n" +
-    "        \n" +
-    "<!--\n" +
-    " <div ng-if=\"limit > -1\" ng-repeat=\"entry in vm.sentrilock.entries | filterOutOneDayCodeGen | maxRecords: 5\" ng-click=\"show($event, entry)\">\n" +
-    "            <label><b> {{entry.AccessedByName | accessorName}}</b></label>\n" +
-    "\n" +
-    "            <span>{{entry.UTCAccessedDT}} </span>\n" +
-    "\n" +
-    "            <p>Access type: {{entry.AccessType}} {{entry.UTCAccessedDT | timeago}}</p>\n" +
-    "            \n" +
-    "        </div>-->\n" +
-    "\n" +
-    "         <div ng-if=\"vm.limit != -1 && vm.sentrilock.entries.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.sentrilock.entries.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
     "            <span style=\"width: 100%\">\n" +
     "            <md-button style=\"float: left\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'sentri'})\">\n" +
     "                <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
     "            </md-button>\n" +
     "\n" +
     "          <span class=\"nofm\">{{vm.limit}} of {{vm.sentrilock.entries.length}}</span>\n" +
-    "          </span>\n" +
+    "            </span>\n" +
     "\n" +
     "        </div>\n" +
-    "        <!--<div ng-hide=\"data.entries <=5\" ng-click=\"showMoreFeedback()\" >\n" +
-    "            <label ng-if=\"limit > -1\" ui-sref=\"app.feedback({ listingId: sentrilock.MLSNumber, card: 'sentri'})\"><b>Show More</b></label>\n" +
-    "            <span ui-sref=\"app.feedback({ listingId: theListing.listing_id})\"> ... </span>\n" +
     "\n" +
-    "        </div>-->\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
@@ -780,6 +882,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-showing-detail.view.html',
+    "<!--template for the little popo up. -->\n" +
     "<style>\n" +
     "    .dialogdemoBasicUsage #popupContainer {\n" +
     "        position: relative;\n" +
@@ -794,25 +897,23 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    i.plain {\n" +
     "        text-decoration: none;\n" +
     "    }\n" +
+    "    \n" +
     "    .contact-method {\n" +
     "        padding-top: 4px;\n" +
     "        padding-bottom: 4px;\n" +
     "    }\n" +
-    "    #showingDetails {\n" +
+    "    /*#showingDetails {\n" +
     "        max-width: 90%;\n" +
     "        width: 500px;\n" +
-    "\n" +
-    "    }\n" +
-    "\n" +
-    "\n" +
+    "    }*/\n" +
     "</style>\n" +
     "\n" +
-    "<md-dialog id=\"showingDetails\"\" class=\"\" aria-label=\"Showing Details\">\n" +
+    "<md-dialog id=\"showingDetails\" aria-label=\"Showing Details\">\n" +
     "    <form>\n" +
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools md-primary\">\n" +
     "                <h2>\n" +
-    "                    <md-icon  md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_chat_white_24px.svg\">\n" +
     "\n" +
     "                    </md-icon>\n" +
     "                </h2>\n" +
@@ -824,65 +925,98 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            </div>\n" +
     "        </md-toolbar>\n" +
     "\n" +
-    "        <md-dialog-content style=\"max-height:80%; padding: 15px\">\n" +
-    "            <div>\n" +
-    "                <h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
-    "                <div class='date-row'>\n" +
+    "        <md-dialog-content>\n" +
     "\n" +
-    "                    </div>\n" +
-    "                <span class=\"feedback\">\n" +
-    "                    {{showing.feedback}}\n" +
-    "                </span>\n" +
+    "            <div class=feedback-div>\n" +
+    "                <!--<h5 class=\"order-address\">{{showing.startTime | date: \"short\" }} - {{showing.startTime | timeago }}</h5>\n" +
+    "                -->\n" +
+    "\n" +
+    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
+    "\n" +
+    "                <!--<div class=\"time-wrapper\">\n" +
+    "                    <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                    <span class=datetime>&middot;</span>\n" +
+    "                    <span class=datetime>{{showing.startTime | date:'short'}}</span><br>\n" +
+    "\n" +
+    "\n" +
+    "                </div>-->\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "                <table>\n" +
+    "\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Showing time</td>\n" +
+    "\n" +
+    "                        <td class=card-value>\n" +
+    "\n" +
+    "                        \n" +
+    "                            <span class=datetime>{{showing.startTime | date:'short'}}</span>\n" +
+    "                                <span class=datetime>&middot;</span>\n" +
+    "                            <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                          \n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Showing type</td>\n" +
+    "\n" +
+    "                        <td> <span class=\"card-value\">{{showing.type.name}} </span>\n" +
+    "\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                    <tr>\n" +
+    "                        <td class=\"label\">Result</td>\n" +
+    "                        <td> <span class=\"card-value\"> {{showing.type.result}}</span></td>\n" +
+    "                    </tr>\n" +
+    "                    <tr ng-if=\"showing.type.message && showing.type.message.length>0\">\n" +
+    "                        <td class=\"label\">Message</td>\n" +
+    "                        <td>\n" +
+    "                            <span class=\"card-value\">{{showing.type.message}}</span>\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "\n" +
+    "\n" +
+    "                </table>\n" +
+    "\n" +
+    "\n" +
+    "                <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback card-value\">\"{{showing.feedback}}\"</p>\n" +
+    "                <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback card-value\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "\n" +
     "                <hr>\n" +
-    "              \n" +
-    "                <div ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile' class=\"contact-method\">\n" +
-    "                    <a class='plain' ng-href=\"\">\n" +
     "\n" +
-    "                        <span class=\"contact-label\"> \n" +
-    "                             <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"Mobile\"></md-icon> </span>\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'>\n" +
     "\n" +
-    "                        <span class=\"contact-value\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
     "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
-    "              \n" +
-    "                    </span>\n" +
-    "                </div>\n" +
-    "                </a>\n" +
-    "                <div ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office' class=\"contact-method\">\n" +
-    "                    <!--<a class='plain' ng-href=\"tel:+1-{{showing.contact.phone.office}} \">-->\n" +
-    "                       <a class='plain'  ng-href=\"\">\n" +
-    " \n" +
+    "                </md-button>\n" +
     "\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"Office\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
+    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'>\n" +
+    "\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
     "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                    </span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
+    "                </md-button>\n" +
     "\n" +
-    "                <div ng-show='showing.contact.emails.length > 0' class=\"md-3-line\" ng-repeat=\"email in showing.contact.emails\">\n" +
-    "                    <div class=\"contact-method\">\n" +
-    "                        <span class=\"contact-label\">  <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon> </span>\n" +
-    "                        <span class=\"contact-value\">\n" +
-    "                   {{email}}\n" +
-    "                    </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
+    "            \n" +
+    "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\" ng-click=\"sendMail(email, showing)\">\n" +
+    "                    <!-- <a href=\"mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing...\" target=\"_top\"> -->\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
+    "                        {{email}}\n" +
+    "                        <!--</a>-->\n" +
+    "                </md-button>\n" +
     "\n" +
+    "                <!--<md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click=\"sendMail(sentri.emailAddy2, sentri)\"\n" +
+    "                    class=\"md-raised\">\n" +
     "\n" +
+    "                </md-button>-->\n" +
+    "\n" +
+    "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
     "        </md-dialog-content>\n" +
-    "        <!--<div class=\"md-actions\" layout=\"row\">-->\n" +
     "\n" +
-    "        <!--<span flex></span>-->\n" +
-    "        <!--<md-button ng-show=\"supersonic != undefined\" ng-click=\"answer('not useful')\" >-->\n" +
-    "        <!--PHONE-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--<md-button ng-click=\"answer('useful')\" style=\"margin-right:20px;\" >-->\n" +
-    "        <!--EMAIL-->\n" +
-    "        <!--</md-button>-->\n" +
-    "        <!--</div>-->\n" +
     "    </form>\n" +
     "</md-dialog>"
   );
@@ -1039,7 +1173,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div> <md-card-stat title=\"X-OUTs\" stat-model=\"listing.activitySummary[0].listing_prefs_xOutCnt\"></md-card-stat></div>\n" +
     "\n" +
     "            <div> <md-card-stat ng-show='listing.summary.listing_views_totalCnt' title=\"TOTAL\" value=\"{{listing.activitySummary[0].listing_views_totalCnt}}\"></md-card-stat></div>\n" +
-    "\n" +
     "\n" +
     "            <div ng-show='listing.summary.listing_views_sevenDayCnt' class=\"summary-item seven-count\">\n" +
     "                {{listing.summary.listing_views_sevenDayCnt}} in last 7 days\n" +
@@ -1389,7 +1522,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "      \n" +
     "\n" +
-    "\n" +
     "        <div class=\"card-icons-wrapper\">\n" +
     "            <md-button class=\"md-icon-button\" ng-click=\"vm.openInBrowser(listing.subjectUrl)\">\n" +
     "                <md-icon md-svg-src=\"assets/icons/ic_open_in_browser_black_48px.svg\" aria-label=\"Launch in browser\"></md-icon>\n" +
@@ -1400,7 +1532,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "\n" +
     "    <div layout=\"row\">\n" +
+    "\n" +
     "        <div flex class=\"left\">\n" +
+    "\n" +
     "            <div>\n" +
     "                <label>Days listed</label>\n" +
     "                <span><b>{{listing.listing_daysOn}}</b></span>\n" +
@@ -1412,8 +1546,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <span ng-if=\"listing.listing_views_todayCnt == undefined\"><b>*</b></span>\n" +
     "            </div>\n" +
-    "            <div>\n" +
     "\n" +
+    "            <div>\n" +
     "                <label>7-day views</label>\n" +
     "\n" +
     "                <span ng-if=\"listing.listing_views_sevenDayCnt != undefined\"><b>{{listing.listing_views_sevenDayCnt}}</b></span>\n" +
@@ -1429,7 +1563,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <span ng-if=\"listing.listing_views_thirtyDayCnt == undefined\"><b>*</b></span>\n" +
     "\n" +
-    "\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
@@ -1443,8 +1576,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <span ng-if=\"listing.listing_favoritesCnt\">\n" +
     "                     <md-icon  class=\"favs\" md-svg-src=\"assets/icons/ic_favorite_black_24px.svg\"></md-icon>\n" +
     "                  <b>{{listing.listing_favoritesCnt}}</b>\n" +
-    "              </span>\n" +
-    "                  </div>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <div flex class=\"right \">\n" +
     "            <div>\n" +
@@ -1551,20 +1684,32 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <div ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
     "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "            <span>{{showing.startTime | timeago }}</span>\n" +
-    "            <span>{{showing.startTime | date:'short'}}</span>\n" +
-    "            <p class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
+    "            <div class=\"time-wrapper\">\n" +
+    "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                <span class=datetime>&middot;</span> \n" +
+    "                <span class=datetime>{{showing.startTime | date:'short'}}</span><br>\n" +
+    "                 <span class=datetime>{{showing.type.name}} \n" +
+    "                 &middot;\n" +
+    "                {{showing.type.result}}\n" +
+    "                <div ng-if=\"showing.type.message && showing.type.message.length>0\"> &middot;</div>\n" +
+    "                 {{showing.type.message}} \n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "           \n" +
+    "            <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
+    "            <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "             <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
-    "        <div ng-if=\"vm.limit != -1 && vm.showings.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
+    "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.showings.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
     "            <span style=\"width: 100%\">\n" +
-    "            <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'showings'})\">\n" +
-    "                <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
-    "            </md-button>\n" +
+    "                <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'showings'})\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
+    "                </md-button>\n" +
     "\n" +
-    "          <span class=\"nofm\">{{vm.limit}} of {{vm.showings.length}}</span>\n" +
-    "          </span>\n" +
+    "                 <span class=\"nofm\">{{vm.limit}} of {{vm.showings.length}}</span>\n" +
+    "            </span>\n" +
     "\n" +
     "        </div>\n" +
     "        <!--\n" +
@@ -1603,27 +1748,28 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <span class=\"cell showings-div\">\n" +
     "           \n" +
-    "                <div>\n" +
+    "             <div style=\"min-height: 50px;\">\n" +
     "                    <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/showings.svg\"></md-icon>\n" +
     "                    <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>\n" +
     "                </div>\n" +
-    "                <div>\n" +
-    "                    <span class=\"title\">showings</span>\n" +
+    "                <div class=\"box-label\">\n" +
+    "                    <span class=\"title no-wrap\"\">showings</span>\n" +
     "\n" +
     "    </div>\n" +
     "    </span>\n" +
     "\n" +
     "\n" +
     "    <span class=\"cell clicks-div\">\n" +
-    "           <div>\n" +
-    "                       \n" +
-    "                            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
-    "                             <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
-    "                             <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
-    "                            <change-indicator data=\"vm.listing_views_todayCnt\" rate-decimals=\"0\" pct-decimals=\"0\" color=\"light\"></change-indicator>\n" +
-    "                        </div>\n" +
-    "                        <div>\n" +
-    "                            <span class=\"title\">clicks</span>\n" +
+    "        \n" +
+    "       <div style=\"min-height: 50px;\">                  \n" +
+    "            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
+    "                <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/clicks.svg\"></md-icon>\n" +
+    "                <label>{{vm.listing_views_todayCnt.current}}</label> \n" +
+    "            <change-indicator data=\"vm.listing_views_todayCnt\" rate-decimals=\"0\" pct-decimals=\"0\" color=\"light\"></change-indicator>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"box-label\">\n" +
+    "            <span class=\"title no-wrap\">clicks</span>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
@@ -1631,14 +1777,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "<span ng-if=\"showings != undefined\" class=\"cell positive-div\">\n" +
     "        \n" +
-    "        <div>\n" +
+    "        <div style=\"min-height: 50px;\">\n" +
     "           \n" +
     "                <!--<img src=\"assets/icons/chat.png\"/>-->\n" +
     "                      <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/feedback.svg\"></md-icon>\n" +
     "                <label>{{vm.sentimentCounter.notNegative | percentOf:vm.showings.length | percentage}}</label>\n" +
     "                        </div>\n" +
-    "                        <div>\n" +
-    "                            <span class=\"title\">non-negative</span>\n" +
+    "                        <div class=\"box-label\">\n" +
+    "                            <span class=\"title no-wrap\">non-negative</span>\n" +
     "\n" +
     "</div>\n" +
     "\n" +
@@ -1945,7 +2091,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_listing-detail.feedback.view.html',
-    "<div style=\"margin-top:35px\">\n" +
+    "\n" +
     "<div ng-if=\"card === 'sentri'\"> <!--ng-if=\"vm.sentrilock.entries.length>0\"-->\n" +
     "    <md-card-sentri sentrilock='vm.sentrilock' title=\"Summary - Feedback on your sentrilock\"\n" +
     "    sysId=\"2\" limit=\"-1\" >\n" +
@@ -1960,7 +2106,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "\n" +
     "\n" +
-    "</div>\n"
+    "\n"
   );
 
 
@@ -1975,7 +2121,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    }\n" +
     "</style>\n" +
     "\n" +
-    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content has-header\">\n" +
+    "<div id=\"listing-detail\" style=\"text-align: left;\" class=\"content\">\n" +
     "\n" +
     "    <div id=\"three-columns\" class=\"grid-container\" style=\"display:block;\">\n" +
     "\n" +
@@ -2036,7 +2182,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\">\n" +
     "                <md-showing-summary ng-if=\"vm.theListing.activityAggregate.snapshots[8] && vm.theListing.activityAggregate.snapshots[8].data.length> 0\"\n" +
     "                imgurl=\"/assets/logos/ShowingsCom_243.png\" listing='vm.theListing' showings='vm.theListing.activityAggregate.snapshots[8].data' title=\"Summary - Feedback on your showings\" \n" +
-    "                sysId=\"8\" limit=\"5\">\n" +
+    "                sysId=\"8\" limit=\"4\">\n" +
     "                </md-showing-summary>\n" +
     "                <!---->\n" +
     "            </li>\n" +
@@ -2053,8 +2199,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                </md-showing-summary>\n" +
     "            </li>-->\n" +
     "            <li ng-if=\"vm.sentrilock.entries.length>0\">\n" +
-    "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Summary - Feedback on your showings\"\n" +
-    "                sysId=\"2\" limit=\"5\">\n" +
+    "                <md-card-sentri ng-if=\"vm.sentrilock.entries.length>0\" sentrilock='vm.sentrilock' title=\"Sentilock Entry Logs\"\n" +
+    "                sysId=\"2\" limit=\"4\">\n" +
     "                </md-card-sentri>\n" +
     "            </li>\n" +
     "        </ul>\n" +

@@ -1,4 +1,4 @@
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -8,40 +8,92 @@
 
     angular
         .module(appName)
+        .filter('toProperCase', function () {
+            return function (item) {
 
-        .filter('toProperCase', function() {
-            return function(item) {
-
-
-                return item.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+                return item.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 
             };
         })
 
-        .filter('agentEmail', function() {
+        .filter('agentEmail', function () {
 
-            return function(item) {
+            return function (item) {
                 var emails = item.split(';')
                 var all = [];
 
-                _.each(emails, function(el, index, list) {
+                _.each(emails, function (el, index, list) {
 
                     if (all.indexOf(el) === -1) {
-                        var str = '<a href="mailto:'+ el + ' target="_top">' + el + '</a>'
+                        var str = '<a href="mailto:' + el + ' target="_top">' + el + '</a>'
                         all.push(el);
                     }
-
                 });
-                     
-                return all.shift();
 
+                return all.shift();
             };
         })
-        
+
+        .filter('normalizePhoneNumber', function () {
+            return function (item, forDialer) {
+                if (item) {
+                    var finalNum = ""
+  
+                    // replace multiple spaces, newlines etc. with single space
+                    var str = item.replace(/\s\s+/g, ' ');
+
+                    var re = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?\s*(\d+))?$/im;
+                    // var str = phone;
+                    var m;
+                    var rawNum = "";
+                    var ext = "";
+
+                    if ((m = re.exec(str)) !== null) {
+                        if (m.index === re.lastIndex) {
+                            re.lastIndex++;
+                        }
+                        // View your result using the m-variable.
+                        if (m[2] != undefined)
+                            rawNum = m[2];
+                        if (m[3] != undefined)
+                            ext = m[3];
+                        // next pull apart number and any extention
+
+                        //normalize string and remove all unnecessary characters
+                        var phone = rawNum.replace(/[^\d]/g, "");
+
+                        // iff 11 and first is a 1 just strip it...
+                        if (phone.length == 11 && phone[0] == 1) {
+                            phone = phone.slice(1);
+                        }
+                        // should have 10 digits if not we return null
+                        if (phone.length == 10) {
+                            //reformat and return phone number
+                            finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                        }
+                        if (ext != "") {
+                            if  (forDialer != undefined && forDialer === true) {
+                                finalNum += ";" + ext;
+                            } else {
+                                finalNum += " ext. " + ext;
+                            }
+                        
+                        }
+                        return finalNum;
+
+                    }
+
+                }
+                return item;
+              
+            };
+        })
+
 
         // for days on market when item is time in epoch (looks like)
-        .filter('makeDaysOn', function() {
-            return function(item) {
+        .filter('makeDaysOn', function () {
+
+            return function (item) {
                 var nowInMs = (new Date).getTime();
                 var diff = nowInMs - item;
 
@@ -53,9 +105,9 @@
             };
         })
 
-        .filter('percentChange', function() {
+        .filter('percentChange', function () {
             // will be passed the current site data
-            return function(newValue, baseline) {
+            return function (newValue, baseline) {
 
                 if (newValue == undefined)
                     return "";
@@ -67,11 +119,12 @@
 
             };
         })
-        .filter('noFractionCurrency', ['$filter', '$locale', function($filter, $locale) {
+
+        .filter('noFractionCurrency', ['$filter', '$locale', function ($filter, $locale) {
 
             var currencyFilter = $filter('currency');
             var formats = $locale.NUMBER_FORMATS;
-            return function(amount, currencySymbol) {
+            return function (amount, currencySymbol) {
                 var value = currencyFilter(amount, currencySymbol);
                 if (value === undefined)
                     return amount;
@@ -84,38 +137,38 @@
             };
         }])
 
-        .filter('percentOf', ['$filter', function($filter) {
-            return function(count, total) {
+        .filter('percentOf', ['$filter', function ($filter) {
+            return function (count, total) {
                 return count / total;
             };
         }])
 
-        .filter('maxRecords', ['$filter', function($filter) {
+        .filter('maxRecords', ['$filter', function ($filter) {
             var MAX = 4;
-            return function(recs) {
+            return function (recs) {
                 return recs.slice(0, MAX);
             };
         }])
 
         // This filter makes the assumption that the input will be in decimal form (i.e. 17% is 0.17).
-        .filter('percentage', ['$filter', function($filter) {
-            return function(input, decimals) {
+        .filter('percentage', ['$filter', function ($filter) {
+            return function (input, decimals) {
                 return Math.round($filter('number')(input * 100, decimals)) + '%';
             };
         }])
 
         // This
-        .filter('name', ['$filter', function($filter) {
-            return function(input, decimals) {
+        .filter('name', ['$filter', function ($filter) {
+            return function (input, decimals) {
 
             };
         }])
 
-        .filter("timeago", function() {
+        .filter("timeago", function () {
             //time: the time
             //local: compared to what time? default: now
             //raw: whether you want in a format of "5 minutes ago", or "5 minutes"
-            return function(time, local, raw) {
+            return function (time, local, raw) {
                 if (!time) return "never";
 
                 if (!local) {
@@ -175,8 +228,8 @@
         })
 
 
-        .filter('groupBy', ['$parse', function($parse) {
-            return function(list, group_by) {
+        .filter('groupBy', ['$parse', function ($parse) {
+            return function (list, group_by) {
 
                 var filtered = [];
                 var prev_item = null;
@@ -187,7 +240,7 @@
                 var new_field = 'group_by_CHANGED';
 
                 // loop through each item in the list
-                angular.forEach(list, function(item) {
+                angular.forEach(list, function (item) {
 
                     group_changed = false;
 
