@@ -50,13 +50,14 @@
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
+
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var subject = "Regarding showing feedback you left at " + listing.address;
             var emailList = [];
             emailList.push(addy);
 

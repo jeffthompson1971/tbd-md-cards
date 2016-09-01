@@ -74,8 +74,10 @@
         
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var subject = "Regarding showing feedback you left at " + listing.address;
+            
             var emailList = [];
+           
             emailList.push(addy);
 
             PalSvc.email(emailList, subject);  
