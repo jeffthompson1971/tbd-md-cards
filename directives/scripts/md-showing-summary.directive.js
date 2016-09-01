@@ -75,15 +75,11 @@
         $scope.sendMail = function (addy, wholeRec) {
 
             var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
-            //var link = "mailto:" + addy + "?subject=" + subject;
             var emailList = [];
             emailList.push(addy);
 
-            PalSvc.email(emailList, subject);
-
-            
+            PalSvc.email(emailList, subject);  
         };
-
 
         $scope.dial = function (number) {
             var dialable =  $filter('normalizePhoneNumber')(number, true);

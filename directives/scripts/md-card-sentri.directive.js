@@ -56,17 +56,19 @@
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding your Sentrilock entry at " + wholeRec.Location);
-            var link = "mailto:" + addy + "?subject=" + subject;
-            window.location.href = link;
+            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var emailList = [];
+            emailList.push(addy);
 
+            PalSvc.email(emailList, subject);
         };
 
         $scope.dial = function (number) {
             if (IS_MOBILE_APP && window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+                var num = "tel:" + number;
+                window.open(num, '_system')
+                // window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
-
         };
 
         $scope.addToContacts = function (entry) {
