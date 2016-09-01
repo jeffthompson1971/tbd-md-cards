@@ -64,10 +64,11 @@
         };
 
         $scope.dial = function (number) {
+
+            var dialable = $filter('normalizePhoneNumber')(number, true);
+
             if (IS_MOBILE_APP && window.cordova) {
-                var num = "tel:" + number;
-                window.open(num, '_system')
-                // window.cordova.InAppBrowser.open('tel:' + number, '_system');
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
         };
 

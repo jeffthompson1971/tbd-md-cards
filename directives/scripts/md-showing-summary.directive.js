@@ -82,7 +82,9 @@
         };
 
         $scope.dial = function (number) {
+            
             var dialable =  $filter('normalizePhoneNumber')(number, true);
+            
             if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }

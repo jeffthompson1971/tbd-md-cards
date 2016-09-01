@@ -799,17 +799,19 @@ angular.module('tbd', []);
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding your Sentrilock entry at " + wholeRec.Location);
-            var link = "mailto:" + addy + "?subject=" + subject;
-            window.location.href = link;
+            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var emailList = [];
+            emailList.push(addy);
 
+            PalSvc.email(emailList, subject);
         };
 
         $scope.dial = function (number) {
             if (IS_MOBILE_APP && window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
+                var num = "tel:" + number;
+                window.open(num, '_system')
+                // window.cordova.InAppBrowser.open('tel:' + number, '_system');
             }
-
         };
 
         $scope.addToContacts = function (entry) {
@@ -1884,15 +1886,11 @@ rowcolor
         $scope.sendMail = function (addy, wholeRec) {
 
             var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
-            //var link = "mailto:" + addy + "?subject=" + subject;
             var emailList = [];
             emailList.push(addy);
 
-            PalSvc.email(emailList, subject);
-
-            
+            PalSvc.email(emailList, subject);  
         };
-
 
         $scope.dial = function (number) {
             var dialable =  $filter('normalizePhoneNumber')(number, true);
@@ -2449,7 +2447,7 @@ result :"In Process" or "Declined By Seller"
             return function (item, forDialer) {
                 if (item) {
                     var finalNum = ""
-  
+
                     // replace multiple spaces, newlines etc. with single space
                     var str = item.replace(/\s\s+/g, ' ');
 
@@ -2475,20 +2473,27 @@ result :"In Process" or "Declined By Seller"
 
                         // iff 11 and first is a 1 just strip it...
                         if (phone.length == 11 && phone[0] == 1) {
+
                             phone = phone.slice(1);
                         }
-                        // should have 10 digits if not we return null
+                        // should have 10 digits 
                         if (phone.length == 10) {
                             //reformat and return phone number
-                            finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                            if (forDialer != undefined && forDialer === true) {
+                                finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1$2$3");
+                            } else {
+                                finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                            }
+
                         }
+
                         if (ext != "") {
-                            if  (forDialer != undefined && forDialer === true) {
+                            if (forDialer != undefined && forDialer === true) {
                                 finalNum += ";" + ext;
                             } else {
                                 finalNum += " ext. " + ext;
                             }
-                        
+
                         }
                         return finalNum;
 
@@ -2496,7 +2501,7 @@ result :"In Process" or "Declined By Seller"
 
                 }
                 return item;
-              
+
             };
         })
 
