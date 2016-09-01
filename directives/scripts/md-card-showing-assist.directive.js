@@ -28,6 +28,7 @@
                 scope.$watch("ngClass", function (value) {
                     $(element).attr("class", value)
                 });
+                scope.limit = attrs.limit;
                 scope.logoUrl = (attrs.logourl !== undefined) ? attrs.logourl : "assets/logos/showingassist-logo.png";
                 scope.title = attrs.title;
                 scope.sysId = attrs.sysid;
@@ -139,7 +140,7 @@
         }
     };
 
-    function MdCardShowingAssistController($scope, $mdDialog) {
+    function MdCardShowingAssistController($scope, $mdDialog, ListingSvc) {
         var vm = this;
 
         if (vm.limit && vm.limit != -1) {

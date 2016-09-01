@@ -76,8 +76,8 @@
 
             <li ng-if="vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0">
                 <md-card-showing-assist ng-if="vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0"
-                imgurl="/assets/logos/showingassist-logo.png" showings='c' title="Summary - Feedback on your showings"
-                sysId="10">
+                imgurl="/assets/logos/showingassist-logo.png" listing='vm.theListing' showings='vm.theListing.activityAggregate.snapshots[10].data' title="Summary - Feedback on your showings"
+                sysId="10" limit = "4">
                 </md-card-showing-assist>
             </li>
             <!--<li>

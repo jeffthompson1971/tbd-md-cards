@@ -1,16 +1,11 @@
 <md-card class="site-summary-card">
-
     <div class="site-header">
         <div class="logo">
             <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com" />
-
         </div>
     </div>
-
     <div class="feedback-div">
-
         <div ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)">
-
             <label><b> {{showing.contact.name}}</b></label>
             <div class="time-wrapper">
                 <span class=datetime>{{showing.startTime | timeago }}</span>

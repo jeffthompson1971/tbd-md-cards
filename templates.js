@@ -851,31 +851,41 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <div class=\"logo\">\n" +
-    "                 <img src=\"assets/logos/showingassist-logo.png\" alt=\"Showing Assist\"/>         \n" +
-    "        </div> \n" +
+    "            <img src=\"assets/logos/showingassist-logo.png\" alt=\"Showing Assist\" />\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
-    "        <div ng-repeat=\"showing in vm.showings | maxRecords:5\" ng-click=\"show($event, showing)\">\n" +
-    "\n" +
-    "\n" +
+    "        <div ng-repeat=\"showing in showings\" ng-click=\"show($event, showing)\">\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "            <span>{{showing.date | timeago }}</span>\n" +
-    "            <span>{{showing.date | date:'short' : 'UTC' }}</span>\n" +
     "\n" +
+    "            <div class=\"time-wrapper\">\n" +
+    "                <span class=datetime>{{showing.date | timeago }}</span>\n" +
+    "                <span class=datetime>&middot;</span> \n" +
+    "                <span class=datetime>{{showing.date | date:'short'}}</span><br>\n" +
+    "                 <span class=datetime>{{showing.type.name}} \n" +
+    "                 &middot;\n" +
+    "                {{showing.type.result}}\n" +
+    "                <div ng-if=\"showing.type.message && showing.type.message.length>0\"> &middot;</div>\n" +
+    "                 {{showing.type.msg}} \n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "           \n" +
+    "            <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
+    "            <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "             <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "\n" +
-    "            <p>{{showing.type.msg}}</p>\n" +
-    "            <p>{{showing.feedback}}</p>\n" +
     "        </div>\n" +
-    "        <div ng-hide=\"vm.showings.length <= 4\" ng-click=\"showMoreFeedback()\">\n" +
     "\n" +
-    "            <label><b>Show More</b></label>\n" +
-    "            <span> ... </span>\n" +
-    "            <p>{{showing.feedback}}</p>\n" +
+    "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.showings.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
+    "            <span style=\"width: 100%\">\n" +
+    "                <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'showings'})\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
+    "                </md-button>\n" +
     "\n" +
+    "                 <span class=\"nofm\">{{vm.limit}} of {{vm.showings.length}}</span>\n" +
+    "            </span>\n" +
     "\n" +
     "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
     "\n" +
     "</md-card>"
   );
@@ -1671,18 +1681,13 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/_md-showing-summary.view.html',
     "<md-card class=\"site-summary-card\">\n" +
-    "\n" +
     "    <div class=\"site-header\">\n" +
     "        <div class=\"logo\">\n" +
     "            <img src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\" />\n" +
-    "\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "\n" +
     "    <div class=\"feedback-div\">\n" +
-    "\n" +
     "        <div ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
-    "\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <div class=\"time-wrapper\">\n" +
     "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
@@ -2189,8 +2194,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <li ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\">\n" +
     "                <md-card-showing-assist ng-if=\"vm.theListing.activityAggregate.snapshots[10] && vm.theListing.activityAggregate.snapshots[10].data.length> 0\"\n" +
-    "                imgurl=\"/assets/logos/showingassist-logo.png\" showings='c' title=\"Summary - Feedback on your showings\"\n" +
-    "                sysId=\"10\">\n" +
+    "                imgurl=\"/assets/logos/showingassist-logo.png\" listing='vm.theListing' showings='vm.theListing.activityAggregate.snapshots[10].data' title=\"Summary - Feedback on your showings\"\n" +
+    "                sysId=\"10\" limit = \"4\">\n" +
     "                </md-card-showing-assist>\n" +
     "            </li>\n" +
     "            <!--<li>\n" +
