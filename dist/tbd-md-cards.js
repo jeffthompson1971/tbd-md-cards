@@ -1866,7 +1866,7 @@ rowcolor
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
 
@@ -1884,9 +1884,13 @@ rowcolor
         $scope.sendMail = function (addy, wholeRec) {
 
             var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
-            var link = "mailto:" + addy + "?subject=" + subject;
-            window.location.href = link;
+            //var link = "mailto:" + addy + "?subject=" + subject;
+            var emailList = [];
+            emailList.push(addy);
 
+            PalSvc.email(emailList, subject);
+
+            
         };
 
 
