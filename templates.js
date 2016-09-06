@@ -739,6 +739,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-sentrilock.view.html',
+    "<style>\n" +
+    "    .card-table {\n" +
+    "        clear:both;\n" +
+    "        padding-top: 2px;\n" +
+    "        padding-bottom: 2px;\n" +
+    "    }\n" +
+    "\n" +
+    "    </style>\n" +
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
@@ -766,11 +774,29 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>\n" +
     "            </div>\n" +
     "\n" +
-    "            <p style=\"clear: both;\" class=\"feedback\">\n" +
-    "                Access type: <span class=\"card-value\">{{entry.AccessType}}</span>\n" +
-    "                <br> Location: <span class=\"card-value\">{{entry.Location}} </span>\n" +
     "\n" +
-    "            </p>\n" +
+    "\n" +
+    "            <table class=\"card-table\">\n" +
+    "\n" +
+    "                <tr>\n" +
+    "                    <td class=\"label\">Access type</td>\n" +
+    "                    <td class=\"value\">{{entry.AccessType}} \n" +
+    "                    </td>\n" +
+    "                </tr>\n" +
+    "                <tr>\n" +
+    "                    <td class=\"label\">Location</td>\n" +
+    "                     <td class=\"value\">{{entry.Location}}</td>\n" +
+    "                </tr>\n" +
+    "\n" +
+    "\n" +
+    "            </table>\n" +
+    "            <!--<p style=\"clear: both;\" class=\"feedback\">\n" +
+    "               <span class=label> Access type:</span> <span class=\"\">{{entry.AccessType}}</span>\n" +
+    "                \n" +
+    "                <br>\n" +
+    "                   <span class=label> Location:</span> <span class=\"\">{{entry.Location}} </span>\n" +
+    "\n" +
+    "            </p>-->\n" +
     "\n" +
     "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "        </div>\n" +

@@ -22,6 +22,29 @@ $font-size: 14px;
 $line-height: 1.4;
 $lines-to-show: 2;
 
+
+.card-table,  th, td {
+            padding: 0 2px 0 2px;
+            .label {
+                white-space: nowrap;
+               // font-weight: 600;
+            }   
+            .value {
+                // color: #636075;
+                color: #999 !important;
+               // font-weight: 800;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                 -webkit-line-clamp:1;
+    -webkit-box-orient: vertical;
+            }
+            border: none;   
+            
+        }
+
+
+
 .no-wrap {
   white-space: nowrap;
 }
@@ -91,6 +114,9 @@ a:link {
 }
 // end screen up to 400px
 md-card-image-overlay {
+
+    
+
     md-card {
         width: 100% !important;
         margin: 0;
@@ -212,6 +238,8 @@ md-card-image-overlay {
     } //  @media screen and (max-width: 767px)
 } // md-card-image-overlay {
 .site-summary-card {
+
+  
     margin: inherit;
     img {
         max-width: 100%;

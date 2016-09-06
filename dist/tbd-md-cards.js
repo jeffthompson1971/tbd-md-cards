@@ -793,13 +793,14 @@ angular.module('tbd', []);
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
+
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var subject = "Regarding showing feedback you left at " + wholeRec.Location;
             var emailList = [];
             emailList.push(addy);
 
@@ -807,10 +808,11 @@ angular.module('tbd', []);
         };
 
         $scope.dial = function (number) {
+
+            var dialable = $filter('normalizePhoneNumber')(number, true);
+
             if (IS_MOBILE_APP && window.cordova) {
-                var num = "tel:" + number;
-                window.open(num, '_system')
-                // window.cordova.InAppBrowser.open('tel:' + number, '_system');
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
         };
 
@@ -1198,59 +1200,6 @@ rowcolor
             var contact = showing.contact;
             var normalizedContact = {
                 name: {}
-            };
-            var nameBits = contact.name.split(" ");
-
-            // ignore any middle initial or name
-            if (nameBits.length < 2) {
-                // only have one name so assume it's last
-
-                normalizedContact.name.familyName = nameBits[0];
-            } else {
-                normalizedContact.name.givenName = nameBits[0];
-                normalizedContact.name.familyName = nameBits[nameBits.length - 1];
-
-            }
-            if (contact.phone) {
-                normalizedContact.phoneNumbers = [];
-                if (contact.phone.mobile) {
-
-                    normalizedContact.phoneNumbers.push({
-                        type: "mobile",
-                        value: $filter('normalizePhoneNumber')(contact.phone.mobile)
-                    })
-                }
-                if (contact.phone.office) {
-
-                    normalizedContact.phoneNumbers.push({
-                        type: "work",
-                        value: $filter('normalizePhoneNumber')(contact.phone.office)
-                    })
-                }
-                if (contact.phone.home) {
-                    normalizedContact.phoneNumbers.push({
-                        type: "home",
-                        value: $filter('normalizePhoneNumber')(contact.phone.home)
-                    })
-                }
-
-            }
-            if (contact.emails) {
-                normalizedContact.emails = [];
-                for (var i = 0; i < contact.emails.length; i++) {
-                    normalizedContact.emails.push({
-                        type: "work",
-                        value: contact.emails[i]
-                    })
-                }
-                // normalizedContact.emails = contact.emails;
-            }
-
-            normalizedContact.note = "From showings.com feedback.";
-
-            $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
-
-        }
             };
             var nameBits = contact.name.split(" ");
 
@@ -1939,15 +1888,19 @@ rowcolor
         
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding showing feedback you left at " + listing.address);
+            var subject = "Regarding showing feedback you left at " + listing.address;
+            
             var emailList = [];
+           
             emailList.push(addy);
 
             PalSvc.email(emailList, subject);  
         };
 
         $scope.dial = function (number) {
+            
             var dialable =  $filter('normalizePhoneNumber')(number, true);
+            
             if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
@@ -2028,6 +1981,7 @@ rowcolor
         
         // need this so detail dialog can access info like address
       //  vm.listing = $scope.theListing;
+        
         $scope.$watch('vm.showings', function (showings, previousShowings) {
 
             // ng-class failed in a directive - so i use this approach
@@ -3744,6 +3698,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/_md-card-sentrilock.view.html',
+    "<style>\n" +
+    "    .card-table {\n" +
+    "        clear:both;\n" +
+    "        padding-top: 2px;\n" +
+    "        padding-bottom: 2px;\n" +
+    "    }\n" +
+    "\n" +
+    "    </style>\n" +
     "<md-card class=\"md-card  site-summary-card\">\n" +
     "\n" +
     "    <div class=\"site-header\">\n" +
@@ -3771,11 +3733,29 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>\n" +
     "            </div>\n" +
     "\n" +
-    "            <p style=\"clear: both;\" class=\"feedback\">\n" +
-    "                Access type: <span class=\"card-value\">{{entry.AccessType}}</span>\n" +
-    "                <br> Location: <span class=\"card-value\">{{entry.Location}} </span>\n" +
     "\n" +
-    "            </p>\n" +
+    "\n" +
+    "            <table class=\"card-table\">\n" +
+    "\n" +
+    "                <tr>\n" +
+    "                    <td class=\"label\">Access type</td>\n" +
+    "                    <td class=\"value\">{{entry.AccessType}} \n" +
+    "                    </td>\n" +
+    "                </tr>\n" +
+    "                <tr>\n" +
+    "                    <td class=\"label\">Location</td>\n" +
+    "                     <td class=\"value\">{{entry.Location}}</td>\n" +
+    "                </tr>\n" +
+    "\n" +
+    "\n" +
+    "            </table>\n" +
+    "            <!--<p style=\"clear: both;\" class=\"feedback\">\n" +
+    "               <span class=label> Access type:</span> <span class=\"\">{{entry.AccessType}}</span>\n" +
+    "                \n" +
+    "                <br>\n" +
+    "                   <span class=label> Location:</span> <span class=\"\">{{entry.Location}} </span>\n" +
+    "\n" +
+    "            </p>-->\n" +
     "\n" +
     "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "        </div>\n" +

@@ -1,3 +1,11 @@
+<style>
+    .card-table {
+        clear:both;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    </style>
 <md-card class="md-card  site-summary-card">
 
     <div class="site-header">
@@ -25,11 +33,29 @@
                 <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>
             </div>
 
-            <p style="clear: both;" class="feedback">
-                Access type: <span class="card-value">{{entry.AccessType}}</span>
-                <br> Location: <span class="card-value">{{entry.Location}} </span>
 
-            </p>
+
+            <table class="card-table">
+
+                <tr>
+                    <td class="label">Access type</td>
+                    <td class="value">{{entry.AccessType}} 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Location</td>
+                     <td class="value">{{entry.Location}}</td>
+                </tr>
+
+
+            </table>
+            <!--<p style="clear: both;" class="feedback">
+               <span class=label> Access type:</span> <span class="">{{entry.AccessType}}</span>
+                
+                <br>
+                   <span class=label> Location:</span> <span class="">{{entry.Location}} </span>
+
+            </p>-->
 
             <md-divider ng-if="!$last"></md-divider>
         </div>
