@@ -9,7 +9,8 @@
 
         <div class="trending-list-guard">
 
-            <div  ng-repeat="trend in listing.trends track by $index" ng-click="">
+            <!--<div  ng-repeat="trend in listing.trends track by $index" ng-click="">-->
+                 <div  ng-repeat="trend in listing.trends | unique" ng-click="">
 
                 <span class="trend-box">
                     <md-icon md-svg-src="assets/icons/ic_whatshot_black_48px.svg" tabindex="0" aria-hidden="true">

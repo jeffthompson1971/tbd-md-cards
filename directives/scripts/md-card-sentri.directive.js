@@ -180,14 +180,14 @@
 
         var vm = this;
 
-        var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+        $scope.entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
         if (vm.limit && vm.limit != -1) {
 
-            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+            $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
         } else {
 
-            $scope.entries = entriesNoOneDay;
+            $scope.entries = $scope.entriesNoOneDay;
         }
 
         vm.mdDialog = $mdDialog;
@@ -219,13 +219,13 @@
             if (_.isUndefined(data))
                 return;
 
-            var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+            $scope.entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
             if (vm.limit && vm.limit != -1) {
-                $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+                $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
 
             } else {
-                $scope.entries = entriesNoOneDay
+                $scope.entries = $scope.entriesNoOneDay
             }
         });
     }

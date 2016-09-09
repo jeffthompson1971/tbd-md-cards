@@ -12,7 +12,14 @@
             return function (item) {
 
                 return item.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+            };
+        })
 
+        // filters out duplicate strings in array of strings
+        .filter('unique', function () {
+
+            return function (arr, field) {
+                return _.uniq(arr, function (a) { return a; });
             };
         })
 
@@ -92,10 +99,8 @@
 
                 }
                 return item;
-
             };
         })
-
 
         // for days on market when item is time in epoch (looks like)
         .filter('makeDaysOn', function () {
@@ -108,7 +113,6 @@
                 var day = 24 * 60 * 60 * 1000;
 
                 return Math.round(diff / day);
-
             };
         })
 
@@ -123,7 +127,6 @@
                 var val = (diff / baseline);
 
                 return val;
-
             };
         })
 
@@ -234,7 +237,6 @@
             }
         })
 
-
         .filter('groupBy', ['$parse', function ($parse) {
             return function (list, group_by) {
 
@@ -265,7 +267,6 @@
                                 group_changed = true;
                             }
                         }
-
 
                     }// otherwise we have the first item in the list which is new
                     else {

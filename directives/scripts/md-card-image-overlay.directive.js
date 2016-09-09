@@ -60,6 +60,19 @@
             // TODO - this needs to look for any showing service ID not just
             // hardcode CSS 
             if (theListing.activityAggregate && theListing.activityAggregate.snapshots) {
+               
+                var snaps = theListing.activityAggregate.snapshots;
+
+            _.each(snaps, function (snap) {
+
+                if (_.has(snap, "listing_trend")) {
+
+                    $scope.listing.trends.push(snap.listing_trend);
+                }
+            })
+
+
+               
                 if (theListing.activityAggregate.snapshots["8"]) {
                     
                     vm.showings = (theListing.activityAggregate.snapshots["8"].data) ? 

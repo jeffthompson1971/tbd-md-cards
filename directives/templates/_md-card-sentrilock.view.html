@@ -1,11 +1,4 @@
-<style>
-    .card-table {
-        clear:both;
-        padding-top: 2px;
-        padding-bottom: 2px;
-    }
 
-    </style>
 <md-card class="md-card  site-summary-card">
 
     <div class="site-header">
@@ -19,8 +12,6 @@
 
     <div class="feedback-div">
 
-
-        <!--<div ng-repeat="entry in entries | filterOutOneDayCodeGen" ng-click="show($event, entry)">  | maxRecords: 5-->
         <div ng-repeat="entry in entries" ng-click="show($event, entry)">
             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
             <div class="time-wrapper">
@@ -39,34 +30,28 @@
 
                 <tr>
                     <td class="label">Access type</td>
-                    <td class="value">{{entry.AccessType}} 
+                    <td class="value">{{entry.AccessType}}
                     </td>
                 </tr>
                 <tr>
                     <td class="label">Location</td>
-                     <td class="value">{{entry.Location}}</td>
+                    <td class="value">{{entry.Location}}</td>
                 </tr>
 
 
             </table>
-            <!--<p style="clear: both;" class="feedback">
-               <span class=label> Access type:</span> <span class="">{{entry.AccessType}}</span>
-                
-                <br>
-                   <span class=label> Location:</span> <span class="">{{entry.Location}} </span>
-
-            </p>-->
 
             <md-divider ng-if="!$last"></md-divider>
         </div>
 
-        <div class="footer" ng-if="vm.limit != -1 && vm.sentrilock.entries.length > vm.limit" ng-click="showMoreFeedback()">
+
+        <div class="footer" ng-if="vm.limit != -1 && entriesNoOneDay.length > vm.limit" ng-click="showMoreFeedback()">
             <span style="width: 100%">
             <md-button style="float: left" class="md-icon-button" ui-sref="app.feedback({card:'sentri'})">
                 <md-icon md-svg-src="assets/icons/ic_more_horiz_black_48px.svg" aria-label="more"></md-icon>
             </md-button>
 
-          <span class="nofm">{{vm.limit}} of {{vm.sentrilock.entries.length}}</span>
+          <span class="nofm">{{vm.limit}} of {{entriesNoOneDay.length}}</span>
             </span>
 
         </div>
