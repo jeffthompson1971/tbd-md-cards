@@ -27,6 +27,11 @@
     "imagenie-anywhere": "*"
   },
   "resolutions": {
-    "localforage": "~1.4.0"
+    "angular-cookies": "1.3.17",
+    "angular": "~1.4.7",
+    "angular-animate": "^1.4.8",
+    "localforage": "~1.4.0",
+    "tbd-md-cards": "b7852fd867",
+    "angular-material": "1.0.7"
   }
 }

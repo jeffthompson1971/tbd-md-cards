@@ -50,23 +50,27 @@
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
+
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = encodeURI("Regarding your Sentrilock entry at " + wholeRec.Location);
-            var link = "mailto:" + addy + "?subject=" + subject;
-            window.location.href = link;
+            var subject = "Regarding showing feedback you left at " + wholeRec.Location;
+            var emailList = [];
+            emailList.push(addy);
 
+            PalSvc.email(emailList, subject);
         };
 
         $scope.dial = function (number) {
-            if (IS_MOBILE_APP && window.cordova) {
-                window.cordova.InAppBrowser.open('tel:' + number, '_system');
-            }
 
+            var dialable = $filter('normalizePhoneNumber')(number, true);
+
+            if (IS_MOBILE_APP && window.cordova) {
+                window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
+            }
         };
 
         $scope.addToContacts = function (entry) {
@@ -176,14 +180,14 @@
 
         var vm = this;
 
-        var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+        $scope.entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
         if (vm.limit && vm.limit != -1) {
 
-            $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+            $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
         } else {
 
-            $scope.entries = entriesNoOneDay;
+            $scope.entries = $scope.entriesNoOneDay;
         }
 
         vm.mdDialog = $mdDialog;
@@ -215,13 +219,13 @@
             if (_.isUndefined(data))
                 return;
 
-            var entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
+            $scope.entriesNoOneDay = $filter('filterOutOneDayCodeGen')(vm.sentrilock.entries);
 
             if (vm.limit && vm.limit != -1) {
-                $scope.entries = entriesNoOneDay.slice(0, vm.limit);
+                $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
 
             } else {
-                $scope.entries = entriesNoOneDay
+                $scope.entries = $scope.entriesNoOneDay
             }
         });
     }

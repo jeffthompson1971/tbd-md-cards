@@ -57,7 +57,7 @@
 
     MdShowingSummaryController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
 
@@ -71,8 +71,22 @@
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
+        
+        $scope.sendMail = function (addy, wholeRec) {
+
+            var subject = "Regarding showing feedback you left at " + listing.address;
+            
+            var emailList = [];
+           
+            emailList.push(addy);
+
+            PalSvc.email(emailList, subject);  
+        };
+
         $scope.dial = function (number) {
+            
             var dialable =  $filter('normalizePhoneNumber')(number, true);
+            
             if (IS_MOBILE_APP && window.cordova) {
                 window.cordova.InAppBrowser.open('tel:' + dialable, '_system');
             }
@@ -149,7 +163,11 @@
             $scope.showings = vm.showings;
         }
 
-        $scope.theListing = ListingSvc.getSelectedListing();
+       // $scope.theListing = ListingSvc.getSelectedListing();
+        
+        // need this so detail dialog can access info like address
+      //  vm.listing = $scope.theListing;
+        
         $scope.$watch('vm.showings', function (showings, previousShowings) {
 
             // ng-class failed in a directive - so i use this approach
@@ -191,11 +209,13 @@
 
         vm.show = function (ev, selShowing) {
             console.log(selShowing);
+            
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showing: selShowing
+                        showing: selShowing,
+                        listing: vm.listing
                     },
                     controller: DialogController,
                     templateUrl: 'templates/_md-card-showing-detail.view.html',
@@ -210,13 +230,14 @@
                 });
         }
 
-        vm.showAll = function (ev, showings) {
+        vm.showAll = function (ev, showings, listing) {
             console.log("show all called");
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showings: showings
+                        showings: showings,
+                        listing: vm.listing
                     },
                     controller: DialogControllerAll,
                     templateUrl: 'templates/_md-card-showing-detail-all.view.html',

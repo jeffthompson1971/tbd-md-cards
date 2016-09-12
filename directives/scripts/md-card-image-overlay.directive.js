@@ -1,4 +1,4 @@
-!(function() {
+!(function () {
     var appName = "app";
     try {
         appName = THE_APP;
@@ -14,7 +14,7 @@
         return {
 
             restrict: 'E',
-            templateUrl: function(elem, attrs) {
+            templateUrl: function (elem, attrs) {
 
                 return (attrs.templatepath) ? attrs.templatepath + "/_md-card-image-overlay.view.html" : 'templates/_md-card-image-overlay.view.html';
             },
@@ -31,7 +31,7 @@
             controller: MdCardImageOverlayController,
             controllerAs: 'vm',
             bindToController: true,
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
 
                 scope.title = attrs.title;
                 scope.meElement = element;
@@ -50,32 +50,43 @@
 
         $scope.$watch('vm.data', activate);
 
-        $scope.$watch('vm.listing', function(theListing) {
+        $scope.$watch('vm.listing', function (theListing) {
 
             if (_.isUndefined(theListing))
                 return;
 
             $scope.listing = theListing;
-            
+
             // TODO - this needs to look for any showing service ID not just
             // hardcode CSS 
             if (theListing.activityAggregate && theListing.activityAggregate.snapshots) {
+
+                var snaps = theListing.activityAggregate.snapshots;
+
+                _.each(snaps, function (snap) {
+
+                    if (_.has(snap, "listing_trend")) {
+
+                        $scope.listing.trends.push(snap.listing_trend);
+                    }
+                })
+
                 if (theListing.activityAggregate.snapshots["8"]) {
-                    
-                    vm.showings = (theListing.activityAggregate.snapshots["8"].data) ? 
-                    theListing.activityAggregate.snapshots["8"].data : [];
+
+                    vm.showings = (theListing.activityAggregate.snapshots["8"].data) ?
+                        theListing.activityAggregate.snapshots["8"].data : [];
                 } else {
-                     vm.showings = [];
-                     
+                    vm.showings = [];
+
                 }
             } else {
-                 vm.showings = [];
+                vm.showings = [];
             }
         });
 
-        $scope.$watch('vm.showings', function(theShowings) {
-            
-            
+        $scope.$watch('vm.showings', function (theShowings) {
+
+
             if (_.isUndefined(theShowings))
                 return;
             for (var i = 0; i < theShowings.length; ++i) {
@@ -89,7 +100,7 @@
 
             $scope.showings = theShowings;
         });
-        
+
         function activate() {
             vm.displayRateOfChange = _.isUndefined(vm.displayRateOfChange) ? true : vm.displayRateOfChange;
             vm.valueType = vm.valueType || 'number';

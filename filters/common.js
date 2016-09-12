@@ -12,7 +12,14 @@
             return function (item) {
 
                 return item.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+            };
+        })
 
+        // filters out duplicate strings in array of strings
+        .filter('unique', function () {
+
+            return function (arr, field) {
+                return _.uniq(arr, function (a) { return a; });
             };
         })
 
@@ -38,7 +45,7 @@
             return function (item, forDialer) {
                 if (item) {
                     var finalNum = ""
-  
+
                     // replace multiple spaces, newlines etc. with single space
                     var str = item.replace(/\s\s+/g, ' ');
 
@@ -64,20 +71,27 @@
 
                         // iff 11 and first is a 1 just strip it...
                         if (phone.length == 11 && phone[0] == 1) {
+
                             phone = phone.slice(1);
                         }
-                        // should have 10 digits if not we return null
+                        // should have 10 digits 
                         if (phone.length == 10) {
                             //reformat and return phone number
-                            finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                            if (forDialer != undefined && forDialer === true) {
+                                finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1$2$3");
+                            } else {
+                                finalNum = phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+                            }
+
                         }
+
                         if (ext != "") {
-                            if  (forDialer != undefined && forDialer === true) {
+                            if (forDialer != undefined && forDialer === true) {
                                 finalNum += ";" + ext;
                             } else {
                                 finalNum += " ext. " + ext;
                             }
-                        
+
                         }
                         return finalNum;
 
@@ -85,10 +99,8 @@
 
                 }
                 return item;
-              
             };
         })
-
 
         // for days on market when item is time in epoch (looks like)
         .filter('makeDaysOn', function () {
@@ -101,7 +113,6 @@
                 var day = 24 * 60 * 60 * 1000;
 
                 return Math.round(diff / day);
-
             };
         })
 
@@ -116,7 +127,6 @@
                 var val = (diff / baseline);
 
                 return val;
-
             };
         })
 
@@ -227,7 +237,6 @@
             }
         })
 
-
         .filter('groupBy', ['$parse', function ($parse) {
             return function (list, group_by) {
 
@@ -258,7 +267,6 @@
                                 group_changed = true;
                             }
                         }
-
 
                     }// otherwise we have the first item in the list which is new
                     else {

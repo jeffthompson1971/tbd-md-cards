@@ -1,3 +1,4 @@
+
 <md-card class="md-card  site-summary-card">
 
     <div class="site-header">
@@ -11,8 +12,6 @@
 
     <div class="feedback-div">
 
-
-        <!--<div ng-repeat="entry in entries | filterOutOneDayCodeGen" ng-click="show($event, entry)">  | maxRecords: 5-->
         <div ng-repeat="entry in entries" ng-click="show($event, entry)">
             <label><b> {{entry.AccessedByName | accessorName}}</b></label>
             <div class="time-wrapper">
@@ -25,22 +24,34 @@
                 <span class=datetime>Lockbox Serial Number: {{entry.LBSerialNumber}}</span>
             </div>
 
-            <p style="clear: both;" class="feedback">
-                Access type: <span class="card-value">{{entry.AccessType}}</span>
-                <br> Location: <span class="card-value">{{entry.Location}} </span>
 
-            </p>
+
+            <table class="card-table">
+
+                <tr>
+                    <td class="label">Access type</td>
+                    <td class="value">{{entry.AccessType}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Location</td>
+                    <td class="value">{{entry.Location}}</td>
+                </tr>
+
+
+            </table>
 
             <md-divider ng-if="!$last"></md-divider>
         </div>
 
-        <div class="footer" ng-if="vm.limit != -1 && vm.sentrilock.entries.length > vm.limit" ng-click="showMoreFeedback()">
+
+        <div class="footer" ng-if="vm.limit != -1 && entriesNoOneDay.length > vm.limit" ng-click="showMoreFeedback()">
             <span style="width: 100%">
             <md-button style="float: left" class="md-icon-button" ui-sref="app.feedback({card:'sentri'})">
                 <md-icon md-svg-src="assets/icons/ic_more_horiz_black_48px.svg" aria-label="more"></md-icon>
             </md-button>
 
-          <span class="nofm">{{vm.limit}} of {{vm.sentrilock.entries.length}}</span>
+          <span class="nofm">{{vm.limit}} of {{entriesNoOneDay.length}}</span>
             </span>
 
         </div>

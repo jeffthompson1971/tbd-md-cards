@@ -44,22 +44,10 @@
         <md-dialog-content>
 
             <div class=feedback-div>
-                <!--<h5 class="order-address">{{showing.startTime | date: "short" }} - {{showing.startTime | timeago }}</h5>
-                -->
-
+   
                 <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(showing)">
                     <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
                 </md-button>
-
-                <!--<div class="time-wrapper">
-                    <span class=datetime>{{showing.startTime | timeago }}</span>
-                    <span class=datetime>&middot;</span>
-                    <span class=datetime>{{showing.startTime | date:'short'}}</span><br>
-
-
-                </div>-->
-
-
 
                 <table>
 
@@ -67,8 +55,7 @@
                         <td class="label">Showing time</td>
 
                         <td class=card-value>
-
-                        
+   
                             <span class=datetime>{{showing.startTime | date:'short'}}</span>
                                 <span class=datetime>&middot;</span>
                             <span class=datetime>{{showing.startTime | timeago }}</span>
@@ -115,11 +102,17 @@
                 </md-button>
 
             
-                <md-button ng-if='showing.contact.emails.length > 0' class="md-raised" ng-repeat="email in showing.contact.emails">
-                    <a href="mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing..." target="_top">
+                <md-button ng-if='showing.contact.emails.length > 0' class="md-raised" ng-repeat="email in showing.contact.emails" ng-click="sendMail(email, showing)">
+                    <!-- <a href="mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing..." target="_top"> -->
                         <md-icon md-svg-src="assets/icons/ic_mail_outline_black_48px.svg" aria-label="Email"></md-icon>
-                        {{email}}</a>
+                        {{email}}
+                        <!--</a>-->
                 </md-button>
+
+                <!--<md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click="sendMail(sentri.emailAddy2, sentri)"
+                    class="md-raised">
+
+                </md-button>-->
 
                 <div ng-if="showActions" style="width: 100%; height: 40px"></div>
             </div>
