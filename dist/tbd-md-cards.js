@@ -795,7 +795,9 @@ angular.module('tbd', []);
 
         $scope.sentri = sentri;
 
-        $scope.showActions = IS_MOBILE_APP;
+        $scope.haveUserInfo = (sentri.AccessType !== "ContractorCode");
+
+        $scope.showActions = true; //IS_MOBILE_APP && $scope.haveUserInfo;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -811,7 +813,7 @@ angular.module('tbd', []);
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = "Regarding showing feedback you left at " + wholeRec.Location;
+            var subject = "Regarding Sentrilock access at " + wholeRec.Location;
             var emailList = [];
             emailList.push(addy);
 
@@ -979,7 +981,7 @@ angular.module('tbd', []);
                 $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
 
             } else {
-                $scope.entries = $scope.entriesNoOneDay
+                $scope.entries = $scope.entriesNoOneDay;
             }
         });
     }
@@ -3472,12 +3474,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        <md-toolbar>\n" +
     "            <div class=\"md-toolbar-tools gray\">\n" +
     "                <img style=\"width: 180px; margin-left: -10px;\" src=\"assets/logos/sentrilock-logo.png\" alt=\"Sentrilock\" />\n" +
-    "\n" +
-    "                <!--<h2>\n" +
-    "                    \n" +
-    "                </h2>\n" +
-    "                <h3 style=\"padding-left: 10px; color: #fff;\"> {{sentri.AgentFirstName}} {{ sentri.AgentLastName }}</h3>\n" +
-    "                -->\n" +
     "                <span flex></span>\n" +
     "                <md-button class=\"md-icon-button\" ng-click=\"cancel()\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_close_black_24px.svg\" aria-label=\"Close dialog\"></md-icon>\n" +
@@ -3489,10 +3485,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <div>\n" +
     "\n" +
-    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
+    "                <!--<md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
-    "                </md-button>\n" +
-    "                <span class=\"name\">\n" +
+    "                </md-button>-->\n" +
+    "                <span ng-if=\"haveUserInfo\" class=\"name\">\n" +
     "                    <md-icon class=person-icon md-svg-src=\"assets/icons/ic_person_black_48px.svg\">\n" +
     "\n" +
     "                    </md-icon>\n" +
@@ -3526,14 +3522,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                    </table>\n" +
     "\n" +
-    "                    <hr>\n" +
+    "                    <hr ng-if=\"haveUserInfo\">\n" +
     "\n" +
     "\n" +
-    "                    <div class=\"orgs\" layout=\"row\" layout-xs=\"column\">\n" +
+    "                    <div ng-if=\"haveUserInfo\" class=\"orgs\" layout=\"row\" layout-xs=\"column\">\n" +
     "                        <div flex class=\"card-value\" style=\"text-align: center\">\n" +
     "                            {{sentri.Association}}\n" +
     "                        </div>\n" +
-    "                        <div class=\"card-value\" style=\"text-align: center; font-size: 32px;\">\n" +
+    "                        <div ng-if=\"sentri.Association && sentri.CompanyName\" class=\"card-value\" style=\"text-align: center; font-size: 32px;\">\n" +
     "                            &middot;\n" +
     "                        </div>\n" +
     "\n" +
@@ -3542,7 +3538,10 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                        </div>\n" +
     "                    </div>\n" +
     "\n" +
-    "                    <div class=\"contact-info\">\n" +
+    "                    <div ng-if=\"haveUserInfo\" class=\"contact-info\">\n" +
+    "                         <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(sentri)\">\n" +
+    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                </md-button>\n" +
     "\n" +
     "                        <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(sentri.ContactNumber)\" ng-show='sentri.ContactNumber'\n" +
     "                            class=\"contact-method\">\n" +

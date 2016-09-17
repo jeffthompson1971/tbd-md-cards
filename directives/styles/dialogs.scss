@@ -8,6 +8,9 @@ md-dialog {
          .md-button.md-raised:not([disabled]):hover {
               background-color: $primary-color-dark !important;
          }
+           .md-button.md-raised:not([disabled]):focus {
+              background-color: $primary-color-dark !important;
+         }
 
         .md-button {
             color: #fff ;
@@ -15,41 +18,36 @@ md-dialog {
 
             .md-raised[disabled] {
 
-                 md-icon svg {
-            fill: #000 !important;
-            
-        }
-       
-        
-            color: #000 !important;
+                md-icon svg {
+                    fill: #000 !important;
+                }
+                color: #000 !important;
             }
         }
         md-icon svg {
             fill: #fff ;
             
         }
-        
+    }
+
+    span.name {
+        font-weight: 700;
+        .person-icon {
+            position: relative;
+            top: -3px;
+            height: 30px;
+            width: 30px;
+        }
 
     }
 
-span.name {
-    font-weight: 700;
-    .person-icon {
-        position: relative;
-        top: -3px;
-        height: 30px;
-        width: 30px;
+    blockquote {
+        border-left: 4px solid #ccc;
+        color: #a5a4a4;
+        font-style: italic;
+        margin: 5px;
+        padding-left: 15px;
     }
-
-}
-
-blockquote {
-    border-left: 4px solid #ccc;
-    color: #a5a4a4;
-    font-style: italic;
-    margin: 5px;
-    padding-left: 15px;
-}
     
     max-width: 80%;
    
@@ -62,9 +60,10 @@ blockquote {
         box-shadow: 1px 1px 13px #aaa;
     }
     .md-fab {
-        background-color: #fff !important;
+        background-color: $primary-color-dark !important;
         width: 42px !important;
         height: 42px !important;
+        color: #fff;
     }
     .md-fab-bottom-right {
         right: 6px !important;
@@ -82,27 +81,21 @@ blockquote {
     @media screen and (max-width: 400px) {
     
         .md-button {
-            font-size: 12px;
-               
-    margin: 3px 2px;
-    padding: 0 2px;
+            font-size: 12px;             
+            margin: 3px 2px;
+            padding: 0 2px;
         }
     }
 
-span.name {
-    font-size: 20px;
-    .person-icon {
-        position: relative;
-        top: -3px;
-        height: 20px;
-        width: 20px;
+    span.name {
+        font-size: 20px;
+        .person-icon {
+            position: relative;
+            top: -3px;
+            height: 20px;
+            width: 20px;
+        }
     }
-
-}
-
-
-
-
 }
 md-dialog-content {
     

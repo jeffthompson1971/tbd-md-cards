@@ -41,7 +41,9 @@
 
         $scope.sentri = sentri;
 
-        $scope.showActions = IS_MOBILE_APP;
+        $scope.haveUserInfo = (sentri.AccessType !== "ContractorCode");
+
+        $scope.showActions = IS_MOBILE_APP && $scope.haveUserInfo;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -225,7 +227,7 @@
                 $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
 
             } else {
-                $scope.entries = $scope.entriesNoOneDay
+                $scope.entries = $scope.entriesNoOneDay;
             }
         });
     }

@@ -23,12 +23,6 @@
         <md-toolbar>
             <div class="md-toolbar-tools gray">
                 <img style="width: 180px; margin-left: -10px;" src="assets/logos/sentrilock-logo.png" alt="Sentrilock" />
-
-                <!--<h2>
-                    
-                </h2>
-                <h3 style="padding-left: 10px; color: #fff;"> {{sentri.AgentFirstName}} {{ sentri.AgentLastName }}</h3>
-                -->
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon md-svg-src="assets/icons/ic_close_black_24px.svg" aria-label="Close dialog"></md-icon>
@@ -40,10 +34,10 @@
 
             <div>
 
-                <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(sentri)">
+                <!--<md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(sentri)">
                     <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
-                </md-button>
-                <span class="name">
+                </md-button>-->
+                <span ng-if="haveUserInfo" class="name">
                     <md-icon class=person-icon md-svg-src="assets/icons/ic_person_black_48px.svg">
 
                     </md-icon>
@@ -77,14 +71,14 @@
 
                     </table>
 
-                    <hr>
+                    <hr ng-if="haveUserInfo">
 
 
-                    <div class="orgs" layout="row" layout-xs="column">
+                    <div ng-if="haveUserInfo" class="orgs" layout="row" layout-xs="column">
                         <div flex class="card-value" style="text-align: center">
                             {{sentri.Association}}
                         </div>
-                        <div class="card-value" style="text-align: center; font-size: 32px;">
+                        <div ng-if="sentri.Association && sentri.CompanyName" class="card-value" style="text-align: center; font-size: 32px;">
                             &middot;
                         </div>
 
@@ -93,7 +87,10 @@
                         </div>
                     </div>
 
-                    <div class="contact-info">
+                    <div ng-if="haveUserInfo" class="contact-info">
+                         <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(sentri)">
+                    <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
+                </md-button>
 
                         <md-button ng-disabled="!showActions" class="md-raised" ng-click="dial(sentri.ContactNumber)" ng-show='sentri.ContactNumber'
                             class="contact-method">
