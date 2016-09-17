@@ -57,7 +57,7 @@
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = "Regarding showing feedback you left at " + wholeRec.Location;
+            var subject = "Regarding Sentrilock access at " + wholeRec.Location;
             var emailList = [];
             emailList.push(addy);
 
