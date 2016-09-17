@@ -5,6 +5,14 @@
      label {
          font-size: 20px !important;
      }
+     div.dark {
+         color: #555;
+    font-weight: 500;
+     }
+     div.light {
+         color: #fff;
+         font-weight: 500;
+     }
      .row {
          display: table-row;
          height: auto;
