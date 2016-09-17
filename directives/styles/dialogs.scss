@@ -1,11 +1,66 @@
+@import "../../assets/scss/snaplistingstheme";
+
+ 
 md-dialog {
+
+    .contact-info {
+
+         .md-button.md-raised:not([disabled]):hover {
+              background-color: $primary-color-dark !important;
+         }
+
+        .md-button {
+            color: #fff ;
+            background-color: $primary-color-dark;
+
+            .md-raised[disabled] {
+
+                 md-icon svg {
+            fill: #000 !important;
+            
+        }
+       
+        
+            color: #000 !important;
+            }
+        }
+        md-icon svg {
+            fill: #fff ;
+            
+        }
+        
+
+    }
+
+span.name {
+    font-weight: 700;
+    .person-icon {
+        position: relative;
+        top: -3px;
+        height: 30px;
+        width: 30px;
+    }
+
+}
+
+blockquote {
+    border-left: 4px solid #ccc;
+    color: #a5a4a4;
+    font-style: italic;
+    margin: 5px;
+    padding-left: 15px;
+}
+    
     max-width: 80%;
    
     max-height: 80%;
-    // padding-bottom: 30px;
+   
     min-width: 300px;
     width: 600px;
     font-size: 16px;
+    md-toolbar {
+        box-shadow: 1px 1px 13px #aaa;
+    }
     .md-fab {
         background-color: #fff !important;
         width: 42px !important;
@@ -21,7 +76,7 @@ md-dialog {
     }
      .feedback {
         font-size: .9em;
-        padding: 10px;
+        //padding: 10px;
     }
 
     @media screen and (max-width: 400px) {
@@ -33,6 +88,19 @@ md-dialog {
     padding: 0 2px;
         }
     }
+
+span.name {
+    font-size: 20px;
+    .person-icon {
+        position: relative;
+        top: -3px;
+        height: 20px;
+        width: 20px;
+    }
+
+}
+
+
 
 
 }
@@ -65,7 +133,7 @@ md-dialog-content {
         max-width: 95%;
         //width: 500px;
         max-height: 95%;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     md-dialog-content {
@@ -93,6 +161,13 @@ md-dialog-content {
 
     .feedback {
         font-size: .9em;
-        padding: 10px;
+        //padding: 10px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+
+    md-dialog {
+        font-size: 14px;
     }
 }

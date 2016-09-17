@@ -14,6 +14,10 @@
         text-decoration: none;
     }
     
+    .gray {
+        background-color: #F0F2F2 !important;
+    }
+    
     .contact-method {
         padding-top: 4px;
         padding-bottom: 4px;
@@ -27,24 +31,32 @@
 <md-dialog id="showingDetails" aria-label="Showing Details">
     <form>
         <md-toolbar>
-            <div class="md-toolbar-tools md-primary">
-                <h2>
-                    <md-icon md-svg-src="assets/icons/ic_chat_white_24px.svg">
+            <!--<div class="logo">
+            <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com" />
+        </div>-->
+            <div class="md-toolbar-tools gray">
 
-                    </md-icon>
-                </h2>
-                <h3 style="padding-left: 10px; color: #fff;"> {{showing.contact.name}}</h3>
+                <img style="margin-left: -12px;" src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com" />
+                <!--<h3 style="padding-left: 10px; color: #fff;"> {{showing.contact.name}}</h3>-->
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
-                    <md-icon md-svg-src="assets/icons/ic_close_white_24px.svg" aria-label="Close dialog"></md-icon>
+                    <md-icon md-svg-src="assets/icons/ic_close_black_24px.svg" aria-label="Close dialog"></md-icon>
                 </md-button>
             </div>
         </md-toolbar>
 
         <md-dialog-content>
-
+            <span class="name">
+                 <md-icon  class=person-icon md-svg-src="assets/icons/ic_person_black_48px.svg">
+                       
+                    </md-icon>
+                  
+                
+                {{showing.contact.name}}
+            </span>
+           
             <div class=feedback-div>
-   
+
                 <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(showing)">
                     <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
                 </md-button>
@@ -55,11 +67,11 @@
                         <td class="label">Showing time</td>
 
                         <td class=card-value>
-   
+
                             <span class=datetime>{{showing.startTime | date:'short'}}</span>
-                                <span class=datetime>&middot;</span>
-                            <span class=datetime>{{showing.startTime | timeago }}</span>
-                          
+                            <span class=datetime>&middot;</span>
+                            <span class=datetime style="white-space: nowrap">{{showing.startTime | timeago }}</span>
+
                         </td>
                     </tr>
                     <tr>
@@ -76,16 +88,23 @@
                     <tr ng-if="showing.type.message && showing.type.message.length>0">
                         <td class="label">Message</td>
                         <td>
+                            <!--<md-icon md-svg-src="assets/icons/ic_chat_black_24px.svg">
+
+                </md-icon>-->
                             <span class="card-value">{{showing.type.message}}</span>
                         </td>
                     </tr>
 
 
                 </table>
+                <div class="contact-info">
+                <p style="clear: both;" ng-if="showing.feedback" class="feedback card-value">
+                    <blockquote>"{{showing.feedback}}"</blockquote>
 
-
-                <p style="clear: both;" ng-if="showing.feedback" class="feedback card-value">"{{showing.feedback}}"</p>
-                <p style="clear: both;" ng-if="!showing.feedback" class="feedback card-value"><i>"No feedback was provided by agent."</i></p>
+                    </p>
+                <p style="clear: both;" ng-if="!showing.feedback" class="feedback card-value">
+                    
+                    <i>"No feedback was provided by agent."</i></p>
 
                 <hr>
 
@@ -101,18 +120,13 @@
                     {{showing.contact.phone.office}} (Office)
                 </md-button>
 
-            
+
                 <md-button ng-if='showing.contact.emails.length > 0' class="md-raised" ng-repeat="email in showing.contact.emails" ng-click="sendMail(email, showing)">
-                    <!-- <a href="mailto:{{email}}?Subject=Re%20your%20feedback%20on%20my%20listing..." target="_top"> -->
-                        <md-icon md-svg-src="assets/icons/ic_mail_outline_black_48px.svg" aria-label="Email"></md-icon>
-                        {{email}}
-                        <!--</a>-->
+                    <md-icon md-svg-src="assets/icons/ic_mail_outline_black_48px.svg" aria-label="Email"></md-icon>
+                    {{email}}
+
                 </md-button>
-
-                <!--<md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click="sendMail(sentri.emailAddy2, sentri)"
-                    class="md-raised">
-
-                </md-button>-->
+                </div>
 
                 <div ng-if="showActions" style="width: 100%; height: 40px"></div>
             </div>
