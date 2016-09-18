@@ -41,7 +41,9 @@
 
         $scope.sentri = sentri;
 
-        $scope.showActions = IS_MOBILE_APP;
+        $scope.haveUserInfo = (sentri.AccessType !== "ContractorCode");
+
+        $scope.showActions = IS_MOBILE_APP && $scope.haveUserInfo;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -57,7 +59,7 @@
 
         $scope.sendMail = function (addy, wholeRec) {
 
-            var subject = "Regarding showing feedback you left at " + wholeRec.Location;
+            var subject = "Regarding Sentrilock access at " + wholeRec.Location;
             var emailList = [];
             emailList.push(addy);
 
@@ -225,7 +227,7 @@
                 $scope.entries = $scope.entriesNoOneDay.slice(0, vm.limit);
 
             } else {
-                $scope.entries = $scope.entriesNoOneDay
+                $scope.entries = $scope.entriesNoOneDay;
             }
         });
     }

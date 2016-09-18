@@ -12,21 +12,20 @@
     i.plain {
         text-decoration: none;
     }
+    
+    .gray {
+        background-color: #F0F2F2 !important;
+    }
 </style>
 
 <md-dialog id="sentrilockDetails" aria-label="Sentrilock Details">
     <form>
         <md-toolbar>
-            <div class="md-toolbar-tools md-primary">
-                <h2>
-                    <md-icon md-svg-src="assets/icons/ic_chat_white_24px.svg">
-                        <h1>Sentrilock Details</h1>
-                    </md-icon>
-                </h2>
-                <h3 style="padding-left: 10px; color: #fff;"> {{sentri.AgentFirstName}} {{ sentri.AgentLastName }}</h3>
+            <div class="md-toolbar-tools gray">
+                <img style="width: 180px; margin-left: -10px;" src="assets/logos/sentrilock-logo.png" alt="Sentrilock" />
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
-                    <md-icon md-svg-src="assets/icons/ic_close_white_24px.svg" aria-label="Close dialog"></md-icon>
+                    <md-icon md-svg-src="assets/icons/ic_close_black_24px.svg" aria-label="Close dialog"></md-icon>
                 </md-button>
             </div>
         </md-toolbar>
@@ -35,76 +34,85 @@
 
             <div>
 
-                <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(sentri)">
+                <!--<md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(sentri)">
+                    <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
+                </md-button>-->
+                <span ng-if="haveUserInfo" class="name">
+                    <md-icon class=person-icon md-svg-src="assets/icons/ic_person_black_48px.svg">
+
+                    </md-icon>
+                    {{sentri.AgentFirstName}} {{ sentri.AgentLastName }}
+                   </span>
+                    <table>
+
+                        <tr>
+                            <td class="label">Access time</td>
+                            <td class=card-value>
+
+                                <span class=no-wrap>{{sentri.UTCAccessedDT | date: 'short'}}</span>
+                                <span>&middot;</span>
+
+                                <span class=no-wrap> {{sentri.UTCAccessedDT | timeago}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Lockbox SN</td>
+                            <td> <span class=card-value> {{sentri.LBSerialNumber}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Access type</td>
+                            <td> <span class="card-value">{{sentri.AccessType}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Location</td>
+                            <td><span class="card-value" style="text-align: center">{{sentri.Location}} </span></td>
+                        </tr>
+
+
+                    </table>
+
+                    <hr ng-if="haveUserInfo">
+
+
+                    <div ng-if="haveUserInfo" class="orgs" layout="row" layout-xs="column">
+                        <div flex class="card-value" style="text-align: center">
+                            {{sentri.Association}}
+                        </div>
+                        <div ng-if="sentri.Association && sentri.CompanyName" class="card-value" style="text-align: center; font-size: 32px;">
+                            &middot;
+                        </div>
+
+                        <div flex style="text-align: center" class="card-value">
+                            {{sentri.CompanyName}}
+                        </div>
+                    </div>
+
+                    <div ng-if="haveUserInfo" class="contact-info">
+                         <md-button ng-if="showActions" class="md-fab  md-fab-bottom-right" aria-label="Add to Contacts" ng-click="addToContacts(sentri)">
                     <md-icon md-svg-src="assets/icons/ic_person_add_black_48px.svg"></md-icon>
                 </md-button>
 
-                <table>
-                  
-                    <tr>
-                        <td class="label">Access time</td>
-                        <td class=card-value>
+                        <md-button ng-disabled="!showActions" class="md-raised" ng-click="dial(sentri.ContactNumber)" ng-show='sentri.ContactNumber'
+                            class="contact-method">
 
-                            <span class=no-wrap>{{sentri.UTCAccessedDT | date: 'short'}}</span>
-                            <span>&middot;</span>
+                            <md-icon md-svg-src="assets/icons/ic_phone_iphone_black_48px.svg" aria-label="dial"></md-icon>
+                            {{sentri.ContactNumber | normalizePhoneNumber}} (Mobile)
+                        </md-button>
 
-                            <span class=no-wrap> {{sentri.UTCAccessedDT | timeago}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label">Lockbox SN</td>
-                        <td> <span class=card-value> {{sentri.LBSerialNumber}}</span></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Access type</td>
-                        <td> <span class="card-value">{{sentri.AccessType}}</span></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Location</td>
-                        <td><span class="card-value" style="text-align: center">{{sentri.Location}} </span></td>
-                    </tr>
+                        <md-button ng-if='(sentri.emailAddy && sentri.emailAddy.length > 3)' ng-click="sendMail(sentri.emailAddy, sentri)" class="md-raised">
 
+                            <md-icon md-svg-src="assets/icons/ic_mail_outline_black_48px.svg" aria-label="Email"></md-icon>
+                            {{ sentri.emailAddy }}
 
-                </table>
+                        </md-button>
 
-                <hr>
-             
+                        <md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click="sendMail(sentri.emailAddy2, sentri)"
+                            class="md-raised">
 
-                <div class="orgs" layout="row" layout-xs="column">
-                    <div flex class="card-value" style="text-align: center">
-                        {{sentri.Association}}
-                    </div>
-                    <div class="card-value" style="text-align: center; font-size: 32px;">
-                        &middot;
+                        </md-button>
                     </div>
 
-                    <div flex style="text-align: center" class="card-value">
-                        {{sentri.CompanyName}}
-                    </div>
-                </div>
-
-             
-
-                <md-button ng-disabled="!showActions" class="md-raised" ng-click="dial(sentri.ContactNumber)" ng-show='sentri.ContactNumber'
-                    class="contact-method">
-
-                    <md-icon md-svg-src="assets/icons/ic_phone_iphone_black_48px.svg" aria-label="dial"></md-icon>
-                    {{sentri.ContactNumber | normalizePhoneNumber}} (Mobile)
-                </md-button>
-
-                <md-button ng-if='(sentri.emailAddy && sentri.emailAddy.length > 3)' ng-click="sendMail(sentri.emailAddy, sentri)" class="md-raised">
-
-                    <md-icon md-svg-src="assets/icons/ic_mail_outline_black_48px.svg" aria-label="Email"></md-icon>
-                    {{ sentri.emailAddy }}
-
-                </md-button>
-
-                <md-button ng-if='(sentri.emailAddy2 && (sentri.emailAddy2 != sentri.emailAddy))' ng-click="sendMail(sentri.emailAddy2, sentri)"
-                    class="md-raised">
-
-                </md-button>
-
-                <div ng-if="showActions" style="width: 100%; height: 40px"></div>
+                    <div ng-if="showActions" style="width: 100%; height: 40px"></div>
 
             </div>
 
