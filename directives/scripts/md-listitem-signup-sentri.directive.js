@@ -31,7 +31,7 @@
             </md-input-container>\
             <md-input-container>\
                 <label for="i3">password</label>\
-                <input id="i3" ng-model="vm.login.password" required></input>\
+                <input id="i3" type=ng-model="vm.login.password" required></input>\
             </md-input-container>\
         <footer>\
         <md-checkbox ng-model="vm.login.perm" checked label="permission">\
