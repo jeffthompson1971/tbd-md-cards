@@ -40,6 +40,7 @@
        <md-button type="submit" value="Login" class="md-raised md-secondary centerme login-form-button">LOG IN</md-button>\
                 <md-button value="Cancel" class="md-raised md-warn centerme login-form-button" ng-click="vm.showForm=false">Cancel </md-button>\
       </footer>\
+       </form>\
       </div>',
 
             link: function (scope, element, attrs) {
