@@ -797,7 +797,7 @@ angular.module('tbd', []);
 
         $scope.haveUserInfo = (sentri.AccessType !== "ContractorCode");
 
-        $scope.showActions = true; //IS_MOBILE_APP && $scope.haveUserInfo;
+        $scope.showActions = IS_MOBILE_APP && $scope.haveUserInfo;
 
         $scope.hide = function () {
             $mdDialog.hide();
