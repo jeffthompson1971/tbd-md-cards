@@ -62,7 +62,7 @@
                         $cordovaSocialSharing
                             .share(msgStr, "What's trending on your listing - only from SnapListings.io!", null, $scope.url) // Share via native share sheet
                             .then(function (result) {
-                                PalSvc.alert("Success", "OK", "Your listing trends were shared successfuly...");
+                                PalSvc.alert("Done", "OK", "All good, no drama...");
                                 //alert("successfully shared: " + JSON.stringify(result));
 
                             }, function (err) {
