@@ -62,6 +62,7 @@
         $scope.showing = showing;
 
         $scope.showActions = IS_MOBILE_APP;
+        
         $scope.hide = function () {
             $mdDialog.hide();
         };
@@ -190,17 +191,18 @@
 
 
                 // }
-                // if (showings[i].sentiment < -2) {
-                //     scope.negativeFB.push(showings[i]);
-                //     scope.negCnt += 1;
-                //     myEl.addClass('negative-color');
+                if (showings[i].sentiment < -2) {
 
-                // } else if (showings[i].sentiment > 2) {
-                //     scope.posCnt += 1;
-                //     scope.positiveFB.push(showings[i]);
-                //     myEl.addClass('positive-color');
-                // }
-                // scope.totalCnt += 1;
+                    scope.negativeFB.push(showings[i]);
+                    scope.negCnt += 1;
+                    myEl.addClass('negative-color');
+
+                } else if (showings[i].sentiment > 2) {
+                    scope.posCnt += 1;
+                    scope.positiveFB.push(showings[i]);
+                    myEl.addClass('positive-color');
+                }
+                scope.totalCnt += 1;
             }
 
         });
