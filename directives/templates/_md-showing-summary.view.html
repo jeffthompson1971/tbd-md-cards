@@ -5,7 +5,8 @@
         </div>
     </div>
     <div class="feedback-div">
-        <div ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)">
+        <div class="show-item" ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)"
+        ng-class="{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3, 'positive': showing.potentialOffer == true}">
             <label><b> {{showing.contact.name}}</b></label>
             <div class="time-wrapper">
                 <span class=datetime>{{showing.startTime | timeago }}</span>

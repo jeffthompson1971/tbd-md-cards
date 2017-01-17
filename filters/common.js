@@ -139,7 +139,7 @@
                 if (value === undefined)
                     return amount;
                 var sep = value.indexOf(formats.DECIMAL_SEP);
-                console.log(amount, value);
+
                 if (amount >= 0) {
                     return value.substring(0, sep);
                 }
