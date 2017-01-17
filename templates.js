@@ -318,9 +318,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "            <div>\n" +
     "                <label>Favorites</label>\n" +
     "\n" +
-    "                <span ng-if=\"listing.listing_favoritesCnt\">\n" +
+    "                <span ng-if=\"listing.listing_prefs_favoritesCnt\">\n" +
     "                  <md-icon  class=\"favs inline-small\" md-svg-src=\"assets/icons/ic_favorite_black_24px.svg\"></md-icon>\n" +
-    "                  <b>{{listing.listing_favoritesCnt}}</b>\n" +
+    "                  <b>{{listing.listing_prefs_favoritesCnt}}</b>\n" +
     "              \n" +
     "                </span>\n" +
     "            </div>\n" +
@@ -968,12 +968,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                \n" +
     "                {{showing.contact.name}}\n" +
     "            </span>\n" +
-    "           \n" +
+    "\n" +
     "            <div class=feedback-div>\n" +
     "\n" +
-    "                <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
-    "                </md-button>\n" +
     "\n" +
     "                <table>\n" +
     "\n" +
@@ -1002,9 +999,6 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                    <tr ng-if=\"showing.type.message && showing.type.message.length>0\">\n" +
     "                        <td class=\"label\">Message</td>\n" +
     "                        <td>\n" +
-    "                            <!--<md-icon md-svg-src=\"assets/icons/ic_chat_black_24px.svg\">\n" +
-    "\n" +
-    "                </md-icon>-->\n" +
     "                            <span class=\"card-value\">{{showing.type.message}}</span>\n" +
     "                        </td>\n" +
     "                    </tr>\n" +
@@ -1012,34 +1006,38 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "                </table>\n" +
     "                <div class=\"contact-info\">\n" +
-    "                <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback card-value\">\n" +
-    "                    <blockquote>\"{{showing.feedback}}\"</blockquote>\n" +
+    "                    <md-button ng-if=\"showActions\" class=\"md-fab  md-fab-bottom-right\" aria-label=\"Add to Contacts\" ng-click=\"addToContacts(showing)\">\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_person_add_black_48px.svg\"></md-icon>\n" +
+    "                    </md-button>\n" +
+    "\n" +
+    "                    <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback card-value\">\n" +
+    "                        <blockquote>\"{{showing.feedback}}\"</blockquote>\n" +
     "\n" +
     "                    </p>\n" +
-    "                <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback card-value\">\n" +
-    "                    \n" +
-    "                    <i>\"No feedback was provided by agent.\"</i></p>\n" +
+    "                    <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback card-value\">\n" +
     "\n" +
-    "                <hr>\n" +
+    "                        <i>\"No feedback was provided by agent.\"</i></p>\n" +
     "\n" +
-    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'>\n" +
+    "                    <hr>\n" +
     "\n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
-    "                    {{showing.contact.phone.mobile}} (Mobile)\n" +
-    "                </md-button>\n" +
+    "                    <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.mobile)\" ng-show='showing.contact.phone && showing.contact.phone.mobile'>\n" +
     "\n" +
-    "                <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'>\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_phone_iphone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
+    "                        {{showing.contact.phone.mobile}} (Mobile)\n" +
+    "                    </md-button>\n" +
     "\n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
-    "                    {{showing.contact.phone.office}} (Office)\n" +
-    "                </md-button>\n" +
+    "                    <md-button ng-disabled=\"!showActions\" class=\"md-raised\" ng-click=\"dial(showing.contact.phone.office)\" ng-show='showing.contact.phone && showing.contact.phone.office'>\n" +
+    "\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_local_phone_black_48px.svg\" aria-label=\"dial\"></md-icon>\n" +
+    "                        {{showing.contact.phone.office}} (Office)\n" +
+    "                    </md-button>\n" +
     "\n" +
     "\n" +
-    "                <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\" ng-click=\"sendMail(email, showing)\">\n" +
-    "                    <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
-    "                    {{email}}\n" +
+    "                    <md-button ng-if='showing.contact.emails.length > 0' class=\"md-raised\" ng-repeat=\"email in showing.contact.emails\" ng-click=\"sendMail(email, showing)\">\n" +
+    "                        <md-icon md-svg-src=\"assets/icons/ic_mail_outline_black_48px.svg\" aria-label=\"Email\"></md-icon>\n" +
+    "                        {{email}}\n" +
     "\n" +
-    "                </md-button>\n" +
+    "                    </md-button>\n" +
     "                </div>\n" +
     "\n" +
     "                <div ng-if=\"showActions\" style=\"width: 100%; height: 40px\"></div>\n" +
@@ -1708,7 +1706,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
-    "        <div ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\">\n" +
+    "        <div class=\"show-item\" ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\"\n" +
+    "        ng-class=\"{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3, 'positive': showing.potentialOffer == true}\">\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <div class=\"time-wrapper\">\n" +
     "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
@@ -1770,22 +1769,22 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/_md-stat-summary.view.html',
     "<div id=\"stats-table\" class=\"site-summary-card\">\n" +
-    "    <div class=\"row\">\n" +
+    "	<div class=\"row\">\n" +
     "\n" +
-    "        <span class=\"cell showings-div\">\n" +
+    "		<span class=\"cell showings-div\">\n" +
     "           \n" +
     "             <div style=\"min-height: 50px;\">\n" +
     "                    <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/showings.svg\"></md-icon>\n" +
     "                    <label>{{vm.listing.activityAggregate.listing_shows_todayCnt}}</label>\n" +
     "                </div>\n" +
     "                <div class=\"box-label\">\n" +
-    "                    <span class=\"title no-wrap\"\">showings</span>\n" +
+    "                    <span class=\"title no-wrap\">showings</span>\n" +
     "\n" +
-    "    </div>\n" +
-    "    </span>\n" +
+    "	</div>\n" +
+    "	</span>\n" +
     "\n" +
     "\n" +
-    "    <span class=\"cell clicks-div\">\n" +
+    "	<span class=\"cell clicks-div\">\n" +
     "        \n" +
     "       <div style=\"min-height: 50px;\">                  \n" +
     "            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
@@ -1801,7 +1800,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "</span>\n" +
     "\n" +
-    "<span ng-if=\"showings != undefined\" class=\"cell positive-div\">\n" +
+    "<span ng-if=\"vm.showings != undefined && vm.showings.length != 0\" class=\"cell positive-div\">\n" +
     "        \n" +
     "        <div style=\"min-height: 50px;\">\n" +
     "           \n" +
@@ -1820,21 +1819,21 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div class=\"row\">\n" +
     "\n" +
-    "    <span class=\"cell showings-detail-div\">\n" +
+    "	<span class=\"cell showings-detail-div\">\n" +
     "        \n" +
     "        <div class=\"statrow\">\n" +
     "            <span class=\"label\">7-day</span>\n" +
-    "    <span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>\n" +
+    "	<span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow\">\n" +
-    "    <span class=\"label\">30-day</span>\n" +
-    "    <span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>\n" +
+    "	<span class=\"label\">30-day</span>\n" +
+    "	<span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow\">\n" +
-    "    <span class=\"label\">Total</span>\n" +
-    "    <span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>\n" +
+    "	<span class=\"label\">Total</span>\n" +
+    "	<span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
@@ -1856,26 +1855,26 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "\n" +
     "<div class=\"statrow \">\n" +
-    "    <span class=\"label \">30-day</span>\n" +
-    "    <span class=\"stat \">{{vm.listing_views_thirtyDayCnt.current}}</span>\n" +
-    "    <span class=\"stat asterisk\" ng-if=\"!vm.listing.activityAggregate.thirtyDayViewsComplete \"> * </span>\n" +
-    "    <br>\n" +
+    "	<span class=\"label \">30-day</span>\n" +
+    "	<span class=\"stat \">{{vm.listing_views_thirtyDayCnt.current}}</span>\n" +
+    "	<span class=\"stat asterisk\" ng-if=\"!vm.listing.activityAggregate.thirtyDayViewsComplete \"> * </span>\n" +
+    "	<br>\n" +
     "\n" +
-    "    <change-indicator data=\"vm.listing_views_thirtyDayCnt \" rate-decimals=\"0 \" pct-decimals=\"0 \" color=\"dark \"></change-indicator>\n" +
+    "	<change-indicator data=\"vm.listing_views_thirtyDayCnt \" rate-decimals=\"0 \" pct-decimals=\"0 \" color=\"dark \"></change-indicator>\n" +
     "\n" +
     "\n" +
     "\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow \">\n" +
-    "    <span class=\"label \" class=\"statrow \">Total</span>\n" +
-    "    <span class=\"stat \">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>\n" +
+    "	<span class=\"label \" class=\"statrow \">Total</span>\n" +
+    "	<span class=\"stat \">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "</span>\n" +
     "\n" +
     "\n" +
-    "<span ng-if=\"vm.showings != undefined\" class=\"cell positive-detail-div \">\n" +
+    "<span ng-if=\"vm.showings != undefined && vm.showings.length != 0\" class=\"cell positive-detail-div \">\n" +
     "        \n" +
     "       \n" +
     "            <div class=\"statrow \">\n" +
@@ -1884,18 +1883,18 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "</div>\n" +
     "\n" +
     "<div class=\"statrow \">\n" +
-    "    <span class=\"label \">Negative</span>\n" +
-    "    <span class=\"stat \" ngClass=\"vm.sentimentCounter.negative> 5\">{{vm.sentimentCounter.negative}}</span>\n" +
+    "	<span class=\"label \">Negative</span>\n" +
+    "	<span class=\"stat \" ngClass=\"vm.sentimentCounter.negative> 5\">{{vm.sentimentCounter.negative}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow\">\n" +
-    "    <span class=\"label\">Neutral</span>\n" +
-    "    <span class=\"stat\">{{vm.sentimentCounter.neutral}}</span>\n" +
+    "	<span class=\"label\">Neutral</span>\n" +
+    "	<span class=\"stat\">{{vm.sentimentCounter.neutral}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow\">\n" +
-    "    <span class=\"label\">Total</span>\n" +
-    "    <span class=\"stat\">{{vm.showings.length}}</span>\n" +
+    "	<span class=\"label\">Total</span>\n" +
+    "	<span class=\"stat\">{{vm.showings.length}}</span>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
