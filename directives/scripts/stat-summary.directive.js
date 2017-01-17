@@ -36,7 +36,6 @@
 
                 scope.title = attrs.title;
 
-                // handle the button press to GO to trulia
                 scope.go = function (val) {
 
                     scope.$parent.navToSite(val);
@@ -49,26 +48,29 @@
 
     function MdStatSummaryController($scope) {
         var vm = this;
+
         $scope.theListing = vm.listing;
+
         $scope.showings = vm.showings;
-        
-          prepareData();
-            updateShowingsViewModel($scope);
-   
 
+        prepareData();
 
-        $scope.theListing.trends = [];
+        updateShowingsViewModel($scope);
+
+        //$scope.theListing.trends = [];
 
         $scope.$watch('vm.showings', function (showings) {
+
             vm.showings = showings;
-           // $scope.showings = showings;
+
             updateShowingsViewModel($scope);
 
         });
 
         $scope.$watch('vm.listing', function (theListing) {
+
             vm.listing = theListing;
-           // $scope.theListing = theListing;
+
             prepareData();
 
         });
@@ -132,7 +134,7 @@
 
         function updateShowingsViewModel() {
 
-            if (_.isUndefined(vm.showings)  || vm.showings.length == 0) {
+            if (_.isUndefined(vm.showings) || vm.showings.length == 0) {
                 return
             }
             vm.sentimentCounter = {
@@ -141,7 +143,11 @@
                 neutral: 0,
                 notNegative: 0
             }
+
             for (var i = 0; i < vm.showings.length; i++) {
+
+                // now deal with the sentiment
+
                 var sent = vm.showings[i].sentiment;
 
                 if (sent < -3) {
