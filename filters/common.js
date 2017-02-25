@@ -8,6 +8,10 @@
 
     angular
         .module(appName)
+
+        
+
+
         .filter('toProperCase', function () {
             return function (item) {
 

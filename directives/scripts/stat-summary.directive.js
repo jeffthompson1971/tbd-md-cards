@@ -134,7 +134,7 @@
 
         function updateShowingsViewModel() {
 
-            if (_.isUndefined(vm.showings) || vm.showings.length == 0) {
+            if (_.isUndefined(vm.showings)) {
                 return
             }
             vm.sentimentCounter = {

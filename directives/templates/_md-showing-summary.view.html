@@ -1,12 +1,13 @@
 <md-card class="site-summary-card">
     <div class="site-header">
         <div class="logo">
-            <img src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com" />
+            <img ng-if="sysId == 8" src="assets/logos/showings.com_logo_40x146.png" alt="Showings.com" />
+            <img ng-if="sysId == 10" src="/assets/logos/showingassist-logo.png" alt="SA" />
         </div>
     </div>
     <div class="feedback-div">
         <div class="show-item" ng-repeat="showing in showings | orderBy:'-startTime'" ng-click="show($event, showing)"
-        ng-class="{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3, 'positive': showing.potentialOffer == true}">
+        ng-class="{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3 || showing.potentialOffer == true}">
             <label><b> {{showing.contact.name}}</b></label>
             <div class="time-wrapper">
                 <span class=datetime>{{showing.startTime | timeago }}</span>

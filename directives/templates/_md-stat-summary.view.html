@@ -1,7 +1,7 @@
 <div id="stats-table" class="site-summary-card">
-	<div class="row">
+    <div class="row">
 
-		<span class="cell showings-div">
+        <span class="cell showings-div">
            
              <div style="min-height: 50px;">
                     <md-icon class="stat-icon" md-svg-src="assets/icons/showings.svg"></md-icon>
@@ -10,11 +10,11 @@
                 <div class="box-label">
                     <span class="title no-wrap">showings</span>
 
-	</div>
-	</span>
+    </div>
+    </span>
 
 
-	<span class="cell clicks-div">
+    <span class="cell clicks-div">
         
        <div style="min-height: 50px;">                  
             <!--<img src="assets/icons/arrow.png">  -->
@@ -30,7 +30,7 @@
 
 </span>
 
-<span ng-if="vm.showings != undefined && vm.showings.length != 0" class="cell positive-div">
+<span ng-if="vm.showings != undefined" class="cell positive-div">
         
         <div style="min-height: 50px;">
            
@@ -49,21 +49,21 @@
 
 <div class="row">
 
-	<span class="cell showings-detail-div">
+    <span class="cell showings-detail-div">
         
         <div class="statrow">
             <span class="label">7-day</span>
-	<span class="stat">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>
+    <span class="stat">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>
 </div>
 
 <div class="statrow">
-	<span class="label">30-day</span>
-	<span class="stat">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>
+    <span class="label">30-day</span>
+    <span class="stat">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>
 </div>
 
 <div class="statrow">
-	<span class="label">Total</span>
-	<span class="stat">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>
+    <span class="label">Total</span>
+    <span class="stat">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>
 </div>
 
 
@@ -82,57 +82,57 @@
 " pct-decimals="0 " color="dark "></change-indicator>
 
 
-</div>
+    </div>
 
-<div class="statrow ">
-	<span class="label ">30-day</span>
-	<span class="stat ">{{vm.listing_views_thirtyDayCnt.current}}</span>
-	<span class="stat asterisk" ng-if="!vm.listing.activityAggregate.thirtyDayViewsComplete "> * </span>
-	<br>
+    <div class="statrow ">
+        <span class="label ">30-day</span>
+        <span class="stat ">{{vm.listing_views_thirtyDayCnt.current}}</span>
+        <span class="stat asterisk" ng-if="!vm.listing.activityAggregate.thirtyDayViewsComplete "> * </span>
+        <br>
 
-	<change-indicator data="vm.listing_views_thirtyDayCnt " rate-decimals="0 " pct-decimals="0 " color="dark "></change-indicator>
-
-
-
-</div>
-
-<div class="statrow ">
-	<span class="label " class="statrow ">Total</span>
-	<span class="stat ">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>
-</div>
-
-</span>
+        <change-indicator data="vm.listing_views_thirtyDayCnt " rate-decimals="0 " pct-decimals="0 " color="dark "></change-indicator>
 
 
-<span ng-if="vm.showings != undefined && vm.showings.length != 0" class="cell positive-detail-div ">
+
+    </div>
+
+    <div class="statrow ">
+        <span class="label " class="statrow ">Total</span>
+        <span class="stat ">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>
+    </div>
+
+    </span>
+
+
+    <span ng-if="vm.showings != undefined" class="cell positive-detail-div ">
         
        
             <div class="statrow ">
                 <span class="label ">Positive</span>
-<span class="stat ">{{vm.sentimentCounter.positive}}</span>
-</div>
+    <span class="stat ">{{vm.sentimentCounter.positive}}</span>
+    </div>
 
-<div class="statrow ">
-	<span class="label ">Negative</span>
-	<span class="stat " ngClass="vm.sentimentCounter.negative> 5">{{vm.sentimentCounter.negative}}</span>
-</div>
+    <div class="statrow ">
+        <span class="label ">Negative</span>
+        <span class="stat " ngClass="vm.sentimentCounter.negative> 5">{{vm.sentimentCounter.negative}}</span>
+    </div>
 
-<div class="statrow">
-	<span class="label">Neutral</span>
-	<span class="stat">{{vm.sentimentCounter.neutral}}</span>
-</div>
+    <div class="statrow">
+        <span class="label">Neutral</span>
+        <span class="stat">{{vm.sentimentCounter.neutral}}</span>
+    </div>
 
-<div class="statrow">
-	<span class="label">Total</span>
-	<span class="stat">{{vm.showings.length}}</span>
-</div>
-
-
-</span>
-
-</div>
+    <div class="statrow">
+        <span class="label">Total</span>
+        <span class="stat">{{vm.showings.length}}</span>
+    </div>
 
 
+    </span>
+
+    </div>
 
 
-</div>
+
+
+    </div>

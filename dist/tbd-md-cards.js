@@ -459,6 +459,10 @@ angular.module('tbd', []);
 
                     vm.showings = (theListing.activityAggregate.snapshots["8"].data) ?
                         theListing.activityAggregate.snapshots["8"].data : [];
+                } else if (theListing.activityAggregate.snapshots["10"]) {
+
+                    vm.showings = (theListing.activityAggregate.snapshots["10"].data) ?
+                        theListing.activityAggregate.snapshots["10"].data : [];
                 } else {
                     vm.showings = [];
 
@@ -1185,10 +1189,10 @@ rowcolor
 
     MdCardShowingAssistController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
-
+        $scope.extId = 10;
         $scope.showActions = IS_MOBILE_APP;
         $scope.hide = function () {
             $mdDialog.hide();
@@ -1261,7 +1265,7 @@ rowcolor
                 // normalizedContact.emails = contact.emails;
             }
 
-            normalizedContact.note = "From showings.com feedback.";
+            normalizedContact.note = "From ShowingAssit feedback.";
 
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
 
@@ -1294,23 +1298,24 @@ rowcolor
 
             for (var i = 0; i < showings.length; ++i) {
 
-                // var myEl = angular.element(element.find('md-list-item')[i]);
+                // var myEl = angular.element($scope.meEl.find('md-list-item')[i]);
 
                 // if (showings.potentialOffer) {
 
 
                 // }
-                // if (showings[i].sentiment < -2) {
-                //     scope.negativeFB.push(showings[i]);
-                //     scope.negCnt += 1;
-                //     myEl.addClass('negative-color');
+                if (showings[i].sentiment < -2) {
 
-                // } else if (showings[i].sentiment > 2) {
-                //     scope.posCnt += 1;
-                //     scope.positiveFB.push(showings[i]);
-                //     myEl.addClass('positive-color');
-                // }
-                // scope.totalCnt += 1;
+                    $scope.negativeFB.push(showings[i]);
+                    $scope.negCnt += 1;
+                    //  myEl.addClass('negative-color');
+
+                } else if (showings[i].sentiment > 2) {
+                    $scope.posCnt += 1;
+                    $scope.positiveFB.push(showings[i]);
+                    //  myEl.addClass('positive-color');
+                }
+                $scope.totalCnt += 1;
             }
 
         });
@@ -1323,7 +1328,9 @@ rowcolor
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showing: selShowing
+                        showing: selShowing,
+                        listing: vm.listing
+
                     },
                     controller: DialogController,
                     templateUrl: 'templates/_md-card-showing-detail.view.html',
@@ -1338,13 +1345,14 @@ rowcolor
                 });
         }
 
-        vm.showAll = function (ev, showings) {
+        vm.showAll = function (ev, showings, listing) {
             console.log("show all called");
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showings: showings
+                        showings: showings,
+                        listing: vm.listing
                     },
                     controller: DialogControllerAll,
                     templateUrl: 'templates/_md-card-showing-detail-all.view.html',
@@ -1888,7 +1896,7 @@ rowcolor
     function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
-
+        $scope.extId = 8;
         $scope.showActions = IS_MOBILE_APP;
         
         $scope.hide = function () {
@@ -2402,7 +2410,7 @@ result :"In Process" or "Declined By Seller"
 
         function updateShowingsViewModel() {
 
-            if (_.isUndefined(vm.showings) || vm.showings.length == 0) {
+            if (_.isUndefined(vm.showings)) {
                 return
             }
             vm.sentimentCounter = {
@@ -2446,6 +2454,10 @@ result :"In Process" or "Declined By Seller"
 
     angular
         .module(appName)
+
+        
+
+
         .filter('toProperCase', function () {
             return function (item) {
 
@@ -3857,30 +3869,29 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
-    "        <div ng-repeat=\"showing in showings\" ng-click=\"show($event, showing)\">\n" +
+    "        <div class=\"show-item\" ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\" ng-class=\"{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3, 'positive': showing.potentialOffer == true}\">\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
-    "\n" +
     "            <div class=\"time-wrapper\">\n" +
-    "                <span class=datetime>{{showing.date | timeago }}</span>\n" +
-    "                <span class=datetime>&middot;</span> \n" +
+    "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
+    "                <span class=datetime>&middot;</span>\n" +
     "                <span class=datetime>{{showing.date | date:'short'}}</span><br>\n" +
-    "                 <span class=datetime>{{showing.type.name}} \n" +
+    "                <span class=datetime>{{showing.type.name}} \n" +
     "                 &middot;\n" +
     "                {{showing.type.result}}\n" +
     "                <div ng-if=\"showing.type.message && showing.type.message.length>0\"> &middot;</div>\n" +
     "                 {{showing.type.msg}} \n" +
     "                </span>\n" +
     "            </div>\n" +
-    "           \n" +
+    "\n" +
     "            <p style=\"clear: both;\" ng-if=\"showing.feedback\" class=\"feedback\">\"{{showing.feedback}}\"</p>\n" +
     "            <p style=\"clear: both;\" ng-if=\"!showing.feedback\" class=\"feedback\"><i>\"No feedback was provided by agent.\"</i></p>\n" +
-    "             <md-divider ng-if=\"!$last\"></md-divider>\n" +
+    "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
     "\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"footer\" ng-if=\"vm.limit != -1 && vm.showings.length > vm.limit\" ng-click=\"showMoreFeedback()\">\n" +
     "            <span style=\"width: 100%\">\n" +
-    "                <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'showings'})\">\n" +
+    "                <md-button style=\"float: left;\" class=\"md-icon-button\" ui-sref=\"app.feedback({card:'saShowings'})\">\n" +
     "                    <md-icon md-svg-src=\"assets/icons/ic_more_horiz_black_48px.svg\" aria-label=\"more\"></md-icon>\n" +
     "                </md-button>\n" +
     "\n" +
@@ -3932,7 +3943,12 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "        </div>-->\n" +
     "            <div class=\"md-toolbar-tools gray\">\n" +
     "\n" +
-    "                <img style=\"margin-left: -12px;\" src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\" />\n" +
+    "\n" +
+    "\n" +
+    "  \n" +
+    "\n" +
+    "                 <img ng-if=\"extId == 8\" style=\"margin-left: -12px;\" src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\" />\n" +
+    "                      <img ng-if=\"extId == 10\" style=\"margin-left: -12px;\" src=\"assets/logos/showingassist-logo.png\" alt=\"SA\" />\n" +
     "                <!--<h3 style=\"padding-left: 10px; color: #fff;\"> {{showing.contact.name}}</h3>-->\n" +
     "                <span flex></span>\n" +
     "                <md-button class=\"md-icon-button\" ng-click=\"cancel()\">\n" +
@@ -3957,7 +3973,8 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <table>\n" +
     "\n" +
     "                    <tr>\n" +
-    "                        <td class=\"label\">Showing time</td>\n" +
+    "                        <td ng-if=\"extId == 8\" class=\"label\">Showing time</td>\n" +
+    "                        <td ng-if=\"extId == 10\" class=\"label\">ShowingAssist</td>\n" +
     "\n" +
     "                        <td class=card-value>\n" +
     "\n" +
@@ -4684,12 +4701,13 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "<md-card class=\"site-summary-card\">\n" +
     "    <div class=\"site-header\">\n" +
     "        <div class=\"logo\">\n" +
-    "            <img src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\" />\n" +
+    "            <img ng-if=\"sysId == 8\" src=\"assets/logos/showings.com_logo_40x146.png\" alt=\"Showings.com\" />\n" +
+    "            <img ng-if=\"sysId == 10\" src=\"/assets/logos/showingassist-logo.png\" alt=\"SA\" />\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"feedback-div\">\n" +
     "        <div class=\"show-item\" ng-repeat=\"showing in showings | orderBy:'-startTime'\" ng-click=\"show($event, showing)\"\n" +
-    "        ng-class=\"{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3, 'positive': showing.potentialOffer == true}\">\n" +
+    "        ng-class=\"{'negative': showing.sentiment < -3, 'positive': showing.sentiment > 3 || showing.potentialOffer == true}\">\n" +
     "            <label><b> {{showing.contact.name}}</b></label>\n" +
     "            <div class=\"time-wrapper\">\n" +
     "                <span class=datetime>{{showing.startTime | timeago }}</span>\n" +
@@ -4751,9 +4769,9 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/_md-stat-summary.view.html',
     "<div id=\"stats-table\" class=\"site-summary-card\">\n" +
-    "	<div class=\"row\">\n" +
+    "    <div class=\"row\">\n" +
     "\n" +
-    "		<span class=\"cell showings-div\">\n" +
+    "        <span class=\"cell showings-div\">\n" +
     "           \n" +
     "             <div style=\"min-height: 50px;\">\n" +
     "                    <md-icon class=\"stat-icon\" md-svg-src=\"assets/icons/showings.svg\"></md-icon>\n" +
@@ -4762,11 +4780,11 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "                <div class=\"box-label\">\n" +
     "                    <span class=\"title no-wrap\">showings</span>\n" +
     "\n" +
-    "	</div>\n" +
-    "	</span>\n" +
+    "    </div>\n" +
+    "    </span>\n" +
     "\n" +
     "\n" +
-    "	<span class=\"cell clicks-div\">\n" +
+    "    <span class=\"cell clicks-div\">\n" +
     "        \n" +
     "       <div style=\"min-height: 50px;\">                  \n" +
     "            <!--<img src=\"assets/icons/arrow.png\">  -->\n" +
@@ -4782,7 +4800,7 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "</span>\n" +
     "\n" +
-    "<span ng-if=\"vm.showings != undefined && vm.showings.length != 0\" class=\"cell positive-div\">\n" +
+    "<span ng-if=\"vm.showings != undefined\" class=\"cell positive-div\">\n" +
     "        \n" +
     "        <div style=\"min-height: 50px;\">\n" +
     "           \n" +
@@ -4801,21 +4819,21 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div class=\"row\">\n" +
     "\n" +
-    "	<span class=\"cell showings-detail-div\">\n" +
+    "    <span class=\"cell showings-detail-div\">\n" +
     "        \n" +
     "        <div class=\"statrow\">\n" +
     "            <span class=\"label\">7-day</span>\n" +
-    "	<span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>\n" +
+    "    <span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_sevenDayCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow\">\n" +
-    "	<span class=\"label\">30-day</span>\n" +
-    "	<span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>\n" +
+    "    <span class=\"label\">30-day</span>\n" +
+    "    <span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_thirtyDayCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"statrow\">\n" +
-    "	<span class=\"label\">Total</span>\n" +
-    "	<span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>\n" +
+    "    <span class=\"label\">Total</span>\n" +
+    "    <span class=\"stat\">{{vm.listing.activityAggregate.listing_shows_totalCnt}}</span>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
@@ -4834,60 +4852,60 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "\" pct-decimals=\"0 \" color=\"dark \"></change-indicator>\n" +
     "\n" +
     "\n" +
-    "</div>\n" +
+    "    </div>\n" +
     "\n" +
-    "<div class=\"statrow \">\n" +
-    "	<span class=\"label \">30-day</span>\n" +
-    "	<span class=\"stat \">{{vm.listing_views_thirtyDayCnt.current}}</span>\n" +
-    "	<span class=\"stat asterisk\" ng-if=\"!vm.listing.activityAggregate.thirtyDayViewsComplete \"> * </span>\n" +
-    "	<br>\n" +
+    "    <div class=\"statrow \">\n" +
+    "        <span class=\"label \">30-day</span>\n" +
+    "        <span class=\"stat \">{{vm.listing_views_thirtyDayCnt.current}}</span>\n" +
+    "        <span class=\"stat asterisk\" ng-if=\"!vm.listing.activityAggregate.thirtyDayViewsComplete \"> * </span>\n" +
+    "        <br>\n" +
     "\n" +
-    "	<change-indicator data=\"vm.listing_views_thirtyDayCnt \" rate-decimals=\"0 \" pct-decimals=\"0 \" color=\"dark \"></change-indicator>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "</div>\n" +
-    "\n" +
-    "<div class=\"statrow \">\n" +
-    "	<span class=\"label \" class=\"statrow \">Total</span>\n" +
-    "	<span class=\"stat \">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>\n" +
-    "</div>\n" +
-    "\n" +
-    "</span>\n" +
+    "        <change-indicator data=\"vm.listing_views_thirtyDayCnt \" rate-decimals=\"0 \" pct-decimals=\"0 \" color=\"dark \"></change-indicator>\n" +
     "\n" +
     "\n" +
-    "<span ng-if=\"vm.showings != undefined && vm.showings.length != 0\" class=\"cell positive-detail-div \">\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"statrow \">\n" +
+    "        <span class=\"label \" class=\"statrow \">Total</span>\n" +
+    "        <span class=\"stat \">{{vm.listing.activityAggregate.listing_views_totalCnt}}</span>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    </span>\n" +
+    "\n" +
+    "\n" +
+    "    <span ng-if=\"vm.showings != undefined\" class=\"cell positive-detail-div \">\n" +
     "        \n" +
     "       \n" +
     "            <div class=\"statrow \">\n" +
     "                <span class=\"label \">Positive</span>\n" +
-    "<span class=\"stat \">{{vm.sentimentCounter.positive}}</span>\n" +
-    "</div>\n" +
+    "    <span class=\"stat \">{{vm.sentimentCounter.positive}}</span>\n" +
+    "    </div>\n" +
     "\n" +
-    "<div class=\"statrow \">\n" +
-    "	<span class=\"label \">Negative</span>\n" +
-    "	<span class=\"stat \" ngClass=\"vm.sentimentCounter.negative> 5\">{{vm.sentimentCounter.negative}}</span>\n" +
-    "</div>\n" +
+    "    <div class=\"statrow \">\n" +
+    "        <span class=\"label \">Negative</span>\n" +
+    "        <span class=\"stat \" ngClass=\"vm.sentimentCounter.negative> 5\">{{vm.sentimentCounter.negative}}</span>\n" +
+    "    </div>\n" +
     "\n" +
-    "<div class=\"statrow\">\n" +
-    "	<span class=\"label\">Neutral</span>\n" +
-    "	<span class=\"stat\">{{vm.sentimentCounter.neutral}}</span>\n" +
-    "</div>\n" +
+    "    <div class=\"statrow\">\n" +
+    "        <span class=\"label\">Neutral</span>\n" +
+    "        <span class=\"stat\">{{vm.sentimentCounter.neutral}}</span>\n" +
+    "    </div>\n" +
     "\n" +
-    "<div class=\"statrow\">\n" +
-    "	<span class=\"label\">Total</span>\n" +
-    "	<span class=\"stat\">{{vm.showings.length}}</span>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "</span>\n" +
-    "\n" +
-    "</div>\n" +
+    "    <div class=\"statrow\">\n" +
+    "        <span class=\"label\">Total</span>\n" +
+    "        <span class=\"stat\">{{vm.showings.length}}</span>\n" +
+    "    </div>\n" +
     "\n" +
     "\n" +
+    "    </span>\n" +
+    "\n" +
+    "    </div>\n" +
     "\n" +
     "\n" +
-    "</div>"
+    "\n" +
+    "\n" +
+    "    </div>"
   );
 
 
@@ -5108,6 +5126,14 @@ angular.module('tbd').run(['$templateCache', function($templateCache) {
     "    <md-showing-summary \n" +
     "                imgurl=\"/assets/logos/ShowingsCom_243.png\" listing='vm.theListing' showings='vm.showings' title=\"Summary - Feedback on your showings\" \n" +
     "                sysId=\"8\" limit=\"-1\">\n" +
+    "    </md-showing-summary>\n" +
+    "            \n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"card == 'saShowings'\">\n" +
+    "    <md-showing-summary \n" +
+    "                imgurl=\"/assets/logos/showingassist-logo.png\" listing='vm.theListing' showings='vm.showings' title=\"Summary - Feedback on your showings\" \n" +
+    "                sysId=\"10\" limit=\"-1\">\n" +
     "    </md-showing-summary>\n" +
     "            \n" +
     "</div>\n" +
