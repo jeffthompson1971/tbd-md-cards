@@ -60,7 +60,7 @@
     function DialogController($scope, $filter, $rootScope, $mdDialog, PalSvc, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
-
+        $scope.extId = 8;
         $scope.showActions = IS_MOBILE_APP;
         
         $scope.hide = function () {

@@ -75,6 +75,10 @@
 
                     vm.showings = (theListing.activityAggregate.snapshots["8"].data) ?
                         theListing.activityAggregate.snapshots["8"].data : [];
+                } else if (theListing.activityAggregate.snapshots["10"]) {
+
+                    vm.showings = (theListing.activityAggregate.snapshots["10"].data) ?
+                        theListing.activityAggregate.snapshots["10"].data : [];
                 } else {
                     vm.showings = [];
 
