@@ -57,10 +57,10 @@
 
     MdCardShowingAssistController.$inject = ['$scope', '$mdDialog', 'ListingSvc'];
 
-    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing) {
+    function DialogController($scope, $filter, $rootScope, $mdDialog, IS_MOBILE_APP, SYSTEM_EVENT, showing, listing) {
 
         $scope.showing = showing;
-
+        $scope.extId = 10;
         $scope.showActions = IS_MOBILE_APP;
         $scope.hide = function () {
             $mdDialog.hide();
@@ -133,7 +133,7 @@
                 // normalizedContact.emails = contact.emails;
             }
 
-            normalizedContact.note = "From showings.com feedback.";
+            normalizedContact.note = "From ShowingAssit feedback.";
 
             $rootScope.$broadcast(SYSTEM_EVENT.CONTACTS_ADD, normalizedContact);
 
@@ -166,23 +166,24 @@
 
             for (var i = 0; i < showings.length; ++i) {
 
-                // var myEl = angular.element(element.find('md-list-item')[i]);
+                // var myEl = angular.element($scope.meEl.find('md-list-item')[i]);
 
                 // if (showings.potentialOffer) {
 
 
                 // }
-                // if (showings[i].sentiment < -2) {
-                //     scope.negativeFB.push(showings[i]);
-                //     scope.negCnt += 1;
-                //     myEl.addClass('negative-color');
+                if (showings[i].sentiment < -2) {
 
-                // } else if (showings[i].sentiment > 2) {
-                //     scope.posCnt += 1;
-                //     scope.positiveFB.push(showings[i]);
-                //     myEl.addClass('positive-color');
-                // }
-                // scope.totalCnt += 1;
+                    $scope.negativeFB.push(showings[i]);
+                    $scope.negCnt += 1;
+                    //  myEl.addClass('negative-color');
+
+                } else if (showings[i].sentiment > 2) {
+                    $scope.posCnt += 1;
+                    $scope.positiveFB.push(showings[i]);
+                    //  myEl.addClass('positive-color');
+                }
+                $scope.totalCnt += 1;
             }
 
         });
@@ -195,7 +196,9 @@
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showing: selShowing
+                        showing: selShowing,
+                        listing: vm.listing
+
                     },
                     controller: DialogController,
                     templateUrl: 'templates/_md-card-showing-detail.view.html',
@@ -210,13 +213,14 @@
                 });
         }
 
-        vm.showAll = function (ev, showings) {
+        vm.showAll = function (ev, showings, listing) {
             console.log("show all called");
             var parentEl = angular.element($scope.meElement.find('md-list-item'));
             $scope.vm.mdDialog.show(
                 {
                     locals: {
-                        showings: showings
+                        showings: showings,
+                        listing: vm.listing
                     },
                     controller: DialogControllerAll,
                     templateUrl: 'templates/_md-card-showing-detail-all.view.html',
